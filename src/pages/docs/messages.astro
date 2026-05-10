@@ -42,7 +42,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   "ttl":             0,                  // Seconds until expiry (0 = no expiry)
   "reply_to":        null,               // ID of message being replied to
   "scope":           ["control"],        // Required RBAC scopes
-  "rcan_version":    "1.6",             // MUST be present; validated first
+  "rcan_version":    "3.2",             // MUST be present; validated first
   "qos":             1,                  // 0=fire-and-forget 1=at-least-once 2=exactly-once
   "sender_type":     "human",           // "human"|"robot"|"cloud_function"|"system"
   "key_id":          "kid-abc123"       // Optional: signing key identifier (GAP-09)
@@ -78,7 +78,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       <pre><code>// DISCOVER payload (v1.5)
 &#123;
-  "rcan_version": "1.5",
+  "rcan_version": "3.2",
   "capabilities": ["control", "safety", "training"],
   "p66_conformance_pct": 87.0
 &#125;</code></pre>
