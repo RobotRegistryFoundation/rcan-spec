@@ -1,7 +1,7 @@
 # Article 17 — Quality Management System Template for RCAN-Based Robots
 
 **Regulation:** EU AI Act (Regulation 2024/1689), Article 17  
-**RCAN spec version:** 1.6  
+**RCAN spec version:** 3.2  
 **Document type:** QMS template  
 **Status:** Normative guidance  
 **Applies from:** 2 August 2026  
