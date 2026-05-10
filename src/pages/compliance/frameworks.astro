@@ -19,6 +19,17 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     </div>
   </section>
 
+  <!-- BEGIN: ecosystem certification disclaimer (canonical, derived from spec §10) -->
+  <section class="max-w-5xl mx-auto px-6 pt-8">
+    <blockquote class="border-l-4 border-amber-500/40 bg-amber-500/5 px-5 py-4 rounded-r">
+      <p class="font-semibold text-text mb-2">Conformance is not certification.</p>
+      <p class="text-text-muted text-sm leading-relaxed m-0">
+        Conformance to RCAN tracks (L1–L4 protocol, Gateway Authority, HIL Runtime Safety) is <em>self-asserted via signed bundles</em> and <em>independently replayable from those bundles</em>. Conformance is not certification. Certification requires audit by a qualified third-party body, which is intentionally out-of-scope for the foundation in 2026.
+      </p>
+    </blockquote>
+  </section>
+  <!-- END: ecosystem certification disclaimer -->
+
   <!-- Coverage legend -->
   <section class="max-w-5xl mx-auto px-6 pt-12 pb-6">
     <div class="flex flex-wrap gap-4 text-sm">
