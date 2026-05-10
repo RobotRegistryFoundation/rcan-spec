@@ -1,7 +1,7 @@
 # RCAN Protocol Compliance Statement Template
 
 **Document type:** RCAN compliance statement (per-deployment)  
-**RCAN spec version:** 1.6  
+**RCAN spec version:** 3.2  
 **Status:** Normative template  
 
 ---
@@ -26,7 +26,7 @@ RCAN PROTOCOL COMPLIANCE STATEMENT
 Robot:          [FILL: robot name]
 RRN:            [FILL: e.g., RRN-000000000001]
 Config file:    [FILL: e.g., config/arm.rcan.yaml]
-RCAN version:   [FILL: e.g., 1.6]
+RCAN version:   [FILL: e.g., 3.2]
 Runtime:        [FILL: e.g., OpenCastor v2026.3.x]
 Date:           [FILL: YYYY-MM-DD]
 Operator:       [FILL: name / organization]

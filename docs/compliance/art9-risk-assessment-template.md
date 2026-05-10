@@ -2,7 +2,7 @@
 
 **Regulation:** EU AI Act (Regulation 2024/1689), Article 9  
 **Aligned standard:** ISO 12100:2010 (Safety of Machinery — Risk Assessment)  
-**RCAN spec version:** 1.6  
+**RCAN spec version:** 3.2  
 **Document type:** Risk assessment template  
 **Status:** Normative guidance  
 **Applies from:** 2 August 2026  
@@ -24,7 +24,7 @@ Article 9 requires providers of high-risk AI systems to establish, implement, do
 | Product name | [FILL] |
 | RCAN config file | [FILL: e.g., config/bob-pi4-oakd.rcan.yaml] |
 | RRN | [FILL: e.g., RRN-000000000001] |
-| RCAN version | [FILL: e.g., 1.6] |
+| RCAN version | [FILL: e.g., 3.2] |
 | AI provider | [FILL: e.g., Anthropic Claude Sonnet] |
 | Hardware platform | [FILL: e.g., Raspberry Pi 4, SO-ARM101 manipulator] |
 | Intended use | [FILL: brief description] |
