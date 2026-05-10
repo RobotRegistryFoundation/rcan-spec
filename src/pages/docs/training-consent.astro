@@ -15,6 +15,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <strong>⚠️ EU AI Act Deadline: August 2, 2026</strong> — Training data governance requirements (Article 10) and audit trail (Article 17) are legally mandated. The <a href="https://docs.rcan.dev/spec/">RCAN protocol</a> implements the technical controls required for compliance.
     </div>
 
+    <!-- BEGIN: ecosystem certification disclaimer (canonical, derived from spec §10) -->
+    <blockquote class="border-l-4 border-amber-500/40 bg-amber-500/5 px-5 py-4 my-4 rounded-r">
+      <p class="font-semibold text-text mb-2">Conformance is not certification.</p>
+      <p class="text-text-muted text-sm leading-relaxed m-0">
+        Conformance to RCAN tracks (L1–L4 protocol, Gateway Authority, HIL Runtime Safety) is <em>self-asserted via signed bundles</em> and <em>independently replayable from those bundles</em>. Conformance is not certification. Certification requires audit by a qualified third-party body, which is intentionally out-of-scope for the foundation in 2026.
+      </p>
+    </blockquote>
+    <!-- END: ecosystem certification disclaimer -->
+
     <section>
       <h2>When Training Consent Is Required</h2>
       <p>A training consent token MUST be obtained before collecting TRAINING_DATA (type 10) that involves:</p>
