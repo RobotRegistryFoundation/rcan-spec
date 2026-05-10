@@ -5,8 +5,10 @@
 **Framework:** NIST AI Risk Management Framework 1.0 (NIST AI 100-1, January 2023)  
 **Classification focus:** AI systems deployed in safety-critical robotics contexts; US government procurement  
 **Target audience:** Federal agencies, DoD program offices, system integrators, robot OEMs pursuing US government contracts  
-**Status:** Informative  
+**Status:** Informative — historical snapshot  
 **Last updated:** 2026-03-04  
+
+> **Note:** This alignment analysis was conducted against **RCAN Spec v1.1** (archived). The current spec is **v3.2**; the protocol-layer controls referenced below remain present in current versions, but function-by-function mapping has not been re-verified against post-v1.1 changes. Treat this document as a historical reference, not a current compliance attestation.
 
 ---
 

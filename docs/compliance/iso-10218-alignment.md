@@ -3,8 +3,10 @@
 **Document type:** Compliance alignment  
 **RCAN spec version:** 1.1 (rcan.dev/spec)  
 **Standard:** ISO 10218-1:2025 — Robotics: Safety requirements for industrial robots — Part 1: Robots  
-**Status:** Informative  
+**Status:** Informative — historical snapshot  
 **Last updated:** 2026-03-03  
+
+> **Note:** This alignment analysis was conducted against **RCAN Spec v1.1** (archived). The current spec is **v3.2**; the protocol-layer controls referenced below remain present in current versions, but article-by-article mapping has not been re-verified against post-v1.1 changes. Treat this document as a historical reference, not a current compliance attestation.
 
 ---
 
