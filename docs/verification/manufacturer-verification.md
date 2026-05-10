@@ -83,7 +83,7 @@ Community verification confirms the identity data is plausible and community-rev
 }
 ```
 
-> **Note on `signature`:** The `"pending"` value is a placeholder for the initial submission phase. A future version of the protocol will require a cryptographic signature (e.g., Ed25519) over the canonical JSON payload. Manufacturers should structure their tooling to accommodate this field being populated with a real signature in RCAN protocol v2.
+> **Note on `signature`:** The `"pending"` value is a placeholder for the initial submission phase. A future version of the protocol will require a cryptographic signature (e.g., Ed25519) over the canonical JSON payload. Manufacturers should structure their tooling to accommodate this field being populated with a real signature.
 
 **RURI Endpoint Validation:**
 
