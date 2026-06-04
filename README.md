@@ -4,7 +4,7 @@
 
 [![Spec](https://img.shields.io/badge/spec-live%20matrix-blue)](https://rcan.dev/compatibility)
 [![License](https://img.shields.io/badge/license-CC%20BY%204.0-green)](https://creativecommons.org/licenses/by/4.0/)
-[![CI](https://github.com/continuonai/rcan-spec/actions/workflows/ci.yml/badge.svg)](https://github.com/continuonai/rcan-spec/actions)
+[![CI](https://github.com/RobotRegistryFoundation/rcan-spec/actions/workflows/ci.yml/badge.svg)](https://github.com/RobotRegistryFoundation/rcan-spec/actions)
 
 **[→ Read the spec at rcan.dev/spec/](https://rcan.dev/spec/) · [→ Live compatibility matrix](https://rcan.dev/compatibility)**
 
@@ -23,8 +23,8 @@ This repo is the **wire-protocol specification** of a small, composable, Apache/
 | **Declaration** | [ROBOT.md](https://github.com/RobotRegistryFoundation/robot-md) | The file a robot ships at its root. YAML frontmatter + markdown prose. Declares identity, capabilities, safety gates. Spec + Python CLI. |
 | **Agent bridge** | [robot-md-mcp](https://github.com/RobotRegistryFoundation/robot-md-mcp) | MCP server that exposes a `ROBOT.md` to Claude Code, Claude Desktop, Cursor, Zed, Gemini CLI — any MCP-aware agent. One `claude mcp add` away. |
 | **Wire protocol** ← *this* | [RCAN](https://rcan.dev/spec/) | How robots, gateways, and planners talk. Signed envelopes, LoA enforcement, PQC crypto, EU AI Act §23–§27 compliance blocks. |
-| **Python SDK** | [rcan-py](https://github.com/continuonai/rcan-py) | `pip install rcan` — RCANMessage, RobotURI, ConfidenceGate, HiTLGate, AuditChain. |
-| **TypeScript SDK** | [rcan-ts](https://github.com/continuonai/rcan-ts) | `npm install rcan-ts` — same API surface for Node + browser. |
+| **Python SDK** | [rcan-py](https://github.com/RobotRegistryFoundation/rcan-py) | `pip install rcan` — RCANMessage, RobotURI, ConfidenceGate, HiTLGate, AuditChain. |
+| **TypeScript SDK** | [rcan-ts](https://github.com/RobotRegistryFoundation/rcan-ts) | `npm install rcan-ts` — same API surface for Node + browser. |
 | **Registry** | [Robot Registry Foundation](https://robotregistryfoundation.org) | Permanent RRN identities. Public resolver at `/r/<rrn>`. Like ICANN for robots. |
 | **Productized runtime (Layer 4)** | [OpenCastor](https://github.com/craigm26/OpenCastor) | Open-source productized RCAN runtime — connects LLM brains to hardware bodies. One implementation of RCAN. |
 
@@ -75,8 +75,8 @@ Robots today are islands. A Boston Dynamics Spot and a Raspberry Pi rover can't 
 
 | SDK | Language | Install | Tests |
 |---|---|---|---|
-| [rcan-py](https://github.com/continuonai/rcan-py) | Python 3.10+ | `pip install rcan` | 754 |
-| [rcan-ts](https://github.com/continuonai/rcan-ts) | TypeScript / Node 18+ | `npm install rcan-ts` | 447 |
+| [rcan-py](https://github.com/RobotRegistryFoundation/rcan-py) | Python 3.10+ | `pip install rcan` | 754 |
+| [rcan-ts](https://github.com/RobotRegistryFoundation/rcan-ts) | TypeScript / Node 18+ | `npm install rcan-ts` | 447 |
 | [OpenCastor](https://github.com/craigm26/OpenCastor) | Python (robot runtime) | `pip install opencastor` | 6,459 |
 
 ## Companion formats
@@ -119,15 +119,15 @@ npm run build    # production → dist/
 npm run test     # conformance tests
 ```
 
-Open issues and proposals at [github.com/continuonai/rcan-spec/issues](https://github.com/continuonai/rcan-spec/issues). Major changes go through a public comment period before merging.
+Open issues and proposals at [github.com/RobotRegistryFoundation/rcan-spec/issues](https://github.com/RobotRegistryFoundation/rcan-spec/issues). Major changes go through a public comment period before merging.
 
 ## Ecosystem
 
 | Package | Purpose |
 |---|---|
 | **rcan-spec** (this) | Protocol specification |
-| [rcan-py](https://github.com/continuonai/rcan-py) | Python SDK |
-| [rcan-ts](https://github.com/continuonai/rcan-ts) | TypeScript SDK |
+| [rcan-py](https://github.com/RobotRegistryFoundation/rcan-py) | Python SDK |
+| [rcan-ts](https://github.com/RobotRegistryFoundation/rcan-ts) | TypeScript SDK |
 | [OpenCastor](https://github.com/craigm26/OpenCastor) | Productized robot runtime (Layer 4) |
 | [RRF](https://robotregistryfoundation.org) | Robot identity registry |
 | [Fleet UI](https://app.opencastor.com) | Web fleet dashboard |
