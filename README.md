@@ -139,3 +139,7 @@ Current versions for all packages: see the [live compatibility matrix](https://r
 
 Specification text: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 Reference implementations: MIT.
+
+---
+
+> **Stewarded by the [Robot Registry Foundation](https://github.com/RobotRegistryFoundation).** RCAN is an open standard; issues, proposals, and PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
