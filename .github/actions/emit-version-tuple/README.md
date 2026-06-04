@@ -5,7 +5,7 @@ Composite action that builds a version-tuple payload, hybrid-signs it (ML-DSA-65
 ## Usage (hybrid — recommended)
 
 ```yaml
-- uses: continuonai/rcan-spec/.github/actions/emit-version-tuple@v3.2.0
+- uses: RobotRegistryFoundation/rcan-spec/.github/actions/emit-version-tuple@v3.2.0
   with:
     project: robot-md
     ran: ${{ secrets.ROBOT_MD_RAN }}
