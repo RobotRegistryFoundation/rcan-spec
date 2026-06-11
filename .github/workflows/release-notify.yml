@@ -57,7 +57,7 @@ jobs:
           SPEC_TAG: ${{ steps.tag.outputs.tag }}
         run: |
           gh issue create \
-            --repo continuonai/rcan-py \
+            --repo RobotRegistryFoundation/rcan-py \
             --title "chore: update SDK for RCAN spec ${SPEC_TAG}" \
             --body "RCAN spec ${SPEC_TAG} released. Update SPEC_VERSION in rcan/validate.py, run tests, bump version if needed, publish to PyPI. See https://rcan.dev/changelog/" \
           || echo "Issue may already exist or PAT not configured, continuing"
@@ -69,7 +69,7 @@ jobs:
           SPEC_TAG: ${{ steps.tag.outputs.tag }}
         run: |
           gh issue create \
-            --repo continuonai/rcan-ts \
+            --repo RobotRegistryFoundation/rcan-ts \
             --title "chore: update SDK for RCAN spec ${SPEC_TAG}" \
             --body "RCAN spec ${SPEC_TAG} released. Update SPEC_VERSION constant, run npm test and build, bump version if needed, publish to npm. See https://rcan.dev/changelog/" \
           || echo "Issue may already exist or PAT not configured, continuing"

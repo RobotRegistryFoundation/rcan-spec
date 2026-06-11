@@ -2,7 +2,7 @@
 
 > **Status: DRAFT** · Last revised: 2026-03-04
 > Seeking co-founders, endorsing organizations, and stakeholder input.
-> → Discuss on [GitHub issue #13](https://github.com/continuonai/rcan-spec/issues/13)
+> → Discuss on [GitHub issue #13](https://github.com/RobotRegistryFoundation/rcan-spec/issues/13)
 
 ---
 
@@ -137,7 +137,7 @@ The Robot Registry Foundation governs the following areas:
 The RRF maintains the authoritative namespace of **Robot Registration Numbers (RRNs)**. It delegates namespace prefixes to Authoritative nodes (manufacturers, enterprises) and reserves the root namespace for robots without a dedicated organisational registry.
 
 ### 2. RCAN Specification Stewardship
-The RRF stewards the RCAN protocol specification hosted at [github.com/continuonai/rcan-spec](https://github.com/continuonai/rcan-spec). This includes:
+The RRF stewards the RCAN protocol specification hosted at [github.com/RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec). This includes:
 - Accepting and reviewing proposed specification changes via GitHub issues and pull requests.
 - Maintaining the canonical spec version and changelog.
 - Publishing normative conformance requirements for each spec version.
@@ -172,7 +172,7 @@ RCAN is developed in the open. Anyone may propose changes to the specification, 
 
 ### Proposing a Spec Change
 
-1. **Open a GitHub issue** at [continuonai/rcan-spec](https://github.com/continuonai/rcan-spec/issues) describing the problem or proposal. Use the `spec-change` label for normative changes, `discussion` for exploratory ideas.
+1. **Open a GitHub issue** at [RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec/issues) describing the problem or proposal. Use the `spec-change` label for normative changes, `discussion` for exploratory ideas.
 2. **Gather feedback** — a minimum 14-day open comment period applies to all normative changes. Breaking changes require 30 days.
 3. **Open a pull request** with the proposed change. PRs must include: updated spec text, rationale, backward-compatibility analysis, and (for new message types) a wire format definition.
 4. **Review** — the chair or a delegated reviewer approves or requests changes. Two approvals are required for normative changes.
@@ -305,11 +305,11 @@ No commitments have been made. This charter is an invitation to collaborate.
 
 | Role | What to do |
 |------|-----------|
-| **Co-founder** | Comment on [GitHub issue #13](https://github.com/continuonai/rcan-spec/issues/13) expressing intent to co-found; include your organization name and primary interest |
+| **Co-founder** | Comment on [GitHub issue #13](https://github.com/RobotRegistryFoundation/rcan-spec/issues/13) expressing intent to co-found; include your organization name and primary interest |
 | **Endorsing organization** | Post a short statement of endorsement on issue #13; no financial commitment required at this stage |
 | **Technical contributor** | Open a pull request against `docs/governance/` with proposed amendments |
 | **Standards body representative** | Contact the RCAN maintainers directly via the repository to discuss formal liaison |
-| **Interested observer** | ⭐ Star the [rcan-spec repository](https://github.com/continuonai/rcan-spec) and subscribe to issue #13 for updates |
+| **Interested observer** | ⭐ Star the [rcan-spec repository](https://github.com/RobotRegistryFoundation/rcan-spec) and subscribe to issue #13 for updates |
 
 We are particularly seeking input from:
 - Robot manufacturers (large and small) currently implementing RCAN.

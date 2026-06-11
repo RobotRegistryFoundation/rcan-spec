@@ -16,7 +16,7 @@ Security fixes are backported to the current stable version and the previous min
 
 Report privately via one of the following:
 
-- **GitHub Security Advisories** (preferred): [github.com/continuonai/rcan-spec/security/advisories/new](https://github.com/continuonai/rcan-spec/security/advisories/new)
+- **GitHub Security Advisories** (preferred): [github.com/RobotRegistryFoundation/rcan-spec/security/advisories/new](https://github.com/RobotRegistryFoundation/rcan-spec/security/advisories/new)
 - **Email**: security@continuon.ai — encrypt with PGP if the report contains sensitive detail (public key at rcan.dev/security.asc)
 
 Include in your report:
