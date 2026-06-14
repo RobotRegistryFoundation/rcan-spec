@@ -1,0 +1,355 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Position paper. Sources are public reporting on the June 2026 Fable 5 / Mythos 5
+// directive and Executive Order 14409 — cited inline and in the reference list.
+---
+
+<BaseLayout
+  title="AI Governance Infrastructure — A US Policy Position"
+  description="The June 2026 Fable 5 and Mythos 5 export-control directive exposed the gap between voluntary US AI policy and ad-hoc enforcement. RCAN and the Robot Registry Foundation propose protocol-layer guardrails, verifiable transparency, and a structured statutory process for embodied AI — the EU AI Act's structure, built on infrastructure rather than improvisation."
+>
+  <!-- Hero -->
+  <section class="max-w-4xl mx-auto px-6 pt-20 pb-12 border-b border-white/5">
+    <p class="text-sm font-mono uppercase tracking-widest text-accent mb-4">Policy Position · June 2026</p>
+    <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+      AI guardrails need infrastructure,<br />
+      <span class="text-text-muted">not improvisation.</span>
+    </h1>
+    <p class="text-xl text-text-muted max-w-2xl leading-relaxed">
+      The United States can govern frontier AI the way the EU AI Act governs it — through a structured, transparent, fact-grounded process — without the licensing regime it has rejected. The missing piece is a verifiable evidence layer at the point of deployment. RCAN provides that layer for embodied AI; the Robot Registry Foundation provides the institution that anchors it.
+    </p>
+    <div class="flex flex-wrap gap-3 mt-8">
+      <a href="#proposals" class="px-4 py-2 bg-accent/10 border border-accent/20 text-accent text-sm rounded-lg hover:bg-accent/20 transition-colors">Policy proposals ↓</a>
+      <a href="/compliance/frameworks" class="px-4 py-2 bg-white/5 border border-white/10 text-text-muted text-sm rounded-lg hover:bg-white/10 transition-colors">Framework coverage →</a>
+      <a href="/safety" class="px-4 py-2 bg-white/5 border border-white/10 text-text-muted text-sm rounded-lg hover:bg-white/10 transition-colors">Safety architecture →</a>
+    </div>
+  </section>
+
+  <!-- Scope disclaimer -->
+  <section class="max-w-4xl mx-auto px-6 pt-8">
+    <blockquote class="border-l-4 border-amber-500/40 bg-amber-500/5 px-5 py-4 rounded-r">
+      <p class="font-semibold text-text mb-2">What this document is.</p>
+      <p class="text-text-muted text-sm leading-relaxed m-0">
+        A position paper from the RCAN protocol project and the Robot Registry Foundation (RRF). RCAN is an open technical specification, not a regulator; RRF is a standards and registry body, not a government agency. The June 2026 events summarized below are drawn from public reporting and the involved companies' own statements, cited inline. Our proposals describe a <em>structure</em> the US government could adopt and the deployment-layer infrastructure that would make it enforceable — not legal advice or a claim of regulatory authority.
+      </p>
+    </blockquote>
+  </section>
+
+  <!-- The catalyst -->
+  <section class="max-w-4xl mx-auto px-6 py-16 border-b border-white/5">
+    <h2 class="text-2xl font-bold mb-4">The catalyst: two directives, ten days apart</h2>
+    <p class="text-text-muted leading-relaxed mb-6">
+      In June 2026 the United States demonstrated, in the space of ten days, both halves of the problem it has not yet solved: how to set a predictable national policy for frontier AI, and how to act on a specific safety concern without contradicting that policy.
+    </p>
+
+    <div class="space-y-4">
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="text-xs font-mono bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded">June 2, 2026</span>
+          <h3 class="font-bold">Executive Order 14409 — the voluntary framework</h3>
+        </div>
+        <p class="text-text-muted text-sm leading-relaxed m-0">
+          The White House issued an executive order establishing an <strong>innovation-first, voluntary</strong> framework for frontier models. Agencies were directed to design a pre-release engagement process by August 1, 2026, with NSA and CISA building a classified cyber-capability benchmark. The order pointedly imposed <strong>no licensing and no preclearance</strong> requirement — the US rejecting the EU's mandatory model.
+        </p>
+      </div>
+
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="text-xs font-mono bg-red-500/10 border border-red-500/20 text-red-400 px-2 py-0.5 rounded">June 12–13, 2026</span>
+          <h3 class="font-bold">The Fable 5 / Mythos 5 directive — ad-hoc enforcement</h3>
+        </div>
+        <p class="text-text-muted text-sm leading-relaxed m-0">
+          At 5:21pm ET on June 12, the government ordered Anthropic to suspend access to its most capable models — Fable 5 and Mythos 5 — for <strong>every foreign national, inside or outside the United States</strong>, including the company's own employees, citing national security. The stated basis was a <strong>verbal notice of a "potential narrow, non-universal jailbreak."</strong> To comply, Anthropic disabled both models for <em>all</em> customers. It was the first US export-control directive ever issued for access to a large language model.
+        </p>
+      </div>
+    </div>
+
+    <p class="text-text-muted leading-relaxed mt-6">
+      The two actions are not contradictory in intent, but they are incoherent as <em>policy</em>. A voluntary, no-preclearance framework was announced, and then a hard recall was imposed on a deployed model serving hundreds of millions of users — on the strength of a verbal notice, with no published standard for what triggers such an action or how a provider contests it.
+    </p>
+  </section>
+
+  <!-- The structural gap -->
+  <section class="max-w-4xl mx-auto px-6 py-16 border-b border-white/5">
+    <h2 class="text-2xl font-bold mb-4">The structural gap</h2>
+    <p class="text-text-muted leading-relaxed mb-4">
+      Anthropic's own response named the missing piece precisely. The company stated that the government <em>should</em> be able to block unsafe deployments — but through "a statutory process that is transparent, fair, clear, and grounded in technical facts," and that this action did not meet that bar. It warned that if a narrow potential jailbreak were sufficient grounds for recall, applied across the industry, it "would essentially halt all new model deployments for all frontier model providers."
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
+      <div class="bg-white/3 border border-white/8 rounded-2xl p-6">
+        <h3 class="font-bold mb-2 text-text">🇪🇺 The EU approach</h3>
+        <p class="text-text-muted text-sm leading-relaxed m-0">
+          The EU AI Act is a <strong>structured law</strong>: risk tiers, defined obligations per tier, conformity assessment, a public database, and named enforcement bodies. A provider knows in advance what is required and how compliance is demonstrated and contested. Predictability is the product.
+        </p>
+      </div>
+      <div class="bg-white/3 border border-white/8 rounded-2xl p-6">
+        <h3 class="font-bold mb-2 text-text">🇺🇸 The current US reality</h3>
+        <p class="text-text-muted text-sm leading-relaxed m-0">
+          A <strong>voluntary framework</strong> plus <strong>discretionary enforcement</strong>. No published threshold for intervention, no defined evidentiary standard, no due-process channel. A provider cannot know in advance what triggers a recall — and, as June showed, may learn of the basis only verbally.
+        </p>
+      </div>
+    </div>
+
+    <h3 class="text-lg font-bold mb-2 mt-8">The transparency paradox</h3>
+    <p class="text-text-muted leading-relaxed mb-4">
+      There is a deeper hazard. Anthropic had stated publicly, in good faith, that perfect jailbreak resistance is impossible — a candid disclosure of a known limitation. That candor appears to have supplied the conceptual frame for the concern that triggered the directive. The lesson the market will draw is corrosive: <strong>disclosing a limitation invites action while staying silent does not.</strong> A governance regime that punishes transparency selects for opacity. Any durable US framework must invert that incentive — making verifiable disclosure the safe, rewarded path.
+    </p>
+    <p class="text-text-muted leading-relaxed">
+      The gap, then, is not a missing law and not a missing value. It is a missing <strong>evidence layer</strong>: a fact base, captured the same way every time, that a transparent statutory process could actually run on. Process needs facts; facts need infrastructure.
+    </p>
+  </section>
+
+  <!-- What guardrails require -->
+  <section class="max-w-4xl mx-auto px-6 py-16 border-b border-white/5">
+    <h2 class="text-2xl font-bold mb-4">What a guardrail actually is</h2>
+    <p class="text-text-muted leading-relaxed mb-6">
+      "Guardrail" is used loosely to mean a content filter wrapped around a model's output. For text that is often adequate. For AI that <em>acts</em> — in robots, agents, and physical systems — a filter outside the execution boundary observes outputs but cannot constrain what the system attempts or when it dispatches. A real guardrail has four properties, and each must be <strong>verifiable by someone other than the operator</strong>:
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-5">
+        <h3 class="font-bold mb-1 text-sm">1 · Structural, not advisory</h3>
+        <p class="text-text-muted text-sm leading-relaxed m-0">Enforced before dispatch as a protocol invariant — not a check the model can reason around, rephrase past, or route around with a different tool call.</p>
+      </div>
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-5">
+        <h3 class="font-bold mb-1 text-sm">2 · Attributable</h3>
+        <p class="text-text-muted text-sm leading-relaxed m-0">Every consequential action records which model produced it, at what confidence, and under whose authority — so cause can be reconstructed, not guessed at.</p>
+      </div>
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-5">
+        <h3 class="font-bold mb-1 text-sm">3 · Tamper-evident</h3>
+        <p class="text-text-muted text-sm leading-relaxed m-0">The record is append-only and cryptographically chained, so a regulator or auditor can detect after-the-fact editing rather than trusting the operator's copy.</p>
+      </div>
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-5">
+        <h3 class="font-bold mb-1 text-sm">4 · Independently replayable</h3>
+        <p class="text-text-muted text-sm leading-relaxed m-0">Evidence is a signed bundle anyone can re-verify from the bundle alone — not a dashboard screenshot or a vendor's assurance.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RCAN provisions table -->
+  <section class="max-w-4xl mx-auto px-6 py-16 border-b border-white/5">
+    <h2 class="text-2xl font-bold mb-2">How RCAN provides these guardrails</h2>
+    <p class="text-text-muted leading-relaxed mb-8">
+      RCAN already specifies the deployment-layer controls a transparent process would rely on. These are not proposals — they are defined in the RCAN specification today and running on physical hardware via the <a href="https://github.com/craigm26/OpenCastor" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">OpenCastor</a> reference runtime. For the authoritative version/feature mapping, see the <a href="/compatibility" class="text-accent hover:underline">live compatibility matrix</a>.
+    </p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-white/10">
+            <th class="text-left py-3 pr-4 text-text-muted font-medium">Governance concern raised by the Fable 5 episode</th>
+            <th class="text-left py-3 pr-4 text-text-muted font-medium">RCAN provision</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          <tr>
+            <td class="py-4 pr-4 text-text-muted align-top"><strong class="text-text">"Which model did this, and how sure was it?"</strong> — model identity is opaque after the fact.</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.1 AI block — every audit record carries <code class="text-accent/80 font-mono text-xs">model_provider</code>, <code class="text-accent/80 font-mono text-xs">model_id</code>, <code class="text-accent/80 font-mono text-xs">inference_confidence</code>, <code class="text-accent/80 font-mono text-xs">inference_latency_ms</code>, and <code class="text-accent/80 font-mono text-xs">thought_id</code>. Model attribution is a structural field, not a log line.</td>
+          </tr>
+          <tr>
+            <td class="py-4 pr-4 text-text-muted align-top"><strong class="text-text">"Can the operator quietly edit the record?"</strong> — evidence integrity depends on trusting the operator.</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§6 AuditChain — HMAC-SHA256 append-only chain; any edit breaks the hash linkage and is detectable by a third party from the bundle alone.</td>
+          </tr>
+          <tr>
+            <td class="py-4 pr-4 text-text-muted align-top"><strong class="text-text">"A jailbreak produced an unsafe action."</strong> — a bad output reaches an actuator before any filter can intervene.</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.2 confidence gates + §16.3 HiTL gates — per-scope thresholds and structural human-authorization gates enforced <em>before</em> dispatch. A low-confidence or gated action cannot reach an actuator regardless of how the model was manipulated.</td>
+          </tr>
+          <tr>
+            <td class="py-4 pr-4 text-text-muted align-top"><strong class="text-text">"Was a human actually in control?"</strong> — human oversight is asserted but not provable.</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.3 structural <code class="text-accent/80 font-mono text-xs">PENDING_AUTH → AUTHORIZE</code> flow signed by an OWNER principal; §2 RBAC role boundaries an agent cannot self-escalate. Oversight is recorded as a signed event.</td>
+          </tr>
+          <tr>
+            <td class="py-4 pr-4 text-text-muted align-top"><strong class="text-text">"Is this output AI-generated?"</strong> — provenance of agent actions is unverifiable downstream.</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.5 AI output watermarking — an HMAC watermark token on every AI-generated COMMAND, with a verification endpoint, so downstream systems can confirm provenance.</td>
+          </tr>
+          <tr>
+            <td class="py-4 pr-4 text-text-muted align-top"><strong class="text-text">"What standard was the deployment held to?"</strong> — no measurable, comparable bar.</td>
+            <td class="py-4 pr-4 text-text-muted align-top">L1–L4 conformance suite — quantitative pass/fail per requirement, producing a signed, independently replayable conformance bundle.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-text-muted text-sm leading-relaxed mt-6">
+      RCAN's lane is the <strong>deployment and embodiment layer</strong> — where a model becomes an action. It does not regulate how a frontier lab trains or weights a model. That distinction is the point: most AI risk that touches the physical world materializes at deployment, and that is exactly where verifiable evidence is cheapest to capture and most useful to a regulator.
+    </p>
+  </section>
+
+  <!-- RRF institutional layer -->
+  <section class="max-w-4xl mx-auto px-6 py-16 border-b border-white/5">
+    <h2 class="text-2xl font-bold mb-4">The institutional layer: the Robot Registry Foundation</h2>
+    <p class="text-text-muted leading-relaxed mb-4">
+      A protocol produces evidence; an institution makes it count. The EU AI Act works because of named bodies — notified bodies, market-surveillance authorities, a public registration database. The US framework, as of June 2026, has no analogous neutral institution for embodied AI.
+    </p>
+    <p class="text-text-muted leading-relaxed mb-6">
+      The <a href="https://robotregistryfoundation.org/" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">Robot Registry Foundation</a> is positioned to be that anchor — a standards-and-registry body that already operates the pieces a structured process needs:
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-5">
+        <h3 class="font-bold mb-1 text-sm">A public registry</h3>
+        <p class="text-text-muted text-sm leading-relaxed m-0">Robots and agents identified by RRN / Robot URI — the EU AI Act's "public database," but for deployed embodied systems, with cross-registry federation built in.</p>
+      </div>
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-5">
+        <h3 class="font-bold mb-1 text-sm">Replayable attestation</h3>
+        <p class="text-text-muted text-sm leading-relaxed m-0">Conformance asserted via signed bundles that anyone can re-verify — evidence a regulator can check without trusting the operator or the vendor.</p>
+      </div>
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-5">
+        <h3 class="font-bold mb-1 text-sm">An open spec</h3>
+        <p class="text-text-muted text-sm leading-relaxed m-0">The requirements are public and versioned. No vendor lock-in, no black-box compliance product — the standard itself is auditable.</p>
+      </div>
+    </div>
+    <p class="text-text-muted text-sm leading-relaxed mt-6">
+      One honest boundary: RRF's conformance is <strong>self-asserted and independently replayable</strong>, not third-party certification. That is a feature for a fast-moving field — but if the US wants certification-grade assurance, RRF's bundles are the substrate an accredited body would audit against. See <a href="/compliance/frameworks" class="text-accent hover:underline">Framework Coverage</a> for the "conformance is not certification" boundary.
+    </p>
+  </section>
+
+  <!-- Policy proposals -->
+  <section id="proposals" class="max-w-4xl mx-auto px-6 py-16 border-b border-white/5 scroll-mt-24">
+    <p class="text-sm font-mono uppercase tracking-widest text-accent mb-3">Recommendations</p>
+    <h2 class="text-3xl font-bold mb-4">Five proposals for the US government</h2>
+    <p class="text-text-muted leading-relaxed mb-10">
+      These keep the US framework's innovation-first, no-preclearance posture intact. They add what June showed is missing: a <em>predictable, evidence-based process</em> for when the government does act — the EU AI Act's structure, delivered through infrastructure rather than a licensing bureaucracy.
+    </p>
+
+    <div class="space-y-6">
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6">
+        <div class="flex items-baseline gap-3 mb-2">
+          <span class="text-2xl font-bold text-accent font-mono">01</span>
+          <h3 class="text-lg font-bold">Codify a transparent statutory standard for intervention</h3>
+        </div>
+        <p class="text-text-muted text-sm leading-relaxed mb-3">
+          Replace verbal, discretionary directives with a published standard: what evidence triggers a deployment restriction, what notice and written basis a provider receives, and how it contests the action. This is exactly the "transparent, fair, clear, and grounded in technical facts" process the affected provider itself called for.
+        </p>
+        <p class="text-text-muted text-xs leading-relaxed m-0"><span class="text-accent font-mono">RCAN/RRF role:</span> the standard can require <em>technical facts</em> in a defined, replayable form — RCAN audit bundles — so "grounded in fact" is operational, not aspirational.</p>
+      </div>
+
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6">
+        <div class="flex items-baseline gap-3 mb-2">
+          <span class="text-2xl font-bold text-accent font-mono">02</span>
+          <h3 class="text-lg font-bold">Make deployment-layer evidence the unit of accountability</h3>
+        </div>
+        <p class="text-text-muted text-sm leading-relaxed mb-3">
+          Rather than recalling a general-purpose model over a narrow jailbreak — which, applied consistently, would halt all deployment — hold the <em>deployment</em> accountable through verifiable guardrails and audit. A jailbreak that cannot produce an unsafe physical action because a structural gate blocks it is a contained risk, and the audit chain proves containment.
+        </p>
+        <p class="text-text-muted text-xs leading-relaxed m-0"><span class="text-accent font-mono">RCAN/RRF role:</span> §16.2/§16.3 gates plus §6 AuditChain shift the question from "can this model ever be tricked?" (unanswerable) to "can this deployment act unsafely, and can we prove it?" (testable).</p>
+      </div>
+
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6">
+        <div class="flex items-baseline gap-3 mb-2">
+          <span class="text-2xl font-bold text-accent font-mono">03</span>
+          <h3 class="text-lg font-bold">Reward transparency instead of penalizing it</h3>
+        </div>
+        <p class="text-text-muted text-sm leading-relaxed mb-3">
+          Establish a safe-harbor: providers and deployers who disclose known limitations and maintain verifiable guardrails receive procedural protection — graduated remediation before any blunt restriction. This inverts the corrosive incentive June created, where candor invited action and silence did not.
+        </p>
+        <p class="text-text-muted text-xs leading-relaxed m-0"><span class="text-accent font-mono">RCAN/RRF role:</span> watermarking (§16.5), model-identity audit (§16.1), and signed conformance bundles give a deployer concrete artifacts that earn the safe harbor.</p>
+      </div>
+
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6">
+        <div class="flex items-baseline gap-3 mb-2">
+          <span class="text-2xl font-bold text-accent font-mono">04</span>
+          <h3 class="text-lg font-bold">Adopt a tiered, risk-based scope — for embodiment</h3>
+        </div>
+        <p class="text-text-muted text-sm leading-relaxed mb-3">
+          Borrow the EU AI Act's best idea — graduated obligations by risk — and apply it where the US framework is thinnest: AI that takes physical action. Obligations scale with consequence (a warehouse arm near people vs. a stationary sensor), mapped to RCAN conformance levels L1–L4 as the measurable rungs.
+        </p>
+        <p class="text-text-muted text-xs leading-relaxed m-0"><span class="text-accent font-mono">RCAN/RRF role:</span> L1 (core) → L4 (registry) already provides quantitative, testable tiers; see <a href="/conformance/" class="text-accent hover:underline">Conformance</a>.</p>
+      </div>
+
+      <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6">
+        <div class="flex items-baseline gap-3 mb-2">
+          <span class="text-2xl font-bold text-accent font-mono">05</span>
+          <h3 class="text-lg font-bold">Recognize an open, neutral registry for embodied AI</h3>
+        </div>
+        <p class="text-text-muted text-sm leading-relaxed mb-3">
+          The EU AI Act has a public database and named bodies. The US should recognize an open, vendor-neutral registry for deployed robots and agents — public identity, federated discovery, replayable attestation — rather than building a closed government system or leaving a vacuum. Recognition, not control: the registry stays open and auditable.
+        </p>
+        <p class="text-text-muted text-xs leading-relaxed m-0"><span class="text-accent font-mono">RCAN/RRF role:</span> the Robot Registry Foundation already operates this — RRN/Robot URI identity, cross-registry federation, and an open spec the government can point to without owning.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- US vs EU comparison -->
+  <section class="max-w-4xl mx-auto px-6 py-16 border-b border-white/5">
+    <h2 class="text-2xl font-bold mb-4">The EU AI Act's structure, the US's posture</h2>
+    <p class="text-text-muted leading-relaxed mb-8">
+      The US does not need to copy the EU's licensing regime to gain its predictability. The two are separable: the EU AI Act's value is its <em>structure</em>, not its bureaucracy. Infrastructure supplies the structure; the US keeps its innovation-first posture.
+    </p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-white/10">
+            <th class="text-left py-3 pr-4 text-text-muted font-medium">Function</th>
+            <th class="text-left py-3 pr-4 text-text-muted font-medium">EU AI Act</th>
+            <th class="text-left py-3 pr-4 text-text-muted font-medium">US today (June 2026)</th>
+            <th class="text-left py-3 text-text-muted font-medium">RCAN + RRF proposal</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          <tr>
+            <td class="py-4 pr-4 text-text align-top font-medium">Risk tiering</td>
+            <td class="py-4 pr-4 text-text-muted align-top">Statutory risk categories</td>
+            <td class="py-4 pr-4 text-text-muted align-top">None for embodied AI</td>
+            <td class="py-4 text-text-muted align-top">L1–L4 conformance as measurable tiers</td>
+          </tr>
+          <tr>
+            <td class="py-4 pr-4 text-text align-top font-medium">Evidence</td>
+            <td class="py-4 pr-4 text-text-muted align-top">Technical documentation (Annex IV)</td>
+            <td class="py-4 pr-4 text-text-muted align-top">Ad hoc; sometimes verbal</td>
+            <td class="py-4 text-text-muted align-top">Signed, replayable RCAN audit bundles</td>
+          </tr>
+          <tr>
+            <td class="py-4 pr-4 text-text align-top font-medium">Transparency</td>
+            <td class="py-4 pr-4 text-text-muted align-top">Art. 13, Art. 50 marking</td>
+            <td class="py-4 pr-4 text-text-muted align-top">Voluntary; disclosure can backfire</td>
+            <td class="py-4 text-text-muted align-top">§16.5 watermarking + §16.1 model identity + safe harbor</td>
+          </tr>
+          <tr>
+            <td class="py-4 pr-4 text-text align-top font-medium">Human oversight</td>
+            <td class="py-4 pr-4 text-text-muted align-top">Art. 14</td>
+            <td class="py-4 pr-4 text-text-muted align-top">Asserted, not provable</td>
+            <td class="py-4 text-text-muted align-top">§16.3 signed HiTL gates</td>
+          </tr>
+          <tr>
+            <td class="py-4 pr-4 text-text align-top font-medium">Public registry</td>
+            <td class="py-4 pr-4 text-text-muted align-top">EU database (Art. 49)</td>
+            <td class="py-4 pr-4 text-text-muted align-top">None</td>
+            <td class="py-4 text-text-muted align-top">RRF open, federated registry (RRN / Robot URI)</td>
+          </tr>
+          <tr>
+            <td class="py-4 pr-4 text-text align-top font-medium">Enforcement posture</td>
+            <td class="py-4 pr-4 text-text-muted align-top">Mandatory, licensing-adjacent</td>
+            <td class="py-4 pr-4 text-text-muted align-top">Voluntary + discretionary recall</td>
+            <td class="py-4 text-text-muted align-top">Voluntary + <em>predictable, evidence-based</em> process</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-text-muted text-sm leading-relaxed mt-6">
+      Detailed article-level mapping of RCAN provisions to the EU AI Act, NIST AI RMF, ISO 10218-1, and others is maintained on the <a href="/compliance/frameworks" class="text-accent hover:underline">Framework Coverage</a> page.
+    </p>
+  </section>
+
+  <!-- Close + sources -->
+  <section class="max-w-4xl mx-auto px-6 py-16">
+    <div class="bg-accent/5 border border-accent/20 rounded-2xl p-8 mb-10">
+      <h2 class="text-xl font-bold mb-3">The bottom line</h2>
+      <p class="text-text-muted leading-relaxed m-0">
+        The Fable 5 episode was not a failure of values — it was a failure of <em>process built on facts</em>. The United States can have the EU AI Act's predictability without its licensing regime, because the structure that makes governance fair is an evidence layer, and that layer can be open infrastructure. RCAN specifies it for embodied AI; the Robot Registry Foundation anchors it. The work is already shipping — what remains is for policy to point at it.
+      </p>
+    </div>
+
+    <h3 class="font-bold mb-4 text-sm uppercase tracking-wider text-text-muted">Sources</h3>
+    <ul class="space-y-2 text-sm text-text-muted">
+      <li><a href="https://www.anthropic.com/news/fable-mythos-access" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">Anthropic — Statement on the US government directive to suspend access to Fable 5 and Mythos 5</a></li>
+      <li><a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">CNBC — Anthropic disables access to Fable 5 and Mythos 5 to comply with government directive</a></li>
+      <li><a href="https://time.com/article/2026/06/13/anthropic-fable-mythos-ban-US-security/" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">TIME — Anthropic Pulls Its Most Powerful AI Models After U.S. Bars Foreign Access</a></li>
+      <li><a href="https://fortune.com/2026/06/13/anthropic-disables-fable-mythos-export-controls-national-security-threat/" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">Fortune — Anthropic disables Fable and Mythos AI models following U.S. government export ban</a></li>
+      <li><a href="https://www.aljazeera.com/news/2026/6/13/us-orders-anthropic-to-disable-ai-models-for-all-foreign-nationals" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">Al Jazeera — US orders Anthropic to disable AI models for all foreign nationals</a></li>
+      <li><a href="https://www.lw.com/en/insights/president-trump-signs-executive-order-establishing-ai-cybersecurity-and-frontier-model-framework" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">Latham &amp; Watkins — Executive Order Establishing AI Cybersecurity and Frontier Model Framework (EO 14409)</a></li>
+      <li><a href="https://www.nortonrosefulbright.com/en-us/knowledge/publications/900af3cf/executive-order-establishes-voluntary-early-access-framework-to-frontier-ai-models" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">Norton Rose Fulbright — EO sets voluntary 'early access' framework for AI models</a></li>
+    </ul>
+    <p class="text-text-faint text-xs leading-relaxed mt-8">
+      This position paper reflects the views of the RCAN protocol project and the Robot Registry Foundation. It summarizes public reporting and the involved parties' own statements for context and does not assert any regulatory authority. Citations of specific intervention timestamps and the "narrow, non-universal jailbreak" characterization are drawn from the sources above.
+    </p>
+  </section>
+</BaseLayout>

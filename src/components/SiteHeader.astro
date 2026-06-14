@@ -32,6 +32,7 @@ const mobileLinks = [
   { href: '/changelog/', label: 'Changelog' },
   { href: '/safety', label: 'Safety' },
   { href: '/compliance/frameworks', label: 'Compliance' },
+  { href: '/policy/', label: 'Policy' },
   { href: '/spec/', label: 'Spec' },
   { href: '/conformance/', label: '— Conformance' },
   { href: '/schemas/', label: '— Schemas' },
@@ -142,6 +143,16 @@ function isActive(href: string) {
         ]}
       >
         Compliance
+      </a>
+
+      <!-- Policy -->
+      <a href="/policy/"
+        class:list={[
+          "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors",
+          isActive('/policy/') ? "text-accent bg-accent/10" : "text-text-muted hover:text-accent hover:bg-white/5"
+        ]}
+      >
+        Policy
       </a>
 
       <!-- Spec dropdown -->
