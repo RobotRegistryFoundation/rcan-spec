@@ -22,6 +22,14 @@ import {
   handleGet,
 } from "../functions/api/v1/robots/[rrn]/fria.js";
 import { deriveComplianceStatus, handleCompliance } from "../functions/api/v1/robots/[rrn]/compliance.js";
+import {
+  buildManifest,
+  canonicalJson,
+  capabilitiesFor,
+  onRequest as rcanNodeOnRequest,
+  SELF_SIGNED_NOTE,
+  UNSIGNED_NOTE,
+} from "../functions/.well-known/rcan-node.json.js";
 
 // ── D1 mock ───────────────────────────────────────────────────────────────────
 
@@ -367,24 +375,13 @@ describe("isTier — type guard", () => {
 });
 
 describe("/.well-known/rcan-node.json response structure", () => {
-  // Mirror the manifest from functions/.well-known/rcan-node.json.ts
-  const manifest = {
-    rcan_node_version: "1.0",
-    node_type: "root",
-    operator: "Robot Registry Foundation",
-    namespace_prefix: "RRN",
-    public_key: null,
-    api_base: "https://rcan.dev/api/v1",
-    registry_ui: "https://rcan.dev/registry/",
-    spec_version: "1.3",
-    capabilities: ["register", "resolve", "verify", "delegate"],
-    sync_endpoint: "https://rcan.dev/api/v1/sync",
-    last_sync: new Date().toISOString(),
-    ttl_seconds: 3600,
-    contact: "registry@rcan.dev",
-    governance: "https://rcan.dev/governance/",
-    federation_protocol: "https://rcan.dev/federation/",
-  };
+  // Not a mirror: this is the manifest the deployed handler actually builds,
+  // with no key material configured.
+  let manifest: Record<string, unknown>;
+
+  beforeAll(async () => {
+    manifest = await buildManifest({});
+  });
 
   it("has required fields", () => {
     const required = [
@@ -408,20 +405,32 @@ describe("/.well-known/rcan-node.json response structure", () => {
     expect(manifest.namespace_prefix).toMatch(/^RRN(-[A-Z0-9]{2,8})?$/);
   });
 
-  it("capabilities includes core verbs", () => {
+  it("capabilities include the verbs that need no key", () => {
     expect(manifest.capabilities).toContain("register");
     expect(manifest.capabilities).toContain("resolve");
-    expect(manifest.capabilities).toContain("verify");
   });
 
   it("ttl_seconds is a positive integer", () => {
     expect(typeof manifest.ttl_seconds).toBe("number");
-    expect(manifest.ttl_seconds).toBeGreaterThan(0);
+    expect(manifest.ttl_seconds as number).toBeGreaterThan(0);
   });
 
   it("api_base is a valid HTTPS URL", () => {
-    const url = new URL(manifest.api_base);
+    const url = new URL(manifest.api_base as string);
     expect(url.protocol).toBe("https:");
+  });
+
+  it("does not carry last_sync: a per-request stamp is not a sync time", () => {
+    expect(manifest).not.toHaveProperty("last_sync");
+  });
+
+  it("onRequest serves the manifest as JSON", async () => {
+    const res = await rcanNodeOnRequest({ env: {} });
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Content-Type")).toBe("application/json");
+    const body = JSON.parse(await res.text());
+    expect(body.node_type).toBe("root");
+    expect(body).not.toHaveProperty("last_sync");
   });
 });
 
@@ -1075,27 +1084,11 @@ describe("pqc-v1 signature format (post-2028)", () => {
 });
 
 describe("rcan-node.json manifest — PQC fields (issue #188)", () => {
-  // Mirror the updated manifest from functions/.well-known/rcan-node.json.ts
-  const manifest = {
-    rcan_node_version: "1.0",
-    node_type: "root",
-    operator: "Robot Registry Foundation",
-    namespace_prefix: "RRN",
-    public_key: null,
-    crypto_profile: "pqc-hybrid-v1",
-    pqc_public_key: null,
-    ed25519_public_key: null,
-    api_base: "https://rcan.dev/api/v1",
-    registry_ui: "https://rcan.dev/registry/",
-    spec_version: "2.3",
-    capabilities: ["register", "resolve", "verify", "delegate"],
-    sync_endpoint: "https://rcan.dev/api/v1/sync",
-    last_sync: new Date().toISOString(),
-    ttl_seconds: 3600,
-    contact: "registry@rcan.dev",
-    governance: "https://rcan.dev/governance/",
-    federation_protocol: "https://rcan.dev/federation/",
-  };
+  let manifest: Record<string, unknown>;
+
+  beforeAll(async () => {
+    manifest = await buildManifest({});
+  });
 
   it("has crypto_profile field", () => {
     expect(manifest).toHaveProperty("crypto_profile");
@@ -1115,6 +1108,175 @@ describe("rcan-node.json manifest — PQC fields (issue #188)", () => {
 
   it("spec_version is 2.3", () => {
     expect(manifest.spec_version).toBe("2.3");
+  });
+});
+
+// ── M-03: every capability claim is a function of configured key material ────
+
+describe("rcan-node.json capabilities follow the configured key material", () => {
+  it("capabilitiesFor withholds verify without a published key", () => {
+    expect(capabilitiesFor(false, false)).toEqual(["register", "resolve"]);
+    expect(capabilitiesFor(false, true)).toEqual(["register", "resolve"]);
+  });
+
+  it("capabilitiesFor withholds delegate without a working signing key", () => {
+    expect(capabilitiesFor(true, false)).toEqual(["register", "resolve", "verify"]);
+    expect(capabilitiesFor(true, true)).toEqual([
+      "register",
+      "resolve",
+      "verify",
+      "delegate",
+    ]);
+  });
+
+  it("canonicalJson sorts keys recursively and emits no whitespace", () => {
+    expect(canonicalJson({ b: { d: 1, c: [3, 1] }, a: null })).toBe(
+      '{"a":null,"b":{"c":[3,1],"d":1}}',
+    );
+  });
+
+  describe("with no key env set", () => {
+    let manifest: Record<string, unknown>;
+
+    beforeAll(async () => {
+      manifest = await buildManifest({});
+    });
+
+    it("publishes null keys", () => {
+      expect(manifest.public_key).toBeNull();
+      expect(manifest.ed25519_public_key).toBeNull();
+      expect(manifest.pqc_public_key).toBeNull();
+    });
+
+    it("does not advertise verify or delegate", () => {
+      expect(manifest.capabilities).toEqual(["register", "resolve"]);
+      expect(manifest.capabilities).not.toContain("verify");
+      expect(manifest.capabilities).not.toContain("delegate");
+    });
+
+    it("returns an unsigned manifest_signature that says why", () => {
+      const sig = manifest.manifest_signature as Record<string, unknown>;
+      expect(sig.sig).toBeNull();
+      expect(sig.kid).toBeNull();
+      expect(sig.note).toBe(UNSIGNED_NOTE);
+      expect(typeof sig.reason).toBe("string");
+      expect(sig.reason as string).toContain("RCAN_NODE_ED25519_PUBKEY");
+    });
+
+    it("satisfies the outside check: no ed25519 key implies no verify verb", () => {
+      expect(
+        Boolean(manifest.ed25519_public_key) ||
+          !(manifest.capabilities as string[]).includes("verify"),
+      ).toBe(true);
+    });
+  });
+
+  describe("with keys set", () => {
+    let manifest: Record<string, unknown>;
+    let publicKey: CryptoKey;
+
+    beforeAll(async () => {
+      const kp = (await crypto.subtle.generateKey({ name: "Ed25519" }, true, [
+        "sign",
+        "verify",
+      ])) as CryptoKeyPair;
+      publicKey = kp.publicKey;
+
+      const pkcs8 = new Uint8Array(
+        await crypto.subtle.exportKey("pkcs8", kp.privateKey),
+      );
+      const spki = new Uint8Array(await crypto.subtle.exportKey("spki", kp.publicKey));
+      const raw = spki.slice(spki.length - 32);
+
+      const toB64 = (b: Uint8Array) => {
+        let bin = "";
+        for (const x of b) bin += String.fromCharCode(x);
+        return btoa(bin);
+      };
+      const rawB64url = toB64(raw)
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+
+      manifest = await buildManifest({
+        RCAN_NODE_ED25519_PUBKEY: rawB64url,
+        RCAN_NODE_PUBKEY: `ed25519:${rawB64url}`,
+        RCAN_NODE_ED25519_PRIVKEY: toB64(pkcs8),
+      });
+    });
+
+    it("advertises verify and delegate", () => {
+      expect(manifest.capabilities).toEqual([
+        "register",
+        "resolve",
+        "verify",
+        "delegate",
+      ]);
+    });
+
+    it("publishes the key it signs with", () => {
+      expect(typeof manifest.ed25519_public_key).toBe("string");
+      expect(manifest.public_key).toBe(`ed25519:${manifest.ed25519_public_key}`);
+    });
+
+    it("manifest_signature verifies against the published ed25519_public_key", async () => {
+      const sig = manifest.manifest_signature as Record<string, unknown>;
+      expect(sig.alg).toBe("Ed25519");
+      expect(typeof sig.kid).toBe("string");
+      expect(typeof sig.sig).toBe("string");
+
+      const { manifest_signature: _omit, ...signable } = manifest;
+      const input = new TextEncoder().encode(canonicalJson(signable));
+
+      const b64 = (sig.sig as string).replace(/-/g, "+").replace(/_/g, "/");
+      const padded = b64 + "=".repeat((4 - (b64.length % 4)) % 4);
+      const bin = atob(padded);
+      const sigBytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) sigBytes[i] = bin.charCodeAt(i);
+
+      const ok = await crypto.subtle.verify(
+        { name: "Ed25519" },
+        publicKey,
+        sigBytes,
+        input,
+      );
+      expect(ok).toBe(true);
+    });
+
+    it("says a self-signature proves control of the key and nothing more", () => {
+      const sig = manifest.manifest_signature as Record<string, unknown>;
+      expect(sig.note).toBe(SELF_SIGNED_NOTE);
+      expect(sig.note as string).toContain("independence");
+    });
+
+    it("still carries no last_sync", () => {
+      expect(manifest).not.toHaveProperty("last_sync");
+    });
+  });
+
+  describe("with a published key but no private half", () => {
+    it("advertises verify but not delegate, and stays unsigned", async () => {
+      const manifest = await buildManifest({
+        RCAN_NODE_ED25519_PUBKEY: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      });
+      expect(manifest.capabilities).toEqual(["register", "resolve", "verify"]);
+      const sig = manifest.manifest_signature as Record<string, unknown>;
+      expect(sig.sig).toBeNull();
+      expect(sig.reason as string).toContain("RCAN_NODE_ED25519_PRIVKEY");
+    });
+  });
+
+  describe("with a private key that does not sign", () => {
+    it("withholds delegate rather than claim a verb it cannot perform", async () => {
+      const manifest = await buildManifest({
+        RCAN_NODE_ED25519_PUBKEY: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        RCAN_NODE_ED25519_PRIVKEY: "not-a-pkcs8-key",
+      });
+      expect(manifest.capabilities).not.toContain("delegate");
+      const sig = manifest.manifest_signature as Record<string, unknown>;
+      expect(sig.sig).toBeNull();
+      expect(sig.reason as string).toContain("did not produce a signature");
+    });
   });
 });
 

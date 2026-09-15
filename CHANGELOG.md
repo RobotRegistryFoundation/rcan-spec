@@ -1,5 +1,27 @@
 # RCAN Spec Changelog
 
+## [Unreleased]
+
+### Changed
+- `/.well-known/rcan-node.json` builds its `capabilities` list from the key material
+  actually configured on the deployment. `register` and `resolve` are always listed;
+  `verify` only when `RCAN_NODE_ED25519_PUBKEY` is set; `delegate` only when the
+  private half is bound and produces a signature. The root node no longer advertises
+  verify and delegate while publishing null keys.
+- `/.well-known/rcan-node.json` no longer emits `last_sync`. A value stamped per
+  request is a generation time, not a sync time. The field stays in the schema,
+  marked deprecated.
+
+### Added
+- `/.well-known/rcan-node.json` self-signs: `manifest_signature` is
+  `{alg, kid, sig, note}` over the canonical JSON of the manifest with
+  `manifest_signature` removed. The `note` states that a self-signed declaration
+  proves control of the published key and nothing about the operator's independence.
+  When no usable signing key is configured, `sig` and `kid` are null and `reason`
+  says which variable is missing.
+- `scripts/init-rcan-node-key.ts` mints the root node Ed25519 keypair and prints the
+  wrangler commands for the operator. It contacts nothing and sets nothing.
+
 ## [2.3.0] - 2026-03-31
 
 ### Added

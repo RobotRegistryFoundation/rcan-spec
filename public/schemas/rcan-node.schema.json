@@ -15,7 +15,24 @@
     "spec_version": { "type": "string" },
     "capabilities": { "type": "array", "items": { "type": "string" } },
     "sync_endpoint": { "type": "string", "format": "uri" },
-    "last_sync": { "type": "string", "format": "date-time" },
+    "last_sync": {
+      "type": "string",
+      "format": "date-time",
+      "deprecated": true,
+      "description": "Deprecated. rcan.dev no longer emits this: a value stamped per request is a generation time, not a sync time."
+    },
+    "manifest_signature": {
+      "type": "object",
+      "description": "Self-signature over the canonical JSON of this manifest with manifest_signature removed. sig is null when the node has no usable signing key, and reason says why. A self-signature proves control of the published key and nothing about the operator's independence.",
+      "properties": {
+        "alg": { "type": "string", "enum": ["Ed25519"] },
+        "kid": { "type": ["string", "null"] },
+        "sig": { "type": ["string", "null"] },
+        "reason": { "type": "string" },
+        "note": { "type": "string" }
+      },
+      "required": ["alg", "kid", "sig", "note"]
+    },
     "ttl_seconds": { "type": "integer", "minimum": 60 },
     "contact": { "type": "string" },
     "governance": { "type": "string", "format": "uri" },
