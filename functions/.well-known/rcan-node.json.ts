@@ -1,5 +1,5 @@
 /**
- * GET /.well-known/rcan-node.json — the rcan.dev root node manifest.
+ * GET /.well-known/rcan-node.json: the rcan.dev root node manifest.
  *
  * Every capability in this manifest is a function of key material that is
  * actually configured on the deployment. Nothing here is advertised on the
@@ -21,6 +21,22 @@
  * A self-signature proves control of the published key and nothing else; the
  * note field inside manifest_signature says so in the response itself.
  *
+ * Everything outside manifest_signature is inside the signed bytes, so no
+ * published field can be edited without breaking the signature. The reason and
+ * note strings sit inside the block and are therefore outside them.
+ *
+ * What an outside reader needs, all of it published here or in
+ * https://rcan.dev/schemas/rcan-node.schema.json:
+ *   1. take this response, delete the manifest_signature member
+ *   2. canonical JSON: object keys sorted by UTF-16 code unit, recursively, no
+ *      whitespace, UTF-8 bytes
+ *   3. import ed25519_public_key as a raw 32-byte Ed25519 public key, decoded
+ *      from base64url without padding
+ *   4. verify manifest_signature.sig, the raw 64-byte Ed25519 signature decoded
+ *      from base64url without padding, over those bytes
+ * Ed25519 signing is deterministic and nothing here is stamped per request, so
+ * the same deployment returns the same bytes and the same signature every time.
+ *
  * Environment (Cloudflare Pages vars and secrets on project `rcan-spec`):
  *   RCAN_NODE_PUBKEY          var    "ed25519:<base64url raw 32-byte key>"
  *   RCAN_NODE_ED25519_PUBKEY  var    base64url raw 32-byte Ed25519 public key
@@ -41,6 +57,13 @@ export interface RcanNodeEnv {
 export const SELF_SIGNED_NOTE =
   "A self-signed declaration proves control of the published key and nothing about the operator's independence. " +
   "RCAN conformance is self-asserted and this manifest is a format, not an authority.";
+
+export const CAPABILITY_NOTES =
+  "capabilities lists the verbs this deployment's configured key material supports, and nothing it intends. " +
+  "verify means this node publishes an Ed25519 key a reader can check its signatures against. " +
+  "delegate means this node holds a working Ed25519 signing key, which is the mechanical prerequisite for signing a namespace delegation; " +
+  "it does not assert that any delegation exists, it describes no delegation protocol, and it grants nobody authority. " +
+  "The list is self-asserted, like the rest of RCAN conformance.";
 
 export const UNSIGNED_NOTE =
   "This node has no usable signing key configured, so the manifest is unsigned and carries no proof of key control. " +
@@ -132,6 +155,7 @@ export async function buildManifest(env: RcanNodeEnv = {}): Promise<Record<strin
     registry_ui: "https://rcan.dev/registry/",
     spec_version: "2.3",
     capabilities,
+    capability_notes: CAPABILITY_NOTES,
     sync_endpoint: "https://rcan.dev/api/v1/sync",
     ttl_seconds: 3600,
     contact: "registry@rcan.dev",

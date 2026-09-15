@@ -33,7 +33,22 @@ function bytesToBase64url(bytes: Uint8Array): string {
   return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-async function main() {
+export interface MintedNodeKey {
+  /** RCAN_NODE_ED25519_PUBKEY: raw 32-byte public key, base64url, unpadded. */
+  pubB64url: string;
+  /** RCAN_NODE_ED25519_PRIVKEY: PKCS#8 private key, standard base64. */
+  privPkcs8B64: string;
+  /** The kid the manifest derives from pubB64url. */
+  kid: string;
+}
+
+/**
+ * Mint the keypair and return exactly the two strings the operator pastes into
+ * Cloudflare, in exactly the encodings printed below. Exported so a test can
+ * round-trip this output through the deployed manifest builder rather than
+ * re-deriving the encodings and proving nothing. Writes nothing, prints nothing.
+ */
+export async function mintNodeKey(): Promise<MintedNodeKey> {
   const kp = (await crypto.subtle.generateKey({ name: "Ed25519" }, true, [
     "sign",
     "verify",
@@ -60,6 +75,12 @@ async function main() {
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("")
       .slice(0, 16);
+
+  return { pubB64url, privPkcs8B64, kid };
+}
+
+async function main() {
+  const { pubB64url, privPkcs8B64, kid } = await mintNodeKey();
 
   writeFileSync("/tmp/rcan-node-ed25519-privkey.b64", privPkcs8B64, { mode: 0o600 });
 
@@ -105,7 +126,12 @@ async function main() {
   process.stdout.write(out);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+// Run only when invoked as a script. Importing this module (a test does, to
+// round-trip the printed encodings through the manifest builder) mints nothing
+// and writes nothing.
+if (process.argv[1]?.endsWith("init-rcan-node-key.ts")) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

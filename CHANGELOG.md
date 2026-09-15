@@ -11,6 +11,19 @@
 - `/.well-known/rcan-node.json` no longer emits `last_sync`. A value stamped per
   request is a generation time, not a sync time. The field stays in the schema,
   marked deprecated.
+- `POST /api/v1/sync` answers `501` with
+  `{ "error": "federation is not enabled on this node", "delegations": 0 }` when
+  `namespace_delegations` is empty, instead of a `403` implying the caller is merely
+  absent from a list. The `403` still applies once delegations exist.
+- The federation page states what the deployment actually runs: one node, zero
+  delegations, no cryptographic check over a pushed sync body, and that being listed
+  in the federation index is not a certification.
+- `public/schemas/rcan-node.schema.json` accepts `null` for `public_key`, and for
+  `ed25519_public_key` and `pqc_public_key`. A node with no key configured now
+  validates against the published schema instead of failing it, which is the state
+  rcan.dev serves until the key is provisioned. The `ed25519:` pattern still applies
+  to any string value, so a malformed key is still rejected. This is the only
+  constraint relaxed.
 
 ### Added
 - `/.well-known/rcan-node.json` self-signs: `manifest_signature` is
@@ -19,22 +32,25 @@
   proves control of the published key and nothing about the operator's independence.
   When no usable signing key is configured, `sig` and `kid` are null and `reason`
   says which variable is missing.
+- `/.well-known/rcan-node.json` publishes `capability_notes`, inside the signed
+  bytes, saying what the advertised verbs mean: `delegate` means the node holds a
+  working Ed25519 signing key, the mechanical prerequisite for signing a namespace
+  delegation. It asserts no delegation exists, describes no delegation protocol, and
+  grants nobody authority.
+- `public/schemas/rcan-node.schema.json` documents the key and signature encodings
+  and the canonical JSON rule, so a reader holding only the response and the schema
+  can check the self-signature: raw 32-byte Ed25519 key, base64url unpadded; raw
+  64-byte signature, base64url unpadded; object keys sorted by UTF-16 code unit,
+  recursively, no whitespace, UTF-8 bytes.
 - `scripts/init-rcan-node-key.ts` mints the root node Ed25519 keypair and prints the
-  wrangler commands for the operator. It contacts nothing and sets nothing.
+  wrangler commands for the operator. It contacts nothing and sets nothing. Its
+  `mintNodeKey()` is exported so the test suite round-trips the exact printed
+  encodings through the deployed manifest builder.
 
 ### Removed
 - `POST /api/v1/sync` no longer documents an optional payload-signing field in its
   request body. The endpoint never read it. Push sync is authenticated by the admin
   bearer token plus the `namespace_delegations` allowlist, and by nothing else.
-
-### Changed
-- `POST /api/v1/sync` answers `501` with
-  `{ "error": "federation is not enabled on this node", "delegations": 0 }` when
-  `namespace_delegations` is empty, instead of a `403` implying the caller is merely
-  absent from a list. The `403` still applies once delegations exist.
-- The federation page states what the deployment actually runs: one node, zero
-  delegations, no cryptographic check over a pushed sync body, and that being listed
-  in the federation index is not a certification.
 
 ## [2.3.0] - 2026-03-31
 

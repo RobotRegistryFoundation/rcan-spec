@@ -32,10 +32,12 @@ import {
   buildManifest,
   canonicalJson,
   capabilitiesFor,
+  CAPABILITY_NOTES,
   onRequest as rcanNodeOnRequest,
   SELF_SIGNED_NOTE,
   UNSIGNED_NOTE,
 } from "../functions/.well-known/rcan-node.json.js";
+import { mintNodeKey } from "../scripts/init-rcan-node-key.js";
 
 // ── D1 mock ───────────────────────────────────────────────────────────────────
 
@@ -1283,6 +1285,227 @@ describe("rcan-node.json capabilities follow the configured key material", () =>
       expect(sig.sig).toBeNull();
       expect(sig.reason as string).toContain("did not produce a signature");
     });
+  });
+});
+
+
+// ── M-03 verifier pass: outside-reader checkability, round-trip, schema ──────
+
+/** base64url or base64, padded or not, to bytes. What an outside reader does. */
+function b64ToBytes(b64: string): Uint8Array {
+  const n = b64.replace(/-/g, "+").replace(/_/g, "/");
+  const padded = n + "=".repeat((4 - (n.length % 4)) % 4);
+  const bin = atob(padded);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
+describe("rcan-node.json is checkable by a reader who has only the response", () => {
+  it("verifies with the published key alone, imported raw from the manifest", async () => {
+    const { pubB64url, privPkcs8B64 } = await mintNodeKey();
+    const manifest = await buildManifest({
+      RCAN_NODE_ED25519_PUBKEY: pubB64url,
+      RCAN_NODE_PUBKEY: `ed25519:${pubB64url}`,
+      RCAN_NODE_ED25519_PRIVKEY: privPkcs8B64,
+    });
+
+    // Everything below uses only what the response body carries.
+    const sigBlock = manifest.manifest_signature as Record<string, unknown>;
+    const { manifest_signature: _omit, ...signable } = manifest;
+
+    const rawKey = b64ToBytes(manifest.ed25519_public_key as string);
+    expect(rawKey.length).toBe(32);
+
+    const key = await crypto.subtle.importKey(
+      "raw",
+      rawKey as unknown as BufferSource,
+      { name: "Ed25519" },
+      false,
+      ["verify"],
+    );
+    const sigBytes = b64ToBytes(sigBlock.sig as string);
+    expect(sigBytes.length).toBe(64);
+
+    const ok = await crypto.subtle.verify(
+      { name: "Ed25519" },
+      key,
+      sigBytes as unknown as BufferSource,
+      new TextEncoder().encode(canonicalJson(signable)),
+    );
+    expect(ok).toBe(true);
+  });
+
+  it("accepts exactly what init-rcan-node-key.ts prints, with no re-encoding", async () => {
+    // privPkcs8B64 is standard base64 with + and / and padding; pubB64url is
+    // base64url without. The handler must take both as printed.
+    const minted = await mintNodeKey();
+    expect(minted.privPkcs8B64).toMatch(/^[A-Za-z0-9+/]+=*$/);
+    expect(minted.pubB64url).toMatch(/^[A-Za-z0-9_-]+$/);
+
+    const manifest = await buildManifest({
+      RCAN_NODE_ED25519_PUBKEY: minted.pubB64url,
+      RCAN_NODE_PUBKEY: `ed25519:${minted.pubB64url}`,
+      RCAN_NODE_ED25519_PRIVKEY: minted.privPkcs8B64,
+    });
+    expect(manifest.capabilities).toContain("delegate");
+    expect((manifest.manifest_signature as Record<string, unknown>).sig).toBeTruthy();
+  });
+
+  it("publishes the kid the mint script printed", async () => {
+    const minted = await mintNodeKey();
+    const manifest = await buildManifest({
+      RCAN_NODE_ED25519_PUBKEY: minted.pubB64url,
+      RCAN_NODE_ED25519_PRIVKEY: minted.privPkcs8B64,
+    });
+    expect((manifest.manifest_signature as Record<string, unknown>).kid).toBe(minted.kid);
+  });
+
+  it("is byte-identical across requests, so a cached copy still verifies", async () => {
+    const minted = await mintNodeKey();
+    const env = {
+      RCAN_NODE_ED25519_PUBKEY: minted.pubB64url,
+      RCAN_NODE_PUBKEY: `ed25519:${minted.pubB64url}`,
+      RCAN_NODE_ED25519_PRIVKEY: minted.privPkcs8B64,
+    };
+    const a = JSON.stringify(await buildManifest(env));
+    const b = JSON.stringify(await buildManifest(env));
+    expect(a).toBe(b);
+    expect(JSON.stringify(await buildManifest({}))).toBe(
+      JSON.stringify(await buildManifest({})),
+    );
+  });
+
+  it("signs every published field: nothing outside manifest_signature is free", async () => {
+    const minted = await mintNodeKey();
+    const manifest = await buildManifest({
+      RCAN_NODE_ED25519_PUBKEY: minted.pubB64url,
+      RCAN_NODE_ED25519_PRIVKEY: minted.privPkcs8B64,
+    });
+    const { manifest_signature: sigBlock, ...signable } = manifest;
+    const key = await crypto.subtle.importKey(
+      "raw",
+      b64ToBytes(manifest.ed25519_public_key as string) as unknown as BufferSource,
+      { name: "Ed25519" },
+      false,
+      ["verify"],
+    );
+    const sigBytes = b64ToBytes(
+      (sigBlock as Record<string, unknown>).sig as string,
+    ) as unknown as BufferSource;
+
+    for (const field of Object.keys(signable)) {
+      const tampered = { ...signable, [field]: "tampered" };
+      const ok = await crypto.subtle.verify(
+        { name: "Ed25519" },
+        key,
+        sigBytes,
+        new TextEncoder().encode(canonicalJson(tampered)),
+      );
+      expect(ok, `${field} was mutable without breaking the signature`).toBe(false);
+    }
+  });
+
+  it("says what delegate means rather than leaving the verb to be read as authority", async () => {
+    const manifest = await buildManifest({});
+    expect(manifest.capability_notes).toBe(CAPABILITY_NOTES);
+    expect(CAPABILITY_NOTES).toContain("mechanical prerequisite");
+    expect(CAPABILITY_NOTES).toContain("grants nobody authority");
+    expect(CAPABILITY_NOTES).toContain("does not assert that any delegation exists");
+  });
+});
+
+// ── M-03: the manifest production serves on day one validates its own schema ─
+
+describe("rcan-node.json validates against the published schema", () => {
+  const schema = JSON.parse(
+    readFileSync(
+      fileURLToPath(new URL("../public/schemas/rcan-node.schema.json", import.meta.url)),
+      "utf8",
+    ),
+  ) as {
+    required: string[];
+    properties: Record<string, Record<string, unknown>>;
+  };
+
+  /** Enough of draft-07 for this schema: required, type, enum, pattern, nesting. */
+  function validate(
+    doc: Record<string, unknown>,
+    node: { required?: string[]; properties?: Record<string, Record<string, unknown>> },
+    path = "",
+  ): string[] {
+    const errors: string[] = [];
+    for (const key of node.required ?? []) {
+      if (!(key in doc)) errors.push(`${path}/${key} is required and absent`);
+    }
+    for (const [key, rule] of Object.entries(node.properties ?? {})) {
+      if (!(key in doc)) continue;
+      const value = doc[key];
+      const types = rule.type === undefined
+        ? null
+        : Array.isArray(rule.type)
+          ? (rule.type as string[])
+          : [rule.type as string];
+      if (types) {
+        const actual =
+          value === null
+            ? "null"
+            : Array.isArray(value)
+              ? "array"
+              : typeof value === "number"
+                ? Number.isInteger(value) ? "integer" : "number"
+                : typeof value;
+        if (!types.includes(actual) && !(actual === "integer" && types.includes("number"))) {
+          errors.push(`${path}/${key} is ${actual}, schema allows ${types.join("|")}`);
+        }
+      }
+      if (typeof value === "string") {
+        if (rule.pattern && !new RegExp(rule.pattern as string).test(value)) {
+          errors.push(`${path}/${key} does not match ${rule.pattern}`);
+        }
+        if (Array.isArray(rule.enum) && !(rule.enum as unknown[]).includes(value)) {
+          errors.push(`${path}/${key} is not one of ${(rule.enum as string[]).join("|")}`);
+        }
+      }
+      if (value && typeof value === "object" && !Array.isArray(value) && rule.properties) {
+        errors.push(
+          ...validate(
+            value as Record<string, unknown>,
+            rule as { required?: string[]; properties?: Record<string, Record<string, unknown>> },
+            `${path}/${key}`,
+          ),
+        );
+      }
+    }
+    return errors;
+  }
+
+  it("the unconfigured manifest validates: it is what production serves first", async () => {
+    expect(validate(await buildManifest({}), schema)).toEqual([]);
+  });
+
+  it("the configured manifest validates", async () => {
+    const minted = await mintNodeKey();
+    const manifest = await buildManifest({
+      RCAN_NODE_ED25519_PUBKEY: minted.pubB64url,
+      RCAN_NODE_PUBKEY: `ed25519:${minted.pubB64url}`,
+      RCAN_NODE_ED25519_PRIVKEY: minted.privPkcs8B64,
+    });
+    expect(validate(manifest, schema)).toEqual([]);
+  });
+
+  it("the schema still refuses a public_key that is neither null nor ed25519:", async () => {
+    const bad = { ...(await buildManifest({})), public_key: "rsa:nope" };
+    expect(validate(bad, schema)).not.toEqual([]);
+  });
+
+  it("the schema tells a reader the key encoding, not just the field name", () => {
+    expect(String(schema.properties.ed25519_public_key.description)).toMatch(
+      /raw 32-byte Ed25519 public key, base64url/i,
+    );
+    expect(String(schema.properties.manifest_signature.description)).toMatch(
+      /keys sorted by UTF-16 code unit/i,
+    );
   });
 });
 
