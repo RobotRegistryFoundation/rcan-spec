@@ -8,9 +8,18 @@
  *
  * POST /api/v1/sync
  *   Accept a sync payload pushed from an authoritative node.
- *   Body: { protocol, from_node, records, since, signature? }
- *   Auth: Bearer token
+ *   Body: { protocol, from_node, records, since }
+ *   Auth: the admin bearer token, plus membership of the namespace_delegations
+ *         allowlist, and nothing else. This endpoint runs no cryptographic
+ *         check over the pushed body: it has never verified a signed payload,
+ *         and the field that once implied it did has been removed from this
+ *         contract. Do not document such a field here. If a signed push is
+ *         wanted later, write the check first and document it after.
  *   Conflict resolution: root record wins — reject records for RRNs that exist locally.
+ *
+ *   When namespace_delegations is empty this node answers 501 with
+ *   { error, delegations: 0 }. Federation is not enabled, rather than the
+ *   caller being absent from a list they could ask to join.
  */
 
 interface Env {
@@ -191,7 +200,22 @@ async function handleGet(req: Request, env: Env): Promise<Response> {
 
 // ── POST /api/v1/sync ─────────────────────────────────────────────────────────
 
-async function handlePost(req: Request, env: Env): Promise<Response> {
+/**
+ * How many namespace delegations this node holds. A missing table counts as
+ * zero: no table means no delegation, which is the same answer.
+ */
+export async function countDelegations(db: D1Database): Promise<number> {
+  try {
+    const row = await db
+      .prepare(`SELECT COUNT(*) AS n FROM namespace_delegations`)
+      .first<{ n: number }>();
+    return Number(row?.n ?? 0);
+  } catch {
+    return 0;
+  }
+}
+
+export async function handlePost(req: Request, env: Env): Promise<Response> {
   if (!await verifyAdminAuth(req, env)) {
     return err("Authorization required", 401);
   }
@@ -215,6 +239,17 @@ async function handlePost(req: Request, env: Env): Promise<Response> {
   }
   if (!Array.isArray(records)) {
     return err("Missing or invalid `records` array");
+  }
+
+  // Federation is off until a namespace delegation exists. With zero rows this
+  // endpoint can only ever refuse, so answer that plainly instead of a 403 that
+  // implies the caller is simply not yet on a list.
+  const delegations = await countDelegations(env.DB);
+  if (delegations === 0) {
+    return json(
+      { error: "federation is not enabled on this node", delegations: 0 },
+      501
+    );
   }
 
   // Validate from_node is a registered authoritative node

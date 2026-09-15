@@ -22,6 +22,12 @@ import {
   handleGet,
 } from "../functions/api/v1/robots/[rrn]/fria.js";
 import { deriveComplianceStatus, handleCompliance } from "../functions/api/v1/robots/[rrn]/compliance.js";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import {
+  countDelegations,
+  handlePost as handleSyncPost,
+} from "../functions/api/v1/sync/index.js";
 import {
   buildManifest,
   canonicalJson,
@@ -1277,6 +1283,135 @@ describe("rcan-node.json capabilities follow the configured key material", () =>
       expect(sig.sig).toBeNull();
       expect(sig.reason as string).toContain("did not produce a signature");
     });
+  });
+});
+
+
+// ── M-04: the sync endpoint contract and the zero-delegation refusal ─────────
+
+describe("POST /api/v1/sync — contract and refusal (M-04, Option B)", () => {
+  const SYNC_SOURCE = fileURLToPath(
+    new URL("../functions/api/v1/sync/index.ts", import.meta.url),
+  );
+
+  /**
+   * Minimal D1 stub. `delegationRows` is what a COUNT over
+   * namespace_delegations returns; `knownNodes` is the node_url allowlist.
+   * api_keys is absent, so verifyAdminAuth falls through to RCAN_ADMIN_TOKEN.
+   */
+  function syncDb(delegationRows: number, knownNodes: string[] = []) {
+    return {
+      exec: async () => {},
+      prepare(sql: string) {
+        const stmt = {
+          args: [] as unknown[],
+          bind(...a: unknown[]) {
+            stmt.args = a;
+            return stmt;
+          },
+          async run() {
+            return { success: true };
+          },
+          async all() {
+            return { results: [] };
+          },
+          async first() {
+            if (/FROM api_keys/i.test(sql)) throw new Error("no such table: api_keys");
+            if (/COUNT\(\*\) AS n FROM namespace_delegations/i.test(sql)) {
+              return { n: delegationRows };
+            }
+            if (/FROM namespace_delegations WHERE node_url/i.test(sql)) {
+              return knownNodes.includes(String(stmt.args[0]))
+                ? { prefix: "RRN-TEST" }
+                : null;
+            }
+            return null;
+          },
+        };
+        return stmt;
+      },
+    } as unknown as D1Database;
+  }
+
+  function syncRequest(body: unknown) {
+    return new Request("https://rcan.dev/api/v1/sync", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer test-admin-token",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+  }
+
+  const PAYLOAD = {
+    protocol: "rcan-sync/1.0",
+    from_node: "https://example.invalid",
+    records: [],
+  };
+
+  it("the contract documents no payload signature field (Option B)", () => {
+    const source = readFileSync(SYNC_SOURCE, "utf8");
+    const hits = source
+      .split("\n")
+      .filter((line) => line.toLowerCase().includes("signature"));
+    expect(hits).toEqual([]);
+  });
+
+  it("countDelegations reports zero when the table is missing", async () => {
+    const db = {
+      prepare: () => ({
+        first: async () => {
+          throw new Error("no such table: namespace_delegations");
+        },
+      }),
+    } as unknown as D1Database;
+    expect(await countDelegations(db)).toBe(0);
+  });
+
+  it("answers 501 with delegations: 0 when no delegation exists", async () => {
+    const res = await handleSyncPost(syncRequest(PAYLOAD), {
+      DB: syncDb(0),
+      RCAN_ADMIN_TOKEN: "test-admin-token",
+    } as never);
+
+    expect(res.status).toBe(501);
+    const body = await res.json();
+    expect(body).toEqual({
+      error: "federation is not enabled on this node",
+      delegations: 0,
+    });
+  });
+
+  it("does not imply a list the caller could join", async () => {
+    const res = await handleSyncPost(syncRequest(PAYLOAD), {
+      DB: syncDb(0),
+      RCAN_ADMIN_TOKEN: "test-admin-token",
+    } as never);
+    const body = (await res.json()) as Record<string, unknown>;
+    expect(res.status).not.toBe(403);
+    expect(String(body.error)).not.toMatch(/unknown node|register via/i);
+  });
+
+  it("still refuses an unlisted node with 403 once delegations exist", async () => {
+    const res = await handleSyncPost(syncRequest(PAYLOAD), {
+      DB: syncDb(1, ["https://peer.example"]),
+      RCAN_ADMIN_TOKEN: "test-admin-token",
+    } as never);
+    expect(res.status).toBe(403);
+  });
+
+  it("the admin bearer still gates the endpoint before the delegation answer", async () => {
+    const unauth = new Request("https://rcan.dev/api/v1/sync", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(PAYLOAD),
+    });
+    const res = await handleSyncPost(unauth, {
+      DB: syncDb(0),
+      RCAN_ADMIN_TOKEN: "test-admin-token",
+    } as never);
+    expect(res.status).toBe(401);
   });
 });
 

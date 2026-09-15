@@ -22,6 +22,20 @@
 - `scripts/init-rcan-node-key.ts` mints the root node Ed25519 keypair and prints the
   wrangler commands for the operator. It contacts nothing and sets nothing.
 
+### Removed
+- `POST /api/v1/sync` no longer documents an optional payload-signing field in its
+  request body. The endpoint never read it. Push sync is authenticated by the admin
+  bearer token plus the `namespace_delegations` allowlist, and by nothing else.
+
+### Changed
+- `POST /api/v1/sync` answers `501` with
+  `{ "error": "federation is not enabled on this node", "delegations": 0 }` when
+  `namespace_delegations` is empty, instead of a `403` implying the caller is merely
+  absent from a list. The `403` still applies once delegations exist.
+- The federation page states what the deployment actually runs: one node, zero
+  delegations, no cryptographic check over a pushed sync body, and that being listed
+  in the federation index is not a certification.
+
 ## [2.3.0] - 2026-03-31
 
 ### Added
