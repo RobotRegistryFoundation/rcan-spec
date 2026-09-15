@@ -49,6 +49,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <li>
           The node manifest at <a href="/.well-known/rcan-node.json"><code>/.well-known/rcan-node.json</code></a> advertises only the capabilities its configured key material supports, and self-signs when a signing key is configured. A self-signature proves control of that key and nothing about the operator's independence.
         </li>
+        <li>
+          The manifest is the only thing this node signs today. Resolve responses from <code>GET /api/v1/resolve/&lt;RRN&gt;</code> carry no signature over the record, and the <code>verify=true</code> parameter is reserved and does nothing. The Federation Proof shape described below is the protocol; it is not what this deployment returns.
+        </li>
       </ul>
     </div>
 

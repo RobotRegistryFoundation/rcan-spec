@@ -1512,7 +1512,7 @@ describe("rcan-node.json validates against the published schema", () => {
 
 // ── M-04: the sync endpoint contract and the zero-delegation refusal ─────────
 
-describe("POST /api/v1/sync — contract and refusal (M-04, Option B)", () => {
+describe("POST /api/v1/sync: contract and refusal (M-04, Option B)", () => {
   const SYNC_SOURCE = fileURLToPath(
     new URL("../functions/api/v1/sync/index.ts", import.meta.url),
   );
@@ -1622,6 +1622,31 @@ describe("POST /api/v1/sync — contract and refusal (M-04, Option B)", () => {
       RCAN_ADMIN_TOKEN: "test-admin-token",
     } as never);
     expect(res.status).toBe(403);
+  });
+
+  it("a listed node can still push once a delegation exists", async () => {
+    const res = await handleSyncPost(
+      syncRequest({
+        protocol: "rcan-sync/1.0",
+        from_node: "https://peer.example",
+        records: [
+          {
+            rrn: "RRN-TEST-0001",
+            manufacturer: "Acme",
+            model: "M1",
+            version: "1.0",
+            device_id: "d1",
+            rcan_uri: "rcan://peer.example/RRN-TEST-0001",
+          },
+        ],
+      }),
+      {
+        DB: syncDb(1, ["https://peer.example"]),
+        RCAN_ADMIN_TOKEN: "test-admin-token",
+      } as never,
+    );
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ accepted: 1, rejected: 0, conflicts: 0 });
   });
 
   it("the admin bearer still gates the endpoint before the delegation answer", async () => {

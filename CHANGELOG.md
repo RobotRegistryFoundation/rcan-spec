@@ -17,7 +17,10 @@
   absent from a list. The `403` still applies once delegations exist.
 - The federation page states what the deployment actually runs: one node, zero
   delegations, no cryptographic check over a pushed sync body, and that being listed
-  in the federation index is not a certification.
+  in the federation index is not a certification. It also says that the node manifest
+  is the only thing this deployment signs: resolve responses carry no signature over
+  the record and `verify=true` is reserved and does nothing, so the Federation Proof
+  shape on the same page is the protocol and not what rcan.dev returns.
 - `public/schemas/rcan-node.schema.json` accepts `null` for `public_key`, and for
   `ed25519_public_key` and `pqc_public_key`. A node with no key configured now
   validates against the published schema instead of failing it, which is the state
