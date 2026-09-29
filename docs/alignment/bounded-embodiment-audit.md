@@ -92,6 +92,9 @@ Four different expansions are in use. This branch does not pick one.
 | **Robot Communication & Addressing Network** | `package.json:5`; `src/layouts/BaseLayout.astro:13` (site-wide default meta description); `src/pages/docs/introduction.astro:7`; `src/pages/index.astro:34` |
 | **Robot Common Address Notation** | `schemas/registry-api.openapi.yaml:7`; `public/schemas/registry-api.openapi.yaml:7` |
 
+The AAIF Sandbox proposal ([aaif/project-proposals#43](https://github.com/aaif/project-proposals/issues/43))
+uses "Robot Communication and Addressing Network".
+
 "Robot Communication and Networking Protocol" does not occur in this repo or in
 rcan-docs. It may be in the RRF site repo; that repo's audit will say.
 
@@ -136,7 +139,18 @@ index "Version 3.2"; profile-freeze decision `3.2.0`; `VERSIONING.md` "Current v
 **v1.3**"; `scripts/conformance/README.md` "Version: 1.2" and a spec link to
 `rcan.continuon.cloud`.
 
-### 4.5 Appendix letters
+### 4.5 Conformance level definitions disagree
+| Source | L2 | L3 | L4 |
+|---|---|---|---|
+| `CLAUDE.md` glossary | Secure: HiTL, Ed25519, AuditChain | Federated | Registry |
+| `README.md` "Conformance Badges" | authentication, RBAC, ESTOP | replay prevention, audit chain, confidence gates | registry, RRN, ownership proof |
+| `scripts/conformance/README.md` | "Safety" | "AI Accountability" | (not defined) |
+| rcan-docs `governance/robot-registry-foundation.md:205` | – | – | "**L4 — Safety**" |
+
+Appendix C does not depend on which definition wins: it only states that A-levels are
+independent of whichever L-levels RCAN settles on.
+
+### 4.6 Appendix letters
 Appendix B is the only appendix in the published spec. `CHANGELOG.md:283` mentions an
 "Appendix F" in an old release. No Appendix A, C, D or E exists in the spec. This
 branch uses **Appendix C**.
@@ -198,5 +212,6 @@ them). Each is listed for the maintainer. The first three are the most serious.
 See the PR description. In short: Appendix C (informative, except where it restates
 existing MUSTs), `schemas/envelope.json`, `schemas/gate-decision.json`, fixtures, an
 optional `envelope` block in `rcan-config.json`, `tests/assurance/`, EV test cases for
-the conformance runner, README and changelog. Everything in §3–§5 of this audit is left
+the conformance runner, README and changelog. The one existing sentence reworded is the
+README's Protocol 66 entry, which now leads with the plain description. Everything in §3–§5 of this audit is left
 for the maintainer.

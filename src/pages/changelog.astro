@@ -3,6 +3,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const versions = [
   {
+    version: 'v3.3.0',
+    date: 'Unreleased',
+    tag: 'Draft',
+    tagColor: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+    changes: [
+      { type: 'added', text: 'Appendix C Physical Assurance Profile (informative): the model proposes, a bounded layer disposes. Prior art: Simplex architecture (Sha, 2001) and run-time assurance (ASTM F3269); the contribution is a vendor-neutral test method. Requirements R1–R5 mapped onto existing sections; assurance levels A1–A3, independent of conformance levels L1–L4 (an L3 robot can be A1). Conformance is not certification.' },
+      { type: 'added', text: 'Optional envelope block in rcan-config and schemas/envelope.json (workspace, motion, force, proximity, sensing, stop, heartbeat; heartbeat loss always stops).' },
+      { type: 'added', text: 'Optional gate_decision audit record (allow, clamp, reject, stop), hash-chained, with a reference verifier and EV-01..EV-09 test cases. Tests that need an implementation or physical instruments are placeholders, not results.' },
+    ],
+  },
+  {
     version: 'v3.2.0',
     date: '2026-04-23',
     tag: 'Latest',

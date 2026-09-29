@@ -40,7 +40,9 @@ Robots today are islands. A Boston Dynamics Spot and a Raspberry Pi rover can't 
 
 **R2RAM (Robot-to-Robot Access Model)** — role-based access control for robot-to-robot commands. Five levels: Guest → Observer → User → Operator → Creator. Scopes are fine-grained (read, control, safety, admin).
 
-**Protocol 66** — RCAN's mandatory safety layer. Core invariant: local safety always wins. ESTOP is never blocked. Cloud commands pass through the same confidence gates and bounds checks as local commands.
+**Mandatory safety layer (Protocol 66)** — local safety always wins; ESTOP is never blocked. Cloud commands pass through the same confidence gates and bounds checks as local commands.
+
+**Physical assurance** — [Appendix C](spec/appendix-c-physical-assurance.md) (informative) applies a simple rule to AI-driven machines: the model proposes, a bounded layer disposes. A small, deterministic gate between the model and the actuators decides what executes, and the safety claim rests on that gate, not on the model. This is prior art (the Simplex architecture, Sha 2001; run-time assurance, ASTM F3269); what the appendix adds is a vendor-neutral test method for machines driven by learned policies. It maps five requirements (declared envelope, enforcement below the model, stop always wins, accountable commands, tamper-evident evidence) onto existing RCAN sections, adds an optional machine-readable [envelope](schemas/envelope.json) and a hash-chained [`gate_decision`](schemas/gate-decision.json) record, and defines tests EV-01 to EV-09 ([status](tests/assurance/README.md)). Physical assurance levels A1–A3 are a separate axis from protocol conformance levels L1–L4: an L3 robot can be A1. An RCAN ESTOP message and a hardwired power cut are both needed and are not the same thing. It complements, and replaces none of, ISO 10218, ISO/TS 15066, ISO 13482, IEC 60204-1, ISO 13849, IEC 61508 and ITU-T F.748.44. To be presented at the ITU-T FG-EAI workshop on embodied AI, 16 October 2026 (remote); that is not an endorsement. RCAN has one maintainer and no third-party verification. Conformance is not certification.
 
 **Message Types** — 31 defined message types covering commands, telemetry, consent, audit, federation sync, and ESTOP. Every message carries a `msg_id` for replay prevention and a `confidence` field for AI accountability.
 
@@ -70,6 +72,7 @@ Robots today are islands. A Boston Dynamics Spot and a Raspberry Pi rover can't 
 | §20 | Telemetry Field Registry — joint telemetry schema, Prometheus labels |
 | §21 | Robot Registry Integration — RRN↔RURI mapping, ownership proof |
 | Appendix B | Conformance Levels L1–L4 |
+| Appendix C | Physical Assurance Profile (Bounded Embodiment), informative |
 
 ## SDKs
 
@@ -134,6 +137,12 @@ Open issues and proposals at [github.com/RobotRegistryFoundation/rcan-spec/issue
 | [Docs](https://docs.opencastor.com) | Runtime reference, RCAN, API |
 
 Current versions for all packages: see the [live compatibility matrix](https://rcan.dev/compatibility).
+
+## References
+
+- L. Sha, "Using simplicity to control complexity," *IEEE Software*, 18(4), 2001 (Simplex architecture).
+- ASTM F3269, Standard Practice for Methods to Safely Bound Behavior of Aircraft Systems Containing Complex Functions Using Run-Time Assurance.
+- ITU-T F.748.44 (benchmarks the model; Appendix C tests the machine around it).
 
 ## License
 
