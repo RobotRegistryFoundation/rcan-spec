@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://rcan.dev/schemas/messages/config.json",
   "title": "CONFIG Message",
-  "description": "RCAN message type 2. Applies a partial configuration update (JSON Merge Patch, RFC 7396) to a robot's live .rcan.yaml parameters. Requires role_level >= 4 (admin).",
+  "description": "RCAN message type 5. Applies a partial configuration update (JSON Merge Patch, RFC 7396) to a robot's live .rcan.yaml parameters. Requires role_level >= 4 (admin).",
   "type": "object",
   "required": [
     "message_type",
@@ -17,7 +17,7 @@
   "properties": {
     "message_type": {
       "type": "integer",
-      "const": 2,
+      "const": 5,
       "description": "Identifies this as a CONFIG message."
     },
     "ruri": {
@@ -55,7 +55,7 @@
   },
   "examples": [
     {
-      "message_type": 2,
+      "message_type": 5,
       "ruri": "rcan://rcan.dev/boston-dynamics/spot/bd-spot-001a2b3c",
       "principal_id": "user:fleet-admin@example.com",
       "role_level": 4,

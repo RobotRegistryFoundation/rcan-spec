@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://rcan.dev/schemas/messages/invoke-cancel.json",
   "title": "INVOKE_CANCEL Message",
-  "description": "RCAN message type 15. Sent by a principal to request best-effort cancellation of an in-flight INVOKE (§19.4). The runtime SHOULD stop execution if the skill has not yet completed and emit an INVOKE_RESULT with status 'cancelled'. Cancellation is advisory — the runtime is not required to honour it if execution has already passed a point of no return.",
+  "description": "RCAN message type 13. Sent by a principal to request best-effort cancellation of an in-flight INVOKE (§19.4). The runtime SHOULD stop execution if the skill has not yet completed and emit an INVOKE_RESULT with status 'cancelled'. Cancellation is advisory — the runtime is not required to honour it if execution has already passed a point of no return.",
   "type": "object",
   "required": [
     "message_type",
@@ -17,7 +17,7 @@
   "properties": {
     "message_type": {
       "type": "integer",
-      "const": 15,
+      "const": 13,
       "description": "Identifies this as an INVOKE_CANCEL message."
     },
     "ruri": {
@@ -58,7 +58,7 @@
   },
   "examples": [
     {
-      "message_type": 15,
+      "message_type": 13,
       "ruri": "rcan://rcan.dev/opencastor/rover/abc12345",
       "principal_id": "agent:anthropic:claude-sonnet-4",
       "session_token": "tok_example",

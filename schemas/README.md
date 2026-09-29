@@ -1,5 +1,7 @@
 # RCAN JSON Schemas
 
+Message numbers follow the canonical MessageType table in spec §3.2, which rcan-py and rcan-ts also implement.
+
 Machine-verifiable [JSON Schema draft-07](https://json-schema.org/specification-links.html#draft-7) definitions for all RCAN message types, the RURI format, QuantumLink-Sim commitment records, and the `.rcan.yaml` configuration file.
 
 ---
@@ -11,12 +13,12 @@ Machine-verifiable [JSON Schema draft-07](https://json-schema.org/specification-
 | File | `message_type` | Name | Description |
 |------|---------------|------|-------------|
 | `command.json` | `1` | COMMAND | Instruct a robot to execute an action |
-| `config.json` | `2` | CONFIG | Apply a partial config update (admin only) |
 | `status.json` | `3` | STATUS | Robot publishes operational state + telemetry |
-| `auth.json` | `4` | AUTH | Establish an authenticated session |
-| `heartbeat.json` | `5` | HEARTBEAT | Liveness probe between robot and brain |
+| `heartbeat.json` | `4` | HEARTBEAT | Liveness probe between robot and brain |
+| `config.json` | `5` | CONFIG | Apply a partial config update (admin only) |
 | `safety.json` | `6` | SAFETY | Highest-priority STOP / ESTOP / RESUME |
-| `authorize.json` | `9` | AUTHORIZE | HiTL operator approves/rejects a pending action |
+| `auth.json` | `7` | AUTH | Establish an authenticated session |
+| `authorize.json` | `9` (open question) | AUTHORIZE | HiTL operator approves/rejects a pending action. AUTHORIZE has no entry in the §3.2 canonical table and 9 is DISCOVER there; unresolved. |
 | `pending_auth.json` | `10` | PENDING_AUTH | HiTL gate notification for AI-generated command |
 
 ### Top-Level Schemas (`schemas/`)
@@ -205,7 +207,7 @@ if (validate(message)) {
 | Event | Behaviour |
 |-------|-----------|
 | `STOP` | Controlled deceleration to rest |
-| `ESTOP` | Immediate actuator cut — no deceleration ramp |
+| `ESTOP` | Immediate stop request, no deceleration ramp. A software message; it does not replace a hardwired stop that cuts actuator power |
 | `RESUME` | Clear a prior STOP/ESTOP; return to operational state |
 
 ---
