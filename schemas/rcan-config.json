@@ -183,6 +183,10 @@
       }
     },
 
+    "envelope": {
+      "type": "object",
+      "description": "Optional. Physical envelope the robot's safety gate enforces (RCAN Appendix C, informative in this version). Validate the block separately against https://rcan.dev/schemas/envelope.json (JSON Schema 2020-12). Not referenced with $ref here because this file is draft-07. Written and signed by the integrator, never by the model."
+    },
     "agent": {
       "type": "object",
       "description": "AI agent security policy: confidence gates and HiTL gates.",

@@ -1,0 +1,20 @@
+{
+  "envelope_version": "0.1",
+  "machine": { "id": "arm-bench-01", "class": "tabletop_arm", "mass_kg": 1.4 },
+  "level": "A1",
+  "workspace": {
+    "frame": "base_link",
+    "keep_in": [[0.05, -0.25], [0.35, -0.25], [0.35, 0.25], [0.05, 0.25]],
+    "keep_out": [[[0.0, -0.05], [0.08, -0.05], [0.08, 0.05], [0.0, 0.05]]],
+    "z_range_m": [0.01, 0.30]
+  },
+  "motion": { "max_speed_mps": 0.25, "max_accel_mps2": 0.5, "max_joint_speed_radps": 1.0 },
+  "force": { "max_contact_force_n": 10, "max_payload_kg": 0.1 },
+  "proximity": [
+    { "when": { "human_within_m": 0.5 }, "max_speed_mps": 0.05 }
+  ],
+  "sensing": { "max_state_age_ms": 50 },
+  "stop": { "category": 0, "max_time_ms": 150, "max_distance_m": 0.02 },
+  "heartbeat": { "model_timeout_ms": 500, "gate_timeout_ms": 50, "on_loss": "stop" },
+  "authority": { "required_for": ["motion", "gripper"], "resolver": "external" }
+}

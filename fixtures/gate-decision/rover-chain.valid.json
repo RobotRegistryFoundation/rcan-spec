@@ -1,0 +1,147 @@
+[
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:ef796735bbfa6b725807fe56199b4ed06d90fe16448c06e0777e599362f36731",
+    "t": 1791849600000,
+    "principal": "user:operator-01",
+    "authority": "jwt:jti-0001",
+    "cmd": {
+      "kind": "motion",
+      "linear_mps": 0.3,
+      "angular_radps": 0.2,
+      "target": [
+        2,
+        1
+      ]
+    },
+    "decision": "allow",
+    "applied": {
+      "kind": "motion",
+      "linear_mps": 0.3,
+      "angular_radps": 0.2,
+      "target": [
+        2,
+        1
+      ]
+    },
+    "state_digest": "sha256:ab02c919ebc43cc0ae087190d78d3982f52eddc621ea7b6b1d4ddf6c375e2519",
+    "seq": 0,
+    "prev": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "hash": "sha256:33caf552cb05c68476481610c50b6c17beee48847256c9e76cf4f85d8b801acc"
+  },
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:ef796735bbfa6b725807fe56199b4ed06d90fe16448c06e0777e599362f36731",
+    "t": 1791849600020,
+    "principal": "user:operator-01",
+    "authority": "jwt:jti-0001",
+    "cmd": {
+      "kind": "motion",
+      "linear_mps": 0.9,
+      "angular_radps": 0,
+      "target": [
+        4,
+        1
+      ]
+    },
+    "decision": "clamp",
+    "applied": {
+      "kind": "motion",
+      "linear_mps": 0.5,
+      "angular_radps": 0,
+      "target": [
+        4,
+        1
+      ]
+    },
+    "reason": "motion.max_speed_mps",
+    "state_digest": "sha256:12b04850704365ab1f247e41b53706790662698e3cbc00dc4fd36a0fad083d76",
+    "seq": 1,
+    "prev": "sha256:33caf552cb05c68476481610c50b6c17beee48847256c9e76cf4f85d8b801acc",
+    "hash": "sha256:f0076568f735b602449273063dcf825bdb66bf37d8e90a244e6710afb0371b0d"
+  },
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:ef796735bbfa6b725807fe56199b4ed06d90fe16448c06e0777e599362f36731",
+    "t": 1791849600040,
+    "principal": "user:operator-01",
+    "authority": "jwt:jti-0001",
+    "cmd": {
+      "kind": "motion",
+      "linear_mps": 0.3,
+      "angular_radps": 0,
+      "target": [
+        7.5,
+        1
+      ]
+    },
+    "decision": "reject",
+    "applied": null,
+    "reason": "workspace.keep_in",
+    "state_digest": "sha256:f7fbcfd92c442449365c09b4184f8849db2328b49d69d40370d7285f9cbc217a",
+    "seq": 2,
+    "prev": "sha256:f0076568f735b602449273063dcf825bdb66bf37d8e90a244e6710afb0371b0d",
+    "hash": "sha256:eb0f80fe1f22f574472d2a12ad9999d9aaa4f5b904bf6ec2cdd7826a1657ac9b"
+  },
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:ef796735bbfa6b725807fe56199b4ed06d90fe16448c06e0777e599362f36731",
+    "t": 1791849600060,
+    "principal": "agent:planner",
+    "authority": null,
+    "cmd": {
+      "kind": "motion",
+      "linear_mps": 0.2,
+      "angular_radps": 0,
+      "target": [
+        3,
+        2
+      ]
+    },
+    "decision": "reject",
+    "applied": null,
+    "reason": "authority.required_for: motion",
+    "state_digest": "sha256:87721c620835734b77a4c422a02971fef9b99db7a0c4c781d9178528b743dc10",
+    "seq": 3,
+    "prev": "sha256:eb0f80fe1f22f574472d2a12ad9999d9aaa4f5b904bf6ec2cdd7826a1657ac9b",
+    "hash": "sha256:7f25f315b6864c51963d79e38d02143a2033f0587742cd2fc02f3aa8903f7ba0"
+  },
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:ef796735bbfa6b725807fe56199b4ed06d90fe16448c06e0777e599362f36731",
+    "t": 1791849600400,
+    "principal": "gate:watchdog",
+    "authority": null,
+    "cmd": null,
+    "decision": "stop",
+    "applied": {
+      "kind": "stop",
+      "linear_mps": 0,
+      "angular_radps": 0
+    },
+    "reason": "heartbeat.model_timeout_ms",
+    "state_digest": "sha256:35ab84783bd347f14640e03207ca1cf7843cc7afebb69bf183e664eb7f662522",
+    "seq": 4,
+    "prev": "sha256:7f25f315b6864c51963d79e38d02143a2033f0587742cd2fc02f3aa8903f7ba0",
+    "hash": "sha256:d8880752b8d60b3de441535522fc6feae56f2ab5876f18743c35b267c895f015"
+  },
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:ef796735bbfa6b725807fe56199b4ed06d90fe16448c06e0777e599362f36731",
+    "t": 1791849600900,
+    "principal": "gate:proximity",
+    "authority": null,
+    "cmd": null,
+    "decision": "stop",
+    "applied": {
+      "kind": "stop",
+      "linear_mps": 0,
+      "angular_radps": 0
+    },
+    "reason": "proximity: human_within_m 0.4",
+    "state_digest": "sha256:6f90f632f8344db5d5ba2d4b1304e1f61a84f75382a077b4048b67c63fba7fa8",
+    "seq": 5,
+    "prev": "sha256:d8880752b8d60b3de441535522fc6feae56f2ab5876f18743c35b267c895f015",
+    "hash": "sha256:ea41b7d8bbaaa247eb65334d9ff566bb8a7ccf1c2afc6347f51505985e378432"
+  }
+]

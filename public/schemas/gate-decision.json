@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rcan.dev/schemas/gate-decision.json",
+  "title": "RCAN gate_decision evidence record (informative, v0.1)",
+  "description": "One record per safety-gate decision (allow, clamp, reject, stop). Appendix C requirement R5. Records form an append-only chain: prev is the hash of the previous record, hash is sha256 over the canonical JSON (spec/audit-bundle-v1.md rules) of this record with the hash member removed. The first record's prev is sha256: followed by 64 zeros. Optional: an implementation that emits these records MAY also keep emitting the §6 audit record for the same command.",
+  "type": "object",
+  "required": ["type", "seq", "t", "principal", "authority", "cmd", "decision", "applied", "envelope", "state_digest", "prev", "hash"],
+  "additionalProperties": false,
+  "properties": {
+    "type": { "const": "gate_decision" },
+    "seq": { "type": "integer", "minimum": 0, "description": "Monotonic sequence number, contiguous within one chain." },
+    "t": { "type": "integer", "minimum": 0, "description": "Unix epoch milliseconds at which the gate decided." },
+    "principal": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Who the command is attributed to (§2 principal). For a decision the gate originates itself, such as a watchdog stop, the gate's own identity (e.g. gate:watchdog)."
+    },
+    "authority": {
+      "type": ["string", "null"],
+      "description": "Reference to the grant that authorised the command (e.g. JWT jti, AUTHORIZE message_id). Resolved externally; this profile does not define identity or delegation. Null only when no authority was presented, in which case the decision for an authority-gated action MUST NOT be allow or clamp."
+    },
+    "cmd": {
+      "type": ["object", "null"],
+      "description": "The command as proposed to the gate, or null for a decision the gate originated itself."
+    },
+    "decision": { "type": "string", "enum": ["allow", "clamp", "reject", "stop"] },
+    "applied": {
+      "type": ["object", "null"],
+      "description": "What was actually sent to the actuators. Equal to cmd for allow; the modified command for clamp; null for reject; the stop action for stop."
+    },
+    "reason": { "type": "string", "minLength": 1, "description": "Why the gate clamped, rejected or stopped. Required for those three decisions." },
+    "envelope": { "$ref": "#/$defs/sha256", "description": "Hash of the envelope in force (canonical JSON with signature removed)." },
+    "state_digest": { "$ref": "#/$defs/sha256", "description": "Digest of the state snapshot the decision was made on." },
+    "prev": { "$ref": "#/$defs/sha256" },
+    "hash": { "$ref": "#/$defs/sha256" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "decision": { "enum": ["clamp", "reject", "stop"] } } },
+      "then": { "properties": { "reason": true }, "required": ["reason"] }
+    },
+    {
+      "if": { "properties": { "decision": { "const": "reject" } } },
+      "then": { "properties": { "applied": { "type": "null" } } }
+    },
+    {
+      "if": { "properties": { "decision": { "enum": ["allow", "clamp", "stop"] } } },
+      "then": { "properties": { "applied": { "type": "object" } } }
+    }
+  ],
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

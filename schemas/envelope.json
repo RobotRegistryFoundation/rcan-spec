@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rcan.dev/schemas/envelope.json",
+  "title": "RCAN Physical Envelope (informative, v0.1)",
+  "description": "Machine-readable declaration of the physical limits a robot's safety gate enforces, independent of any AI model. Appendix C (Physical Assurance Profile) requirement R1. Informative in this version: RCAN does not yet require it. The envelope is written and signed by the integrator, never by the model. All numeric values are the integrator's declaration; nothing in this schema checks that the declared limits are adequate for the task or the site. Top-level and limit blocks reject unknown keys so that a misspelled limit fails validation instead of being silently ignored.",
+  "type": "object",
+  "required": ["envelope_version", "machine", "level", "workspace", "motion", "stop", "heartbeat"],
+  "additionalProperties": false,
+  "properties": {
+    "envelope_version": {
+      "type": "string",
+      "pattern": "^0\\.[0-9]+$",
+      "description": "Envelope schema version. Quote it in YAML (\"0.1\") so it is not parsed as a number."
+    },
+    "machine": {
+      "type": "object",
+      "required": ["id", "class"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "description": "Integrator's identifier for this machine. MAY be an RRN." },
+        "class": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Machine class, for example mobile_ground, tabletop_arm, mobile_manipulator, legged. Free text in v0.1."
+        },
+        "mass_kg": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "level": {
+      "type": "string",
+      "enum": ["A1", "A2", "A3"],
+      "description": "Physical assurance level claimed by the integrator (A1 Declared, A2 Enforced, A3 Assured). Self-declared unless third-party evidence accompanies it. Independent of the RCAN protocol conformance levels L1-L4: do not put an L-level here."
+    },
+    "workspace": {
+      "type": "object",
+      "required": ["frame", "keep_in"],
+      "additionalProperties": false,
+      "properties": {
+        "frame": { "type": "string", "minLength": 1, "description": "Coordinate frame the polygons are expressed in (e.g. map, base_link)." },
+        "keep_in": { "$ref": "#/$defs/polygon", "description": "The machine (or tool point) must stay inside this polygon." },
+        "keep_out": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/polygon" },
+          "description": "Regions the machine (or tool point) must never enter."
+        },
+        "z_range_m": {
+          "type": "array",
+          "prefixItems": [{ "type": "number" }, { "type": "number" }],
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "Optional [min, max] height band in metres, for arms and other machines that move in 3D."
+        }
+      }
+    },
+    "motion": {
+      "type": "object",
+      "required": ["max_speed_mps"],
+      "additionalProperties": false,
+      "properties": {
+        "max_speed_mps": { "type": "number", "exclusiveMinimum": 0, "description": "Maximum linear speed of the machine, or of the tool centre point for an arm." },
+        "max_turn_radps": { "type": "number", "exclusiveMinimum": 0 },
+        "max_accel_mps2": { "type": "number", "exclusiveMinimum": 0 },
+        "max_joint_speed_radps": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "force": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_contact_force_n": { "type": "number", "exclusiveMinimum": 0 },
+        "max_payload_kg": { "type": "number", "minimum": 0 }
+      }
+    },
+    "proximity": {
+      "type": "array",
+      "description": "Rules applied when a human is detected within a distance. Rules with a smaller distance take precedence.",
+      "items": {
+        "type": "object",
+        "required": ["when"],
+        "additionalProperties": false,
+        "properties": {
+          "when": {
+            "type": "object",
+            "required": ["human_within_m"],
+            "additionalProperties": false,
+            "properties": { "human_within_m": { "type": "number", "exclusiveMinimum": 0 } }
+          },
+          "max_speed_mps": { "type": "number", "minimum": 0 },
+          "action": { "const": "stop" }
+        },
+        "oneOf": [
+          { "properties": { "max_speed_mps": true }, "required": ["max_speed_mps"] },
+          { "properties": { "action": true }, "required": ["action"] }
+        ]
+      }
+    },
+    "sensing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_state_age_ms": { "type": "integer", "exclusiveMinimum": 0, "description": "State older than this is stale; the gate decides stop." }
+      }
+    },
+    "stop": {
+      "type": "object",
+      "required": ["category", "max_time_ms", "max_distance_m"],
+      "additionalProperties": false,
+      "properties": {
+        "category": { "type": "integer", "enum": [0, 1, 2], "description": "Stop category as defined in IEC 60204-1." },
+        "max_time_ms": { "type": "integer", "exclusiveMinimum": 0, "description": "Declared worst-case time from stop request to standstill, at max_speed_mps." },
+        "max_distance_m": { "type": "number", "minimum": 0, "description": "Declared worst-case travel from stop request to standstill, at max_speed_mps." }
+      }
+    },
+    "heartbeat": {
+      "type": "object",
+      "required": ["model_timeout_ms", "gate_timeout_ms", "on_loss"],
+      "additionalProperties": false,
+      "properties": {
+        "model_timeout_ms": { "type": "integer", "exclusiveMinimum": 0 },
+        "gate_timeout_ms": { "type": "integer", "exclusiveMinimum": 0 },
+        "on_loss": { "const": "stop", "description": "Fail closed. Loss of heartbeat always leads to stop; no other value is valid." }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required_for": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "resolver": { "type": "string", "enum": ["external", "local"], "description": "Where authority is resolved. Identity and delegation mechanics are out of scope for this profile." }
+      }
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+:.+$",
+      "description": "Integrator's signature over the canonical JSON of this envelope with the signature member removed, as <alg>:<value>. Produced by the integrator, never by the model."
+    }
+  },
+  "$defs": {
+    "point2": {
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "polygon": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/point2" },
+      "minItems": 3
+    }
+  }
+}
