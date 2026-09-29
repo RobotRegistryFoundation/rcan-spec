@@ -86,12 +86,12 @@ rrf_lookup("RHN-000000000001")          # dual-brain harness, rcan_version: 2.2
 ---
 
 <DocsLayout
-  title="§22 MCP Server Integration"
+  title="MCP Server Integration"
   description="Expose the RCAN robot runtime as Model Context Protocol tools. Any AI agent — Claude Code, Codex, Gemini CLI, cron jobs — can command and observe robots through a standard interface with LoA-enforced access control."
   section="docs"
 >
   <div class="prose max-w-none">
-    <h1>§22 MCP Server Integration</h1>
+    <h1>MCP Server Integration</h1>
 
     <p>
       OpenCastor exposes a <a href="https://modelcontextprotocol.io" target="_blank">Model Context Protocol</a> (MCP)
@@ -104,31 +104,31 @@ rrf_lookup("RHN-000000000001")          # dual-brain harness, rcan_version: 2.2
       A Gemini agent and a Claude Code session with identical tokens have identical access.
     </p>
 
-    <h2>§22.1 Installation and startup</h2>
+    <h2>1. Installation and startup</h2>
     <CodeWindow code={installExample} lang="bash" />
 
-    <h2>§22.2 Client configuration</h2>
+    <h2>2. Client configuration</h2>
     <p>
       MCP clients are registered in the robot's RCAN config under <code>mcp_clients:</code>.
       Tokens are stored as <code>sha256:</code> hashes — never raw values.
     </p>
     <CodeWindow code={configExample} lang="yaml" />
 
-    <h2>§22.3 Tool catalogue</h2>
+    <h2>3. Tool catalogue</h2>
     <p>
       14 tools across three Level-of-Assurance tiers. Every mutating tool routes through
       <code>/api/command</code> — the same RCAN-signed path the bridge uses.
     </p>
     <CodeWindow code={toolsExample} lang="bash" />
 
-    <h2>§22.4 LoA → RCAN trust level mapping</h2>
+    <h2>4. LoA → RCAN trust level mapping</h2>
     <p>
       MCP LoA tiers map to <a href="https://docs.rcan.dev/spec/">RCAN protocol</a> trust roles and command scopes.
       The ESTOP safety invariant is always honoured regardless of LoA.
     </p>
     <CodeWindow code={loaMapExample} lang="bash" />
 
-    <h2>§22.5 EU AI Act compliance via MCP</h2>
+    <h2>5. EU AI Act compliance via MCP</h2>
     <p>
       The <code>rrf_lookup</code> and <code>compliance_report</code> tools make
       EU AI Act Article 11 technical documentation machine-readable. Any authorised
@@ -146,7 +146,7 @@ rrf_lookup("RHN-000000000001")          # dual-brain harness, rcan_version: 2.2
 
     <CodeWindow code={art11Example} lang="bash" />
 
-    <h2>§22.6 Transport</h2>
+    <h2>6. Transport</h2>
     <ul>
       <li>
         <strong>Phase 1 (current): stdio</strong> — works with any local MCP client today.
@@ -159,7 +159,7 @@ rrf_lookup("RHN-000000000001")          # dual-brain harness, rcan_version: 2.2
       </li>
     </ul>
 
-    <h2>§22.7 Security model</h2>
+    <h2>7. Security model</h2>
     <ul>
       <li>Token hashes use SHA-256; raw tokens are never stored or logged.</li>
       <li>LoA enforcement is server-side — not bypassable at the application layer.</li>
@@ -168,7 +168,7 @@ rrf_lookup("RHN-000000000001")          # dual-brain harness, rcan_version: 2.2
       <li>Dev mode (<code>CASTOR_MCP_DEV=1</code>) must never be exposed on a network interface.</li>
     </ul>
 
-    <h2>§22.8 Conformance</h2>
+    <h2>8. Conformance</h2>
     <p>
       A conformant MCP server implementation MUST:
     </p>
@@ -177,10 +177,10 @@ rrf_lookup("RHN-000000000001")          # dual-brain harness, rcan_version: 2.2
       <li>Store client tokens as <code>sha256:</code> hashes only.</li>
       <li>Route all mutating tool calls through the RCAN-signed command path.</li>
       <li>Honour ESTOP regardless of client LoA.</li>
-      <li>Expose all 14 tools in the standard catalogue (§22.3).</li>
+      <li>Expose all 14 tools in the standard catalogue (section 3 above).</li>
     </ul>
 
-    <h2>§22.9 Delegation</h2>
+    <h2>9. Delegation</h2>
     <p>
       MCP tokens function as pre-authorized human delegates. The LoA level declared in
       <code>mcp_clients:</code> constitutes proof of human authorization — no

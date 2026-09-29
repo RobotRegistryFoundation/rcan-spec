@@ -4,7 +4,7 @@ info:
   title: RCAN Robot Registry API
   version: "1.0"
   description: |
-    The **RCAN (Robot Common Address Notation) Registry API** provides programmatic,
+    The **RCAN (Robot Communication and Addressing Network) Registry API** provides programmatic,
     read-only access to the global robot registry at [rcan.dev](https://rcan.dev).
 
     ## Features

@@ -1,8 +1,10 @@
 # Robot Registry Foundation — Draft Founding Charter
 
 > **Status: DRAFT** · Last revised: 2026-03-04
-> Seeking co-founders, endorsing organizations, and stakeholder input.
-> → Discuss on [GitHub issue #13](https://github.com/RobotRegistryFoundation/rcan-spec/issues/13)
+> Seeking co-founders, stakeholder input, and review and collaboration from standards bodies and testing labs.
+>
+> **Status, 2026-09-29.** Draft charter for a proposed foundation. RCAN and the registry currently have one maintainer and no board, co-founders, endorsing organizations or partners. Nothing here has had third-party verification. RCAN, with the registry, has been proposed to the AAIF (Linux Foundation) as a Sandbox project ([aaif/project-proposals#43](https://github.com/aaif/project-proposals/issues/43)); the proposal has not been accepted. Conformance is not certification.
+> → Discuss in [RobotRegistryFoundation/rcan-spec issues](https://github.com/RobotRegistryFoundation/rcan-spec/issues) (the original thread, [#13](https://github.com/RobotRegistryFoundation/rcan-spec/issues/13), is closed)
 
 ---
 
@@ -199,10 +201,12 @@ All contributors are listed in the repository's `CONTRIBUTORS.md`. Organisations
 
 | Level | Requirement |
 |---|---|
-| **L1 — Basic** | Implements RCAN wire framing, HELLO/STATUS/COMMAND/DISCOVER message types, RRN registration, and RURI parsing. |
-| **L2 — Auth** | Adds role-based access control, Ed25519 ownership keys, and authenticated registry operations. |
-| **L3 — Federation** | Adds REGISTRY_REGISTER, REGISTRY_RESOLVE, federation proof verification, and sync protocol. |
-| **L4 — Safety** | Adds ESTOP, hardware_safety field support, watchdog integration, and P66 conformance manifest. |
+| **L1 — Core** | RURI format, mDNS discovery, RBAC, schema validation, §6 audit fields. |
+| **L2 — Safety** | L1 + safe-stop on network loss, prompt-injection defense, audit chain integrity, confidence gates. |
+| **L3 — AI Accountability** | L2 + model identity in audit, HiTL gates and authorization, thought-log scope, offline chain verification. |
+| **L4 — Registry Integration** | L3 + REGISTRY_REGISTER/RESOLVE, RRN validation, ownership proof (spec §21.6). |
+
+Definitions follow the published suite at [rcan.dev/conformance](https://rcan.dev/conformance). Conformance is self-asserted and is not certification. Physical assurance levels A1–A3 (spec Appendix C) are a separate axis.
 
 An implementation **MUST** declare its conformance level in its `rcan-config.json` or `p66-manifest.json`.
 
@@ -291,7 +295,7 @@ The RRF would provide the governance layer above this technical infrastructure �
 **This document is a DRAFT.** The Robot Registry Foundation does not yet exist as a legal entity.
 
 We are currently:
-- [ ] Identifying co-founders and endorsing organizations.
+- [ ] Identifying co-founders, and seeking review and collaboration from standards bodies and testing labs.
 - [ ] Soliciting feedback on the governance model, board composition, and membership tiers.
 - [ ] Mapping regulatory requirements across jurisdictions (EU, US, Japan, South Korea).
 - [ ] Identifying potential escrow agents and successor organizations.
@@ -305,11 +309,10 @@ No commitments have been made. This charter is an invitation to collaborate.
 
 | Role | What to do |
 |------|-----------|
-| **Co-founder** | Comment on [GitHub issue #13](https://github.com/RobotRegistryFoundation/rcan-spec/issues/13) expressing intent to co-found; include your organization name and primary interest |
-| **Endorsing organization** | Post a short statement of endorsement on issue #13; no financial commitment required at this stage |
+| **Co-founder** | Open an issue on [RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec/issues) (issue #13, where this charter was first discussed, is closed); include your organization name and primary interest |
 | **Technical contributor** | Open a pull request against `docs/governance/` with proposed amendments |
-| **Standards body representative** | Contact the RCAN maintainers directly via the repository to discuss formal liaison |
-| **Interested observer** | ⭐ Star the [rcan-spec repository](https://github.com/RobotRegistryFoundation/rcan-spec) and subscribe to issue #13 for updates |
+| **Standards body or testing lab** | Review and collaboration are welcome; contact the maintainer via the repository |
+| **Interested observer** | ⭐ Star the [rcan-spec repository](https://github.com/RobotRegistryFoundation/rcan-spec) and watch the repository for updates |
 
 We are particularly seeking input from:
 - Robot manufacturers (large and small) currently implementing RCAN.

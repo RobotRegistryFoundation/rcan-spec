@@ -158,7 +158,7 @@ RCAN's provisions are not theoretical. They are implemented in OpenCastor, an op
 curl -sL opencastor.com/install | bash
 ```
 
-**QuantumLink-Sim:** OpenCastor implements a tamper-evident audit chain using HKDF-SHA256 key derivation combined with a BB84 quantum key distribution simulation. Each audit record is cryptographically chained to the previous record. Modification of any historical record is detectable. This addresses the EU AI Act Article 12 requirement for logs that enable reliable reconstruction of events.
+**Tamper-evident audit log:** OpenCastor chains each audit record to the previous one with a SHA-256 `prev_hash`. (An optional QuantumLink-Sim add-on simulates a BB84 key exchange; it is a simulation and adds no quantum security.) Modification of any historical record is detectable. This addresses the EU AI Act Article 12 requirement for logs that enable reliable reconstruction of events.
 
 The reference implementation demonstrates that RCAN compliance is achievable on production hardware today, at the scale of a single-board computer, without specialized infrastructure.
 
@@ -181,7 +181,7 @@ The reference implementation demonstrates that RCAN compliance is achievable on 
 | **Physical safeguarding** | ❌ Out of RCAN scope | ✅ Full coverage | ❌ Out of AI Act scope | ❌ Out of IEC 62443 scope |
 | **Risk assessment methodology** | ❌ Out of RCAN scope | ✅ Full coverage (ISO 12100 reference) | ✅ Art. 9 (lifecycle process) | ✅ SL: risk assessment |
 | **Post-market monitoring** | 🔶 Audit trail supports it | ❌ Not addressed | ✅ Art. 72 (mandatory) | 🔶 Logging supports it |
-| **Tamper-evident log integrity** | ✅ QuantumLink-Sim commitment chain | ❌ Not specified | ✅ Art. 12 (reconstruction requirement) | ✅ SL3: log integrity |
+| **Tamper-evident log integrity** | ✅ SHA-256 hash-chained audit log | ❌ Not specified | ✅ Art. 12 (reconstruction requirement) | ✅ SL3: log integrity |
 
 *Legend: ✅ = Addressed, ❌ = Not addressed, 🔶 = Partial / supporting evidence only*
 

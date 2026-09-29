@@ -67,12 +67,12 @@ const auditExample = `# Audit log entry — deletion event
 ---
 
 <DocsLayout
-  title="§23 Training Data Governance API"
+  title="Training Data Governance API"
   description="Programmatic access to training consent records. Implements RCAN training scope and EU AI Act Article 10 data governance."
   section="docs"
 >
   <div class="prose max-w-none">
-    <h1>§23 Training Data Governance API</h1>
+    <h1>Training Data Governance API</h1>
 
     <p>
       The Training Data Governance API provides programmatic access to training consent
@@ -91,7 +91,7 @@ const auditExample = `# Audit log entry — deletion event
     </blockquote>
     <!-- END: ecosystem certification disclaimer -->
 
-    <h2>§23.1 Training Scope in R2RAM</h2>
+    <h2>1. Training Scope in R2RAM</h2>
     <p>
       R2RAM (Robot Role and Access Model) defines a strict privilege hierarchy for robot
       access scopes. The <code>training</code> scope sits above <code>status</code> and
@@ -102,10 +102,10 @@ const auditExample = `# Audit log entry — deletion event
     <p>
       A token bearing the <code>training</code> scope may read, create, and delete consent
       records for subjects associated with the robot identified by the token's audience
-      claim. Admin-level listing (§23.4) additionally requires the <code>system</code> scope.
+      claim. Admin-level listing (section 4) additionally requires the <code>system</code> scope.
     </p>
 
-    <h2>§23.2 GET /api/training-data/consent/&#123;subject_id&#125;</h2>
+    <h2>2. GET /api/training-data/consent/&#123;subject_id&#125;</h2>
     <p>
       Retrieve the current training consent record for a specific subject. Returns the
       consent status, the EU AI Act legal basis, and the robot RRN under which the consent
@@ -113,16 +113,16 @@ const auditExample = `# Audit log entry — deletion event
     </p>
     <CodeWindow code={getConsentExample} lang="json" />
 
-    <h2>§23.3 DELETE /api/training-data/consent/&#123;subject_id&#125;</h2>
+    <h2>3. DELETE /api/training-data/consent/&#123;subject_id&#125;</h2>
     <p>
       Exercise the <strong>GDPR Article 17 right to erasure</strong> for a subject's
       training data. This operation cascades to all training data records associated with
       the subject — not only the consent record itself. Deletion is <strong>irreversible</strong>
-      and MUST be logged (see §23.5).
+      and MUST be logged (see section 5).
     </p>
     <CodeWindow code={deleteConsentExample} lang="json" />
 
-    <h2>§23.4 GET /api/training-data/consent (admin)</h2>
+    <h2>4. GET /api/training-data/consent (admin)</h2>
     <p>
       List all training consent records across all subjects. This endpoint requires a
       <code>system</code>-scope token and is intended for compliance audits and data
@@ -131,7 +131,7 @@ const auditExample = `# Audit log entry — deletion event
     </p>
     <CodeWindow code={listConsentExample} lang="json" />
 
-    <h2>§23.5 Audit Requirements</h2>
+    <h2>5. Audit Requirements</h2>
     <p>
       All deletion events MUST produce a structured audit log entry containing:
     </p>
@@ -148,7 +148,7 @@ const auditExample = `# Audit log entry — deletion event
       Audit records themselves are exempt from the right-to-erasure cascade.
     </p>
 
-    <h2>§23.6 EU AI Act Art. 10 Compliance</h2>
+    <h2>6. EU AI Act Art. 10 Compliance</h2>
     <p>
       OpenCastor's Training Data Governance API implements the data governance requirements
       of <strong>EU AI Act Article 10</strong>, which mandates appropriate data governance

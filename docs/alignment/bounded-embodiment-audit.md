@@ -215,3 +215,25 @@ optional `envelope` block in `rcan-config.json`, `tests/assurance/`, EV test cas
 the conformance runner, README and changelog. The one existing sentence reworded is the
 README's Protocol 66 entry, which now leads with the plain description. Everything in §3–§5 of this audit is left
 for the maintainer.
+
+---
+
+## 7. Resolutions (consistency pass, same branch)
+
+After the audit, the maintainer asked for the findings to be fixed across the ecosystem.
+The decisions taken, and why:
+
+| Finding | Decision | Basis |
+|---|---|---|
+| Four RCAN expansions | **Robot Communication and Addressing Network** everywhere | The original name (first public proposal, 2026-01-02 blog post), the AAIF proposal, rcan-py, robot-md, the compliance docs and site metadata already use it |
+| Message-type numbers | Schemas follow **§3.2**: HEARTBEAT 4, CONFIG 5, AUTH 7, INVOKE_CANCEL 13 | §3.2 calls itself the single source of truth and both rcan-py and rcan-ts implement it; only the JSON schemas disagreed |
+| AUTHORIZE message number | **Left open** | No entry in §3.2 or either SDK; 9 is DISCOVER. Assigning a wire number is a spec decision |
+| L1–L4 definitions | **L1 Core, L2 Safety, L3 AI Accountability, L4 Registry Integration** | Matches the published suite (rcan.dev/conformance), the conformance case files and §21.6 |
+| §27 | **Reserved: Spatial Intelligence Eval** (rcan-docs) | §27 duplicated §22's `rcan-fria-v1` with a wrong article citation; the registry already uses §27 for spatial eval |
+| Governance, certification, standards claims | Rewritten to what is true (one maintainer, no board, no certification program, AAIF proposed not accepted, seeking review) | Honesty rules; no source for the B-Corp, revenue, 501(c)(3), certification or ISO engagement claims |
+| rcan.dev registry tier descriptions | Describe what the code does (owner-requested with evidence URL; `accredited` auto-approved); values unchanged | Renaming tier values would break the wire format |
+| QuantumLink-Sim framing | Tamper evidence attributed to the SHA-256 `prev_hash` chain (OpenCastor `castor/audit.py`); QuantumLink-Sim described as an optional simulation that adds no quantum security | Read the OpenCastor source; the IEC 62443 SL 4 row claimed quantum-adversary forward secrecy from a simulation |
+| Section-number drift in pages | Page-local numbering no longer uses § (MCP, training consent); §8.8/§8.9 labels removed; §16 off-by-one fixed | Those pages are not spec sections |
+| Stale org links | `continuonai/*` → `RobotRegistryFoundation/*`; `blob/main` → `blob/master`; conformance link to nonexistent `v1.10.json` → `v1.4.json` | Repos were transferred |
+
+Still open: AUTHORIZE's number; `public/sdk-status.json` `spec_version` (written by CI from outside this repo); `CLAUDE.md` (the maintainer has uncommitted edits to it); the `/governance` route collision (`src/pages/governance/index.astro` redirect stub vs `governance.astro`; Astro serves the latter; removing the stub means deleting a file); the historical v1.5 entry in `public/compatibility.json`; dated blog posts on craigmerry.com and opencastor.com that use "Autonomy Network" or describe a Benefit Corporation.

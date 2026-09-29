@@ -30,7 +30,7 @@ except ImportError:
     sys.exit("Python 3.4+ required.")
 
 # ---------------------------------------------------------------------------
-# RURI validation (§3 of the RCAN spec)
+# RURI validation (§1 of the RCAN spec)
 # ---------------------------------------------------------------------------
 _RURI_PATTERN = re.compile(
     r'^rcan://'

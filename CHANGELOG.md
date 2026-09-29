@@ -32,6 +32,24 @@ first, this becomes v3.4.0.
 - `docs/alignment/bounded-embodiment-audit.md`: audit of existing coverage, gaps, and
   naming, section-number and claim issues left open for the maintainer.
 
+### Fixed: ecosystem consistency (see audit §7)
+- RCAN is expanded as "Robot Communication and Addressing Network" everywhere in this repo.
+- Message schemas use the §3.2 MessageType numbers (HEARTBEAT 4, CONFIG 5, AUTH 7,
+  INVOKE_CANCEL 13), matching rcan-py and rcan-ts. The SAFETY schema no longer calls the
+  ESTOP message an actuator cut.
+- README, conformance README and governance charter use the published L1–L4 definitions
+  (Core, Safety, AI Accountability, Registry Integration); README lists §22–§27 and names
+  Appendix B correctly; unsourced SDK test counts removed.
+- `/governance` states the real status (one maintainer, no board, no certification
+  program, AAIF proposal not accepted); removed the Benefit Corporation, revenue-pledge,
+  501(c)(3) and certification-program claims. `/about` no longer claims ISO/TC 299
+  engagement. `/api` tier descriptions match the code.
+- Compliance docs attribute tamper evidence to the SHA-256 hash chain and describe
+  QuantumLink-Sim as an optional simulation.
+- Section references on the MCP, training-consent, messages, delegation and compliance
+  pages fixed; `continuonai` GitHub links point at RobotRegistryFoundation.
+- `VERSIONING.md` current version is v3.2.0.
+
 ### Changed
 - `/.well-known/rcan-node.json` builds its `capabilities` list from the key material
   actually configured on the deployment. `register` and `resolve` are always listed;
