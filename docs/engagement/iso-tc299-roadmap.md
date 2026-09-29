@@ -1,7 +1,7 @@
 # ISO/TC 299 Engagement Roadmap
 
 **Status:** Internal working document  
-**Closes:** [Issue #7](https://github.com/continuonai/rcan-spec/issues/7)  
+**Closes:** [Issue #7](https://github.com/RobotRegistryFoundation/rcan-spec/issues/7)  
 **Last updated:** 2026-03-03  
 **Audience:** RCAN contributors and maintainers
 
@@ -150,7 +150,7 @@ These exist today and can be cited immediately in any standards engagement:
 |---|---|---|
 | Published specification v1.2 | [rcan.dev/spec](https://rcan.dev/spec) | Versioned, citable technical specification |
 | Reference implementation | [github.com/craigm26/OpenCastor](https://github.com/craigm26/OpenCastor) | 4,665+ tests, deployed on real hardware |
-| Compliance documentation | [github.com/continuonai/rcan-spec/docs](https://github.com/continuonai/rcan-spec/tree/master/docs) | Conformance suite, robot profiles |
+| Compliance documentation | [github.com/RobotRegistryFoundation/rcan-spec/docs](https://github.com/RobotRegistryFoundation/rcan-spec/tree/master/docs) | Conformance suite, robot profiles |
 | Forensic audit chain | [github.com/craigm26/Quantum-link-Sim](https://github.com/craigm26/Quantum-link-Sim) | §6 audit implementation |
 | Technical whitepaper | `docs/whitepaper/ai-accountability-layer-2026.md` | Committee-audience brief |
 | ISO 10218 alignment | `docs/compliance/iso-10218-alignment.md` | Clause-by-clause mapping to WG 3 output |

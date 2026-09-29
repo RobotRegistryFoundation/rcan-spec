@@ -100,4 +100,4 @@ For compliance teams preparing technical documentation and conformity assessment
 
 ---
 
-*For questions regarding this compliance mapping, contact: [rcan.dev](https://rcan.dev) | [github.com/continuonai/rcan-spec](https://github.com/continuonai/rcan-spec)*
+*For questions regarding this compliance mapping, contact: [rcan.dev](https://rcan.dev) | [github.com/RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec)*

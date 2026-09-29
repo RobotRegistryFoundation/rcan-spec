@@ -2,7 +2,7 @@
 
 **Status:** Draft  
 **Version:** 1.4  
-**Authors:** RCAN Working Group  
+**Authors:** the RCAN maintainer  
 **Related:** [Governance](/governance) · [RURI Specification](/spec) · [Conformance](/conformance)
 
 > **v1.4 update:** Added REGISTRY_REGISTER (MessageType 13), REGISTRY_RESOLVE (14), REGISTRY_REGISTER_RESULT (16), REGISTRY_RESOLVE_RESULT (17) wire types. Ed25519 ownership verification in registry. `hardware_safety` field in `rcan-config.json`. P66 conformance manifest as federated discovery data.
@@ -15,7 +15,7 @@ The RCAN Federation Protocol defines how multiple independent robot registries i
 
 Federation is modelled after the Domain Name System (DNS): just as anyone can operate a DNS resolver or authoritative nameserver, anyone can host an RCAN registry for their own namespace. A robot's globally unique identity is embedded in its RURI, which encodes the authoritative registry that can resolve it.
 
-> **Design principle:** No single organisation — including the RCAN Working Group — should be a required intermediary for robot identity resolution at runtime.
+> **Design principle:** No single organisation — including the RCAN maintainer — should be a required intermediary for robot identity resolution at runtime.
 
 ---
 
@@ -85,7 +85,7 @@ RCAN defines three classes of registry, distinguished by scope and authority lev
 
 ### 4.1 Root Registry — `rcan.dev`
 
-The root registry is operated by the RCAN Working Group and serves as:
+The root registry is operated by the RCAN maintainer and serves as:
 
 - The **registry of last resort** for robots without a dedicated organisational registry.
 - The **bootstrap anchor** for federation: federated registries register themselves with the root so other parties can discover them.
@@ -365,7 +365,7 @@ Every registry **MUST** publish a descriptor at `/.well-known/rcan-registry.json
 **Step 1 — Implement the API**
 
 Implement the required endpoints from §7.2. Reference implementations are available:
-- [rcan-registry-reference](https://github.com/continuonai/rcan-spec/tree/main/examples/registry) (TypeScript / Node.js)
+- [rcan-registry-reference](https://github.com/RobotRegistryFoundation/rcan-spec/tree/master/examples/registry) (TypeScript / Node.js)
 
 **Step 2 — Generate and Publish Your Key Pair**
 
@@ -835,4 +835,4 @@ No central broker is required at runtime. The RRF provides identity anchoring; A
 
 ---
 
-*RCAN Federation Protocol · v1.4 · © RCAN Working Group · Licensed CC-BY-4.0*
+*RCAN Federation Protocol · v1.4 · © RCAN contributors · Licensed CC-BY-4.0*

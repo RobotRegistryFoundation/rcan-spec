@@ -1,9 +1,9 @@
 # AI Decision Accountability at the Protocol Layer: Addressing the Gap in ISO 10218-1:2025
 
 **Document type:** Technical brief  
-**Prepared by:** RCAN Working Group / continuonai  
+**Prepared by:** the RCAN maintainer (RCAN has one maintainer and no working group)  
 **Target audience:** ISO/TC 299 WG3, A3 standards committee, CEN/CENELEC JTC 21, robot safety engineers, conformity assessment bodies  
-**RCAN specification:** v1.1 — [rcan.dev/spec](https://rcan.dev/spec) | [github.com/continuonai/rcan-spec](https://github.com/continuonai/rcan-spec)  
+**RCAN specification:** v1.1 — [rcan.dev/spec](https://rcan.dev/spec) | [github.com/RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec)  
 **Reference implementation:** OpenCastor v2026.3.3.0 — [github.com/craigm26/OpenCastor](https://github.com/craigm26/OpenCastor)  
 **Date:** March 2026  
 
@@ -89,7 +89,7 @@ The automotive industry learned that following the market produces fragmentation
 
 RCAN (Robot Communication and Addressing Network) is an open protocol specification that defines how AI-driven robots communicate, identify themselves, authorize commands, and produce auditable records of AI decisions. It operates at the networking and agent governance layer — above the robot control system, below the application.
 
-RCAN is not a product. It is a specification, available at [rcan.dev/spec](https://rcan.dev/spec) and on GitHub at [github.com/continuonai/rcan-spec](https://github.com/continuonai/rcan-spec), published under an open license.
+RCAN is not a product. It is a specification, available at [rcan.dev/spec](https://rcan.dev/spec) and on GitHub at [github.com/RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec), published under an open license.
 
 ### 3.1 Key Primitives
 
@@ -203,9 +203,9 @@ The current specification (v1.1) is a working draft. It has been published openl
 
 - **CEN/CENELEC JTC 21** (AI standards in Europe): RCAN's EU AI Act mappings (Articles 12, 13, 14) are intended to inform JTC 21's work on harmonized technical standards supporting the AI Act for robotic systems. We invite JTC 21 to evaluate RCAN's provisions as candidate technical requirements that enable AI Act conformity assessment in the robotics domain.
 
-RCAN welcomes contributions, technical objections, and proposal for modifications via the public GitHub repository at [github.com/continuonai/rcan-spec](https://github.com/continuonai/rcan-spec).
+RCAN welcomes contributions, technical objections, and proposal for modifications via the public GitHub repository at [github.com/RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec).
 
-**Contact:** [rcan.dev](https://rcan.dev) | [github.com/continuonai/rcan-spec](https://github.com/continuonai/rcan-spec)
+**Contact:** [rcan.dev](https://rcan.dev) | [github.com/RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec)
 
 ---
 
@@ -229,5 +229,5 @@ The following table summarizes the key normative provisions of RCAN §16 for ref
 
 ---
 
-*RCAN Working Group / continuonai — March 2026*  
-*rcan.dev | github.com/continuonai/rcan-spec*
+*RCAN maintainer, March 2026*  
+*rcan.dev | github.com/RobotRegistryFoundation/rcan-spec*

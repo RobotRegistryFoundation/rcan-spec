@@ -1,7 +1,7 @@
 # RCAN ↔ ROS2/DDS Bridge Specification
 
 **Status:** Draft v1.0  
-**Closes:** [Issue #3](https://github.com/continuonai/rcan-spec/issues/3)  
+**Closes:** [Issue #3](https://github.com/RobotRegistryFoundation/rcan-spec/issues/3)  
 **Reference Implementation:** `castor/bridges/ros2_bridge.py`  
 **ROS2 Distros Tested:** Humble (LTS), Iron, Jazzy
 
