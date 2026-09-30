@@ -18,8 +18,8 @@ Machine-verifiable [JSON Schema draft-07](https://json-schema.org/specification-
 | `config.json` | `5` | CONFIG | Apply a partial config update (admin only) |
 | `safety.json` | `6` | SAFETY | Highest-priority STOP / ESTOP / RESUME |
 | `auth.json` | `7` | AUTH | Establish an authenticated session |
-| `authorize.json` | `9` (open question) | AUTHORIZE | HiTL operator approves/rejects a pending action. AUTHORIZE has no entry in the §3.2 canonical table and 9 is DISCOVER there; unresolved. |
 | `pending_auth.json` | `10` | PENDING_AUTH | HiTL gate notification for AI-generated command |
+| `authorize.json` | `45` | AUTHORIZE | HiTL operator approves or denies a pending action (§16.4). Numbered 45 in v3.3.0; it previously carried 9, which is DISCOVER in §3.2 |
 
 ### Top-Level Schemas (`schemas/`)
 

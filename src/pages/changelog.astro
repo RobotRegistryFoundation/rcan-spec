@@ -10,6 +10,7 @@ const versions = [
     changes: [
       { type: 'added', text: 'Appendix C Physical Assurance Profile (informative): the model proposes, a bounded layer disposes. Prior art: Simplex architecture (Sha, 2001) and run-time assurance (ASTM F3269); the contribution is a vendor-neutral test method. Requirements R1–R5 mapped onto existing sections; assurance levels A1–A3, independent of conformance levels L1–L4 (an L3 robot can be A1). Conformance is not certification.' },
       { type: 'added', text: 'Optional envelope block in rcan-config and schemas/envelope.json (workspace, motion, force, proximity, sensing, stop, heartbeat; heartbeat loss always stops).' },
+      { type: 'added', text: 'AUTHORIZE (§16.4) is MessageType 45 in the canonical table. Its schema previously carried 9, which is DISCOVER.' },
       { type: 'added', text: 'Optional gate_decision audit record (allow, clamp, reject, stop), hash-chained, with a reference verifier and EV-01..EV-09 test cases. Tests that need an implementation or physical instruments are placeholders, not results.' },
     ],
   },

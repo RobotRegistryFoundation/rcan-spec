@@ -37,6 +37,8 @@ first, this becomes v3.4.0.
 - Message schemas use the §3.2 MessageType numbers (HEARTBEAT 4, CONFIG 5, AUTH 7,
   INVOKE_CANCEL 13), matching rcan-py and rcan-ts. The SAFETY schema no longer calls the
   ESTOP message an actuator cut.
+- AUTHORIZE (§16.4) gets MessageType **45**, appended to the §3.2 table. Its schema
+  previously carried 9, which is DISCOVER.
 - README, conformance README and governance charter use the published L1–L4 definitions
   (Core, Safety, AI Accountability, Registry Integration); README lists §22–§27 and names
   Appendix B correctly; unsourced SDK test counts removed.
