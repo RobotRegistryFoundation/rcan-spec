@@ -22,7 +22,7 @@ This repo is the **wire-protocol specification** of a small, composable, Apache/
 |---|---|---|
 | **Declaration** | [ROBOT.md](https://github.com/RobotRegistryFoundation/robot-md) | The file a robot ships at its root. YAML frontmatter + markdown prose. Declares identity, capabilities, safety gates. Spec + Python CLI. |
 | **Agent bridge** | [robot-md-mcp](https://github.com/RobotRegistryFoundation/robot-md-mcp) | MCP server that exposes a `ROBOT.md` to Claude Code, Claude Desktop, Cursor, Zed, Gemini CLI — any MCP-aware agent. One `claude mcp add` away. |
-| **Wire protocol** ← *this* | [RCAN](https://rcan.dev/spec/) | How robots, gateways, and planners talk. Signed envelopes, LoA enforcement, PQC crypto, EU AI Act §23–§27 compliance blocks. |
+| **Wire protocol** ← *this* | [RCAN](https://rcan.dev/spec/) | How robots, gateways, and planners talk. Signed envelopes, LoA enforcement, PQC crypto, EU AI Act §22–§26 compliance artifacts. |
 | **Python SDK** | [rcan-py](https://github.com/RobotRegistryFoundation/rcan-py) | `pip install rcan` — RCANMessage, RobotURI, ConfidenceGate, HiTLGate, AuditChain. |
 | **TypeScript SDK** | [rcan-ts](https://github.com/RobotRegistryFoundation/rcan-ts) | `npm install rcan-ts` — same API surface for Node + browser. |
 | **Registry** | [Robot Registry Foundation](https://robotregistryfoundation.org) | Permanent RRN identities. Public resolver at `/r/<rrn>`. Like ICANN for robots. |
@@ -40,7 +40,9 @@ Robots today are islands. A Boston Dynamics Spot and a Raspberry Pi rover can't 
 
 **R2RAM (Robot-to-Robot Access Model)** — role-based access control for robot-to-robot commands. Five levels: Guest → Observer → User → Operator → Creator. Scopes are fine-grained (read, control, safety, admin).
 
-**Protocol 66** — RCAN's mandatory safety layer. Core invariant: local safety always wins. ESTOP is never blocked. Cloud commands pass through the same confidence gates and bounds checks as local commands.
+**Mandatory safety layer (Protocol 66):** local safety always wins; ESTOP is never blocked. Cloud commands pass through the same confidence gates and bounds checks as local commands.
+
+**Physical assurance:** [Appendix C](spec/appendix-c-physical-assurance.md) (informative) applies a simple rule to AI-driven machines: the model proposes, a bounded layer disposes. A small, deterministic gate between the model and the actuators decides what executes, and the safety claim rests on that gate, not on the model. This is prior art (the Simplex architecture, Sha 2001; run-time assurance, ASTM F3269); what the appendix adds is a vendor-neutral test method for machines driven by learned policies. It maps five requirements (declared envelope, enforcement below the model, stop always wins, accountable commands, tamper-evident evidence) onto existing RCAN sections, adds an optional machine-readable [envelope](schemas/envelope.json) and a hash-chained [`gate_decision`](schemas/gate-decision.json) record, and defines tests EV-01 to EV-09 ([status](tests/assurance/README.md)). Physical assurance levels A1–A3 are a separate axis from protocol conformance levels L1–L4: an L3 robot can be A1. An RCAN ESTOP message and a hardwired power cut are both needed and are not the same thing. It complements, and replaces none of, ISO 10218, ISO/TS 15066, ISO 13482, IEC 60204-1, ISO 13849, IEC 61508 and ITU-T F.748.44. To be presented at the ITU-T FG-EAI workshop on embodied AI, 16 October 2026 (remote); that is not an endorsement. RCAN has one maintainer and no third-party verification. Conformance is not certification.
 
 **Message Types** — 31 defined message types covering commands, telemetry, consent, audit, federation sync, and ESTOP. Every message carries a `msg_id` for replay prevention and a `confidence` field for AI accountability.
 
@@ -68,16 +70,23 @@ Robots today are islands. A Boston Dynamics Spot and a Raspberry Pi rover can't 
 | §18 | Capability Advertisement Protocol — Capability Object Map schema |
 | §19 | Behavior/Skill Invocation — INVOKE, INVOKE_RESULT, INVOKE_CANCEL |
 | §20 | Telemetry Field Registry — joint telemetry schema, Prometheus labels |
-| §21 | Robot Registry Integration — RRN↔RURI mapping, ownership proof |
-| Appendix B | Conformance Levels L1–L4 |
+| §21 | Robot Registry Integration — RRN↔RURI mapping, ownership proof, L4 conformance |
+| §22 | Fundamental Rights Impact Assessment (FRIA) — `rcan-fria-v1` |
+| §23 | Safety Benchmark Protocol — `rcan-safety-benchmark-v1` |
+| §24 | Instructions for Use (EU AI Act Art. 13) |
+| §25 | Post-Market Monitoring (Art. 72) |
+| §26 | EU Register Submission (Art. 49) |
+| §27 | Reserved: Spatial Intelligence Eval (registry intake exists; spec text not yet written) |
+| Appendix B | WebSocket Transport Binding |
+| Appendix C | Physical Assurance Profile (Bounded Embodiment), informative |
 
 ## SDKs
 
-| SDK | Language | Install | Tests |
-|---|---|---|---|
-| [rcan-py](https://github.com/RobotRegistryFoundation/rcan-py) | Python 3.10+ | `pip install rcan` | 754 |
-| [rcan-ts](https://github.com/RobotRegistryFoundation/rcan-ts) | TypeScript / Node 18+ | `npm install rcan-ts` | 447 |
-| [OpenCastor](https://github.com/craigm26/OpenCastor) | Python (robot runtime) | `pip install opencastor` | 6,459 |
+| SDK | Language | Install |
+|---|---|---|
+| [rcan-py](https://github.com/RobotRegistryFoundation/rcan-py) | Python 3.10+ | `pip install rcan` |
+| [rcan-ts](https://github.com/RobotRegistryFoundation/rcan-ts) | TypeScript / Node 18+ | `npm install rcan-ts` |
+| [OpenCastor](https://github.com/craigm26/OpenCastor) | Python (robot runtime) | `pip install opencastor` |
 
 ## Companion formats
 
@@ -93,14 +102,14 @@ ROBOT.md is independent of RCAN — you can ship one without the other — but t
 
 Implementations can declare a conformance level in their `/.well-known/rcan-node.json` manifest:
 
-| Level | Requirement |
-|---|---|
-| **L1** | Robot URI parsing, basic message format |
-| **L2** | L1 + authentication, RBAC, ESTOP |
-| **L3** | L2 + replay prevention, audit chain, confidence gates |
-| **L4** | L3 + registry integration, RRN, ownership proof |
+| Level | Name | Requirement |
+|---|---|---|
+| **L1** | Core | RURI format, mDNS discovery, RBAC, schema validation, §6 audit fields |
+| **L2** | Safety | L1 + safe-stop on network loss, prompt-injection defense, audit chain integrity, confidence gates |
+| **L3** | AI Accountability | L2 + model identity in audit, HiTL gates and authorization, thought-log scope, offline chain verification |
+| **L4** | Registry Integration | L3 + REGISTRY_REGISTER/RESOLVE, RRN validation, ownership proof (§21.6) |
 
-Conformance tests live in the [`tests/`](tests/) directory and run against a reference implementation via `npm run test`.
+Definitions follow the published suite at [rcan.dev/conformance](https://rcan.dev/conformance) and [`scripts/conformance/`](scripts/conformance/). Conformance is self-asserted; only L1 has an executable live checker today. Conformance is not certification. Physical assurance levels A1–A3 (Appendix C) are a separate axis.
 
 ## Spec Versioning
 
@@ -116,7 +125,7 @@ The spec is an Astro static site deployed to [rcan.dev](https://rcan.dev/spec/).
 npm install
 npm run dev      # localhost:4321
 npm run build    # production → dist/
-npm run test     # conformance tests
+npm run test     # schema, registry-function and assurance tests
 ```
 
 Open issues and proposals at [github.com/RobotRegistryFoundation/rcan-spec/issues](https://github.com/RobotRegistryFoundation/rcan-spec/issues). Major changes go through a public comment period before merging.
@@ -134,6 +143,12 @@ Open issues and proposals at [github.com/RobotRegistryFoundation/rcan-spec/issue
 | [Docs](https://docs.opencastor.com) | Runtime reference, RCAN, API |
 
 Current versions for all packages: see the [live compatibility matrix](https://rcan.dev/compatibility).
+
+## References
+
+- L. Sha, "Using simplicity to control complexity," *IEEE Software*, 18(4), 2001 (Simplex architecture).
+- ASTM F3269, Standard Practice for Methods to Safely Bound Behavior of Aircraft Systems Containing Complex Functions Using Run-Time Assurance.
+- ITU-T F.748.44 (benchmarks the model; Appendix C tests the machine around it).
 
 ## License
 

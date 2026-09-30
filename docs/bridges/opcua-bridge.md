@@ -1,7 +1,7 @@
 # RCAN ↔ OPC UA Bridge Specification
 
 **Status:** Draft v1.0  
-**Closes:** [Issue #2](https://github.com/continuonai/rcan-spec/issues/2)  
+**Closes:** [Issue #2](https://github.com/RobotRegistryFoundation/rcan-spec/issues/2)  
 **Namespace URI:** `https://rcan.dev/opcua/v1`  
 **Reference Implementation:** `castor/bridges/opcua_bridge.py`
 

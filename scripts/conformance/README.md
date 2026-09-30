@@ -1,7 +1,9 @@
 # RCAN Conformance Test Suite
 
-Version: **1.2**  
-Spec reference: [RCAN Specification](https://rcan.continuon.cloud/spec/)
+Case files: `rcan-conformance-v1.2.json` … `rcan-conformance-v1.4.json` (latest), plus `rcan-assurance-v0.1.json` (physical assurance, informative)  
+Spec reference: [docs.rcan.dev/spec](https://docs.rcan.dev/spec/) · published suite: [rcan.dev/conformance](https://rcan.dev/conformance)
+
+Conformance is not certification. Only L1 has an executable live checker today (`check_l1.py`).
 
 A conforming RCAN implementation MUST pass all tests at the level it claims.  
 Levels are cumulative: an **L3** implementation must also pass **L1** and **L2**.
@@ -29,14 +31,14 @@ Live checker: [`check_l1.py`](./check_l1.py)
 
 ### L2 — Safety
 
-Builds on L1. Covers the safety-critical behaviours defined in §14–§15 of the spec.
+Builds on L1. Covers the safety-critical behaviours defined in §6 (Safety Invariants) and §16.3 (confidence gates) of the spec.
 
 | Area | Requirement |
 |------|-------------|
 | **Safe-stop on network loss** | If the control connection drops or heartbeat times out, the robot MUST enter safe-stop. Any pending `COMMAND` with `estop_active=true` in the device state MUST be rejected. |
 | **Prompt injection defense** | Any `COMMAND` whose payload (or derived AI prompt) contains injection patterns (e.g., "ignore previous instructions") MUST be blocked and logged as `COMMAND_REJECTED`. |
 | **Audit chain integrity** | Audit log entries are chained via HMAC-SHA256. Tampering with any record (field mutation, insertion, deletion) MUST break verification of all subsequent records. |
-| **§16.2 confidence gates** | If a confidence gate specifies `min_confidence` and the AI-generated command falls below it: `on_fail=block` → reject; `on_fail=escalate` → escalate to HiTL queue without dispatching. |
+| **§16.3 confidence gates** | If a confidence gate specifies `min_confidence` and the AI-generated command falls below it: `on_fail=block` → reject; `on_fail=escalate` → escalate to HiTL queue without dispatching. |
 
 Test file: [`rcan-conformance-v1.2.json`](./rcan-conformance-v1.2.json) → `levels.L2`
 
@@ -44,14 +46,14 @@ Test file: [`rcan-conformance-v1.2.json`](./rcan-conformance-v1.2.json) → `lev
 
 ### L3 — AI Accountability
 
-Builds on L1 + L2. Covers §16 (AI Governance) of the spec.
+Builds on L1 + L2. Covers §16 (AI Accountability) of the spec.
 
 | Area | Requirement |
 |------|-------------|
-| **§16.1 Model identity in audit** | Every AI-produced `COMMAND` must include `ai.provider`, `ai.model`, and `ai.confidence` in the audit entry. Absence of any field is a conformance failure. |
-| **§16.3 HiTL gates** | Actions whose `action_type` appears in the `hitl_gates` config with `require_auth=true` MUST NOT be dispatched immediately. They enter the HiTL queue pending an `AUTHORIZE` message. |
-| **§16.3 HiTL authorization** | An `AUTHORIZE` message from a principal with OWNER role (or above) allows dispatch. An `AUTHORIZE` from a GUEST principal MUST be rejected with `INSUFFICIENT_PRIVILEGES`. |
-| **§16.4 Thought log scope** | `GET /api/thoughts/<id>` returns a thought record with `confidence`. The `reasoning` field MUST be absent unless the requesting principal holds the `config` scope. |
+| **§16.2 Model identity in audit** | Every AI-produced `COMMAND` must include `ai.provider`, `ai.model`, and `ai.confidence` in the audit entry. Absence of any field is a conformance failure. |
+| **§16.4 HiTL gates** | Actions whose `action_type` appears in the `hitl_gates` config with `require_auth=true` MUST NOT be dispatched immediately. They enter the HiTL queue pending an `AUTHORIZE` message. |
+| **§16.4 HiTL authorization** | An `AUTHORIZE` message from a principal with OWNER role (or above) allows dispatch. An `AUTHORIZE` from a GUEST principal MUST be rejected with `INSUFFICIENT_PRIVILEGES`. |
+| **§16.5 Thought log scope** | `GET /api/thoughts/<id>` returns a thought record with `confidence`. The `reasoning` field MUST be absent unless the requesting principal holds the `config` scope. |
 | **Offline chain verification** | An implementation MUST be able to export its audit log as JSONL and verify the HMAC chain offline using only the chain secret, with no network dependency. |
 
 Test file: [`rcan-conformance-v1.2.json`](./rcan-conformance-v1.2.json) → `levels.L3`
@@ -118,4 +120,4 @@ L3 AI-ACCT    ✅ RCAN AI-Accountable v1.2
 
 ---
 
-*Maintained by the continuonai/rcan-spec project.*
+*Maintained in [RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec). L4 (Registry Integration) is defined in spec §21.6. Physical assurance levels A1–A3 (Appendix C) are a separate axis from L1–L4.*

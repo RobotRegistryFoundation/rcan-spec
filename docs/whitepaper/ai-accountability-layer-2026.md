@@ -1,9 +1,9 @@
 # AI Decision Accountability at the Protocol Layer: Addressing the Gap in ISO 10218-1:2025
 
 **Document type:** Technical brief  
-**Prepared by:** RCAN Working Group / continuonai  
+**Prepared by:** the RCAN maintainer (RCAN has one maintainer and no working group)  
 **Target audience:** ISO/TC 299 WG3, A3 standards committee, CEN/CENELEC JTC 21, robot safety engineers, conformity assessment bodies  
-**RCAN specification:** v1.1 — [rcan.dev/spec](https://rcan.dev/spec) | [github.com/continuonai/rcan-spec](https://github.com/continuonai/rcan-spec)  
+**RCAN specification:** v1.1 — [rcan.dev/spec](https://rcan.dev/spec) | [github.com/RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec)  
 **Reference implementation:** OpenCastor v2026.3.3.0 — [github.com/craigm26/OpenCastor](https://github.com/craigm26/OpenCastor)  
 **Date:** March 2026  
 
@@ -89,7 +89,7 @@ The automotive industry learned that following the market produces fragmentation
 
 RCAN (Robot Communication and Addressing Network) is an open protocol specification that defines how AI-driven robots communicate, identify themselves, authorize commands, and produce auditable records of AI decisions. It operates at the networking and agent governance layer — above the robot control system, below the application.
 
-RCAN is not a product. It is a specification, available at [rcan.dev/spec](https://rcan.dev/spec) and on GitHub at [github.com/continuonai/rcan-spec](https://github.com/continuonai/rcan-spec), published under an open license.
+RCAN is not a product. It is a specification, available at [rcan.dev/spec](https://rcan.dev/spec) and on GitHub at [github.com/RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec), published under an open license.
 
 ### 3.1 Key Primitives
 
@@ -158,7 +158,7 @@ RCAN's provisions are not theoretical. They are implemented in OpenCastor, an op
 curl -sL opencastor.com/install | bash
 ```
 
-**QuantumLink-Sim:** OpenCastor implements a tamper-evident audit chain using HKDF-SHA256 key derivation combined with a BB84 quantum key distribution simulation. Each audit record is cryptographically chained to the previous record. Modification of any historical record is detectable. This addresses the EU AI Act Article 12 requirement for logs that enable reliable reconstruction of events.
+**Tamper-evident audit log:** OpenCastor chains each audit record to the previous one with a SHA-256 `prev_hash`. (An optional QuantumLink-Sim add-on simulates a BB84 key exchange; it is a simulation and adds no quantum security.) Modification of any historical record is detectable. This addresses the EU AI Act Article 12 requirement for logs that enable reliable reconstruction of events.
 
 The reference implementation demonstrates that RCAN compliance is achievable on production hardware today, at the scale of a single-board computer, without specialized infrastructure.
 
@@ -181,7 +181,7 @@ The reference implementation demonstrates that RCAN compliance is achievable on 
 | **Physical safeguarding** | ❌ Out of RCAN scope | ✅ Full coverage | ❌ Out of AI Act scope | ❌ Out of IEC 62443 scope |
 | **Risk assessment methodology** | ❌ Out of RCAN scope | ✅ Full coverage (ISO 12100 reference) | ✅ Art. 9 (lifecycle process) | ✅ SL: risk assessment |
 | **Post-market monitoring** | 🔶 Audit trail supports it | ❌ Not addressed | ✅ Art. 72 (mandatory) | 🔶 Logging supports it |
-| **Tamper-evident log integrity** | ✅ QuantumLink-Sim commitment chain | ❌ Not specified | ✅ Art. 12 (reconstruction requirement) | ✅ SL3: log integrity |
+| **Tamper-evident log integrity** | ✅ SHA-256 hash-chained audit log | ❌ Not specified | ✅ Art. 12 (reconstruction requirement) | ✅ SL3: log integrity |
 
 *Legend: ✅ = Addressed, ❌ = Not addressed, 🔶 = Partial / supporting evidence only*
 
@@ -203,9 +203,9 @@ The current specification (v1.1) is a working draft. It has been published openl
 
 - **CEN/CENELEC JTC 21** (AI standards in Europe): RCAN's EU AI Act mappings (Articles 12, 13, 14) are intended to inform JTC 21's work on harmonized technical standards supporting the AI Act for robotic systems. We invite JTC 21 to evaluate RCAN's provisions as candidate technical requirements that enable AI Act conformity assessment in the robotics domain.
 
-RCAN welcomes contributions, technical objections, and proposal for modifications via the public GitHub repository at [github.com/continuonai/rcan-spec](https://github.com/continuonai/rcan-spec).
+RCAN welcomes contributions, technical objections, and proposal for modifications via the public GitHub repository at [github.com/RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec).
 
-**Contact:** [rcan.dev](https://rcan.dev) | [github.com/continuonai/rcan-spec](https://github.com/continuonai/rcan-spec)
+**Contact:** [rcan.dev](https://rcan.dev) | [github.com/RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec)
 
 ---
 
@@ -229,5 +229,5 @@ The following table summarizes the key normative provisions of RCAN §16 for ref
 
 ---
 
-*RCAN Working Group / continuonai — March 2026*  
-*rcan.dev | github.com/continuonai/rcan-spec*
+*RCAN maintainer, March 2026*  
+*rcan.dev | github.com/RobotRegistryFoundation/rcan-spec*

@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://rcan.dev/schemas/messages/safety.json",
   "title": "SAFETY Message",
-  "description": "RCAN message type 6. Highest-priority message class. Immediately halts or resumes a robot's motion. STOP performs a controlled stop; ESTOP cuts motion actuators immediately; RESUME clears a prior stop and allows motion to continue. Safety messages bypass all confidence gates and HiTL queues.",
+  "description": "RCAN message type 6. Highest-priority message class. Immediately halts or resumes a robot's motion. STOP requests a controlled stop; ESTOP requests an immediate stop with no deceleration ramp; RESUME clears a prior stop and allows motion to continue. This is a protocol message: it depends on the receiving software being alive and does not replace a hardwired stop that cuts actuator power (see Appendix C, two different stops). Safety messages bypass all confidence gates and HiTL queues.",
   "type": "object",
   "required": [
     "message_type",
@@ -26,7 +26,7 @@
     "safety_event": {
       "type": "string",
       "enum": ["STOP", "ESTOP", "RESUME"],
-      "description": "STOP = controlled deceleration to rest. ESTOP = immediate actuator cut. RESUME = clear stop, return to prior state."
+      "description": "STOP = controlled deceleration to rest. ESTOP = immediate stop request, no deceleration ramp (a software message, not a hardwired power cut). RESUME = clear stop, return to prior state."
     },
     "reason": {
       "type": "string",

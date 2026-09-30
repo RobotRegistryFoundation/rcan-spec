@@ -25,8 +25,8 @@ The table below maps each IEC 62443 Security Level to the corresponding RCAN pro
 |---|---|---|---|---|
 | **SL 1** | Casual violation — curious insiders, unintentional errors | Basic authentication; audit logging of system events | §2 RBAC (GUEST and USER roles provide minimum access differentiation); §6 audit trail (COMMAND and CONFIG message types logged with principal identity at time of dispatch) | Partial |
 | **SL 2** | Intentional violation with low resources — disgruntled insiders, commodity tooling | Authenticated sessions; role separation; log integrity; patch management | §2 full 5-tier RBAC (GUEST / USER / OPERATOR / ENGINEER / ADMIN); §6 HMAC-keyed audit chain (each audit record keyed to session credentials); §6 prompt injection defense (injection attempts detected and blocked before the LLM inference call, preventing insider misuse of the AI channel) | Partial — RCAN addresses the protocol layer; network segmentation, conduit firewalling, and patch management processes are organizational and out of scope |
-| **SL 3** | Sophisticated intentional violation — organized criminal groups, hacktivists | Strong authentication (MFA); tamper-evident logging; anomaly detection; software integrity verification | §6 quantum commitment chain (QuantumLink-Sim hybrid QKD + HKDF-SHA-256 derivation; QBER monitoring provides continuous link-integrity signal); §16.2 confidence gates (model-output confidence thresholds function as an anomaly detection mechanism in the AI inference path); §16.3 Human-in-the-Loop (HiTL) gates (operator confirmation required for designated high-consequence action classes) | Partial — addresses the AI-specific attack surface (adversarial prompts, model substitution); physical security and network zone/conduit architecture remain out of scope |
-| **SL 4** | State-sponsored attack — nation-state grade adversary with sophisticated resources | Nation-state-grade controls: hardware security modules, classified key management, multi-layer defense-in-depth | QuantumLink-Sim BB84 QKD hybrid key derivation provides cryptographic forward secrecy against a quantum-capable adversary; derived session keys are ephemeral and not recoverable from recorded traffic | Partial — QuantumLink-Sim is a simulation of QKD, not a certified QKD hardware implementation; real SL 4 deployments require certified QKD hardware (e.g., ID Quantique, Toshiba QKD) and classified key custodian procedures |
+| **SL 3** | Sophisticated intentional violation — organized criminal groups, hacktivists | Strong authentication (MFA); tamper-evident logging; anomaly detection; software integrity verification | §6 SHA-256 hash-chained audit log (`prev_hash`); §16.2 confidence gates (model-output confidence thresholds function as an anomaly detection mechanism in the AI inference path); §16.3 Human-in-the-Loop (HiTL) gates (operator confirmation required for designated high-consequence action classes) | Partial — addresses the AI-specific attack surface (adversarial prompts, model substitution); physical security and network zone/conduit architecture remain out of scope |
+| **SL 4** | State-sponsored attack — nation-state grade adversary with sophisticated resources | Nation-state-grade controls: hardware security modules, classified key management, multi-layer defense-in-depth | No SL 4 control. The optional QuantumLink-Sim add-on simulates a BB84 key exchange; a simulation provides no protection against a quantum-capable adversary | Not met — QuantumLink-Sim is a simulation of QKD, not a QKD implementation; real SL 4 deployments require certified QKD hardware (e.g., ID Quantique, Toshiba QKD) and classified key custodian procedures |
 
 ### Reading the Coverage Column
 
@@ -73,7 +73,7 @@ RCAN adoption provides **protocol-level evidence** for requirements in the follo
 ### Audit Logging (SR 2.8 / SR 3.3)
 
 - **SR 2.8 — Audit Log Accessibility:** §6 defines a structured audit trail with mandatory fields (timestamp, principal, session ID, message type, payload hash). The audit log is accessible to ADMIN-tier principals via the management interface.
-- **SR 3.3 — Security Functionality Verification:** The QuantumLink-Sim quantum commitment chain provides tamper-evident audit records. Each audit entry is committed to the chain; post-hoc modification of any entry invalidates all subsequent chain links. This provides evidence for SR 3.3 at SL 2–3. Cite QuantumLink-Sim audit output (chain root hash, QBER statistics) in the SR 3.3 evidence package.
+- **SR 3.3 — Security Functionality Verification:** The SHA-256 hash-chained audit log (`prev_hash`) provides tamper-evident audit records. Each audit entry is committed to the chain; post-hoc modification of any entry invalidates all subsequent chain links. This provides evidence for SR 3.3 at SL 2–3. Cite the audit-chain verification output (head hash, verification result) in the SR 3.3 evidence package.
 
 ### System Integrity (SR 3.4)
 
@@ -86,7 +86,7 @@ When preparing an IEC 62443 assessment package for a RCAN-conformant system, inc
 1. RCAN specification version number and conformance test report.
 2. §2 role configuration document: which principals are assigned which tiers, and the organizational procedures for role assignment and revocation.
 3. §6 audit log samples covering COMMAND, CONFIG, and SAFETY message types, annotated with principal identity and session ID.
-4. QuantumLink-Sim chain root hash and QBER monitoring statistics for the assessment period.
+4. Audit-chain head hash and verification result for the assessment period.
 5. §16.2 confidence gate threshold configuration and a log of gate-triggered rejections during the assessment period.
 6. §16.3 HiTL gate event log showing operator confirmation records for high-consequence actions.
 7. A gap register documenting which IEC 62443 requirements are addressed by system-level or organizational controls outside RCAN.
@@ -122,7 +122,7 @@ RCAN §16 is therefore best understood as a **domain extension** of IEC 62443 fo
 - RCAN Specification §6 (Audit Trail and Quantum Commitment Chain)
 - RCAN Specification §8 (Safety Layer)
 - RCAN Specification §16 (AI Accountability)
-- QuantumLink-Sim documentation (OpenCastor repository)
+- Audit chain implementation (OpenCastor repository, `castor/audit.py`)
 
 ---
 

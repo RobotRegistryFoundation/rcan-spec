@@ -10,7 +10,7 @@ RCAN spec versions follow `MAJOR.MINOR.PATCH`:
 | **MINOR** | Additive, backwards-compatible changes | New optional message fields, new conformance level, new §16 sub-provision |
 | **PATCH** | Clarifications, editorial fixes, no behaviour change | Fixing ambiguous prose, correcting a table, adding examples |
 
-Current version: **v1.3** (MAJOR.MINOR; PATCH omitted when 0)
+Current version: **v3.2.0** (canonical per `spec/decisions/2026-05-04-profile-freeze.md`; v3.3.0 proposed, see CHANGELOG). The live SDK pairing is at [rcan.dev/compatibility](https://rcan.dev/compatibility).
 
 ## Backwards Compatibility Guarantee
 

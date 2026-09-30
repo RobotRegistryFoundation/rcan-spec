@@ -2,6 +2,56 @@
 
 ## [Unreleased]
 
+Proposed as **v3.3.0** (MINOR: additive and optional, no breaking change, per
+VERSIONING.md). v3.3 was earlier pencilled in for the §8.7 voice block; if voice ships
+first, this becomes v3.4.0.
+
+### Added: Appendix C, Physical Assurance Profile (Bounded Embodiment), informative
+- `spec/appendix-c-physical-assurance.md`: the model proposes, a bounded layer
+  disposes. States the prior art (Simplex, Sha 2001; run-time assurance, ASTM F3269),
+  maps requirements R1–R5 onto existing RCAN sections, defines physical assurance
+  levels A1–A3 as an axis independent of protocol levels L1–L4, separates the RCAN
+  ESTOP message from a hardwired stop, and lists what is out of scope. MUST/SHOULD are
+  used only to restate requirements RCAN already makes.
+- `schemas/envelope.json` (JSON Schema 2020-12, also published under
+  `public/schemas/`): machine-readable workspace, motion, force, proximity, sensing,
+  stop and heartbeat limits. `heartbeat.on_loss` accepts only `stop`.
+- `schemas/gate-decision.json`: optional hash-chained `gate_decision` audit record with
+  decisions `allow | clamp | reject | stop`.
+- `rcan-config.json` (both copies): optional `envelope` block. Existing configs are
+  unaffected.
+- `fixtures/envelope/` (rover and tabletop arm valid; fail-open heartbeat and
+  L3-as-assurance-level invalid) and `fixtures/gate-decision/rover-chain.valid.json`.
+- `scripts/conformance/rcan-assurance-v0.1.json`: EV-01 to EV-09 cases in the existing
+  conformance case shape. Numbers are illustrative defaults, not thresholds.
+- `scripts/assurance/evidence-chain.ts`: reference verifier for chain linkage,
+  authority on executed commands, and replay against the envelope.
+- `tests/assurance/`: 54 tests of the schemas, fixtures and verifier; EV tests that need
+  an implementation or instruments are registered as skipped placeholders. These test
+  the method, not any robot.
+- `docs/alignment/bounded-embodiment-audit.md`: audit of existing coverage, gaps, and
+  naming, section-number and claim issues left open for the maintainer.
+
+### Fixed: ecosystem consistency (see audit §7)
+- RCAN is expanded as "Robot Communication and Addressing Network" everywhere in this repo.
+- Message schemas use the §3.2 MessageType numbers (HEARTBEAT 4, CONFIG 5, AUTH 7,
+  INVOKE_CANCEL 13), matching rcan-py and rcan-ts. The SAFETY schema no longer calls the
+  ESTOP message an actuator cut.
+- AUTHORIZE (§16.4) gets MessageType **45**, appended to the §3.2 table. Its schema
+  previously carried 9, which is DISCOVER.
+- README, conformance README and governance charter use the published L1–L4 definitions
+  (Core, Safety, AI Accountability, Registry Integration); README lists §22–§27 and names
+  Appendix B correctly; unsourced SDK test counts removed.
+- `/governance` states the real status (one maintainer, no board, no certification
+  program, AAIF proposal not accepted); removed the Benefit Corporation, revenue-pledge,
+  501(c)(3) and certification-program claims. `/about` no longer claims ISO/TC 299
+  engagement. `/api` tier descriptions match the code.
+- Compliance docs attribute tamper evidence to the SHA-256 hash chain and describe
+  QuantumLink-Sim as an optional simulation.
+- Section references on the MCP, training-consent, messages, delegation and compliance
+  pages fixed; `continuonai` GitHub links point at RobotRegistryFoundation.
+- `VERSIONING.md` current version is v3.2.0.
+
 ### Changed
 - `/.well-known/rcan-node.json` builds its `capabilities` list from the key material
   actually configured on the deployment. `register` and `resolve` are always listed;

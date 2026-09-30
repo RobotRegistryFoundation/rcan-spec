@@ -1,0 +1,70 @@
+{
+  "envelope_version": "0.1",
+  "machine": {
+    "id": "rover-01",
+    "class": "mobile_ground",
+    "mass_kg": 2.1
+  },
+  "level": "A2",
+  "workspace": {
+    "frame": "map",
+    "keep_in": [
+      [
+        0,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        0,
+        4
+      ]
+    ],
+    "keep_out": []
+  },
+  "motion": {
+    "max_speed_mps": 0.5,
+    "max_turn_radps": 1.5,
+    "max_accel_mps2": 1.0
+  },
+  "proximity": [
+    {
+      "when": {
+        "human_within_m": 1.0
+      },
+      "max_speed_mps": 0.2
+    },
+    {
+      "when": {
+        "human_within_m": 0.4
+      },
+      "action": "stop"
+    }
+  ],
+  "sensing": {
+    "max_state_age_ms": 100
+  },
+  "stop": {
+    "category": 1,
+    "max_time_ms": 300,
+    "max_distance_m": 0.15
+  },
+  "heartbeat": {
+    "model_timeout_ms": 200,
+    "gate_timeout_ms": 50,
+    "on_loss": "continue"
+  },
+  "authority": {
+    "required_for": [
+      "motion"
+    ],
+    "resolver": "external"
+  },
+  "signature": "ed25519:ILLUSTRATIVE-NOT-A-REAL-SIGNATURE"
+}

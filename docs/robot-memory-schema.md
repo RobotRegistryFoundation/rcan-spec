@@ -3,7 +3,7 @@
 **Status:** Draft  
 **Version:** 1.0.0-draft  
 **Related:** RCAN Spec §4 (Robot Identity), §6 (Agent Harness), §7 (Telemetry)  
-**Issue:** continuonai/rcan-spec#191
+**Issue:** RobotRegistryFoundation/rcan-spec#191
 
 ---
 

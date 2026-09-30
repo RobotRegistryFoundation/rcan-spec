@@ -1,7 +1,7 @@
 # ISO/TC 299 Engagement Roadmap
 
 **Status:** Internal working document  
-**Closes:** [Issue #7](https://github.com/continuonai/rcan-spec/issues/7)  
+**Closes:** [Issue #7](https://github.com/RobotRegistryFoundation/rcan-spec/issues/7)  
 **Last updated:** 2026-03-03  
 **Audience:** RCAN contributors and maintainers
 
@@ -43,32 +43,15 @@ SG 1 (Special Group 1: Gaps and Structure) is explicitly tasked with identifying
 
 ---
 
-## 3. Primary Contact: Roberta Nelson Shea
+## 3. Entry Point: ISO/TC 299 WG 3 and SG 1
 
-> **This is the single most important contact for RCAN standardization.**
+WG 3 (Industrial Robot Safety) produced ISO 10218-1:2025, and SG 1 (Gaps and Structure) is tasked with finding what current ISO/TC 299 standards do not cover. Both are reached through the ISO/TC 299 secretariat or a national member body (in the US, ANSI via A3), not by contacting individuals directly.
 
-**Roberta Nelson Shea**  
-- Global Technical Compliance Officer, Universal Robots  
-- Convenor, ISO/TC 299 **WG 3** (Industrial Robot Safety) — wrote ISO 10218-1:2025  
-- Convenor, ISO/TC 299 **SG 1** (Gaps and Structure) — explicitly tasked with finding the gaps RCAN addresses  
-- LinkedIn: [linkedin.com/in/robertanelsonshea](https://linkedin.com/in/robertanelsonshea)
-
-She simultaneously chairs the working group that produced the most recent industrial robot safety standard AND runs the committee explicitly tasked to find gaps in that standard. RCAN is precisely the type of gap SG 1 is looking for.
-
-**Recommended initial outreach:**  
-LinkedIn DM, brief and technical. Lead with the gap, not the project:
-
-> "Hi Roberta — I'm working on an open specification that adds AI decision accountability to robot protocols (audit chain, RBAC, HiTL gates). It fills a gap I don't see covered by ISO 10218-1 or 13482 for AI-generated commands. Given SG 1's mandate, I'd value 20 minutes to walk you through the technical approach. Published spec at rcan.dev — technical brief attached."
-
-Attach: `docs/whitepaper/ai-accountability-layer-2026.md`
+**Outreach approach:** lead with the gap, not the project. Offer the technical brief (`docs/whitepaper/ai-accountability-layer-2026.md`) and ask whether AI decision accountability for robot commands is in SG 1's gap inventory.
 
 ---
 
 ## 4. US Path: A3 / ANSI
-
-**Carole Strait Franklin**  
-- Director of Standards Development, **A3** (Association for Advancing Automation)  
-- LinkedIn: [linkedin.com/in/carole-strait-franklin-64972b7](https://linkedin.com/in/carole-strait-franklin-64972b7)
 
 A3 administers **ANSI/A3 R15.06-2025** (industrial robot safety, US version of ISO 10218) and holds ISO/TC 299 liaison status. A3 is the US national body pathway into ISO/TC 299.
 
@@ -78,7 +61,7 @@ A3 administers **ANSI/A3 R15.06-2025** (industrial robot safety, US version of I
 - **Automate conference** (A3's flagship annual event) → talk proposals for practitioner audiences
 
 **Recommended outreach:**
-1. LinkedIn connection + brief introduction to RCAN
+1. Brief introduction to RCAN through A3's standards development office
 2. Request: A3 Technical Committee presentation slot (30–45 min) — "AI Decision Accountability at the Protocol Layer"
 3. Submit talk proposal to **Automate 2026 or 2027** conference
 
@@ -86,7 +69,7 @@ A3 administers **ANSI/A3 R15.06-2025** (industrial robot safety, US version of I
 
 ## 5. EU Path: CEN/CENELEC JTC 21
 
-**Contact:** namirifar@cencenelec.eu  
+**Contact:** the CEN/CENELEC JTC 21 secretariat (via the CEN-CENELEC website)  
 **Subject:** JTC 21 liaison inquiry — RCAN AI accountability specification for robotics
 
 CEN/CENELEC Joint Technical Committee 21 (JTC 21) is developing harmonized standards under the EU AI Act. Organizations with relevant technical specifications can apply for **liaison status**, enabling them to contribute technical content to the standards development process.
@@ -95,9 +78,9 @@ CEN/CENELEC Joint Technical Committee 21 (JTC 21) is developing harmonized stand
 RCAN §16 (EU AI Act compliance mappings) maps directly to:
 - **Art. 12** — Record-keeping requirements → RCAN §6 audit chain
 - **Art. 13** — Transparency and provision of information → RCAN §5 identity + capability manifest
-- **Art. 14** — Human oversight → RCAN §9 HiTL gate + PENDING_AUTH mechanism
+- **Art. 14** — Human oversight → RCAN §16.4 HiTL gate + PENDING_AUTH mechanism
 
-The **August 2026 deadline** for harmonized EU AI Act standards creates urgency. JTC 21 is actively developing standards now; waiting until 2027 means missing the harmonization window.
+JTC 21's harmonized-standards work is ongoing; check its current work programme before writing.
 
 **Attachments for outreach email:**
 - `docs/compliance/eu-ai-act-mapping.md` (article-by-article mapping)
@@ -109,16 +92,16 @@ The **August 2026 deadline** for harmonized EU AI Act standards creates urgency.
 
 ### 6.1 Immediate (0–3 months)
 
-- [ ] **LinkedIn DM to Roberta Nelson Shea** — link rcan.dev + attach whitepaper PDF
-- [ ] **LinkedIn DM to Carole Strait Franklin** — introduce RCAN, request A3 TC presentation
-- [ ] **Email to namirifar@cencenelec.eu** — JTC 21 liaison inquiry with attachments
+- [ ] **ISO/TC 299 SG 1** — gap submission via the secretariat or ANSI, with the whitepaper
+- [ ] **A3** — introduce RCAN, request a Technical Committee presentation
+- [ ] **CEN/CENELEC JTC 21** — liaison inquiry via the secretariat, with attachments
 - [ ] **Submit Automate 2026/2027 talk proposal**: "AI Decision Accountability at the Protocol Layer" — abstract due dates vary, check A3 conference site
 - [ ] **Publish** `docs/whitepaper/ai-accountability-layer-2026.md` at rcan.dev/whitepaper (PDF + web)
 
 ### 6.2 Near-term (3–12 months)
 
 - [ ] **ISO/TC 299 liaison status** — apply via ANSI (requires A3 membership or direct ANSI organizational membership). Budget: ~$1,500–3,000/year for ANSI SMB membership.
-- [ ] **WG 3 or SG 1 observer status** — request via Roberta Nelson Shea or ANSI contact. Observers receive meeting documents and can attend without voting.
+- [ ] **WG 3 or SG 1 observer status** — request via ANSI. Observers receive meeting documents and can attend without voting.
 - [ ] **Submit RCAN as informative reference** — if any ISO/TC 299 Technical Report is in draft, request inclusion of rcan.dev/spec as an informative reference for AI accountability approaches.
 - [ ] **A3 Technical Committee presentation** — 30–45 min slot to present RCAN to US robot safety community.
 
@@ -150,7 +133,7 @@ These exist today and can be cited immediately in any standards engagement:
 |---|---|---|
 | Published specification v1.2 | [rcan.dev/spec](https://rcan.dev/spec) | Versioned, citable technical specification |
 | Reference implementation | [github.com/craigm26/OpenCastor](https://github.com/craigm26/OpenCastor) | 4,665+ tests, deployed on real hardware |
-| Compliance documentation | [github.com/continuonai/rcan-spec/docs](https://github.com/continuonai/rcan-spec/tree/master/docs) | Conformance suite, robot profiles |
+| Compliance documentation | [github.com/RobotRegistryFoundation/rcan-spec/docs](https://github.com/RobotRegistryFoundation/rcan-spec/tree/master/docs) | Conformance suite, robot profiles |
 | Forensic audit chain | [github.com/craigm26/Quantum-link-Sim](https://github.com/craigm26/Quantum-link-Sim) | §6 audit implementation |
 | Technical whitepaper | `docs/whitepaper/ai-accountability-layer-2026.md` | Committee-audience brief |
 | ISO 10218 alignment | `docs/compliance/iso-10218-alignment.md` | Clause-by-clause mapping to WG 3 output |
@@ -212,9 +195,9 @@ Engagement activity is tracked via GitHub issues in this repo. Tag with label `e
 
 | Contact | Status | Next Action |
 |---|---|---|
-| Roberta Nelson Shea (ISO/TC 299 WG3/SG1) | Not contacted | LinkedIn DM with whitepaper |
-| Carole Strait Franklin (A3/ANSI) | Not contacted | LinkedIn DM, request TC presentation |
-| CEN/CENELEC JTC 21 | Not contacted | Email namirifar@cencenelec.eu |
+| ISO/TC 299 WG 3 / SG 1 | Not contacted | Gap submission via secretariat or ANSI |
+| A3 / ANSI | Not contacted | Request TC presentation |
+| CEN/CENELEC JTC 21 | Not contacted | Liaison inquiry via secretariat |
 | Automate 2026/2027 | Not submitted | Check A3 site for CFP deadline |
 | ANSI membership | Not applied | Evaluate SMB tier (~$1,500/yr) |
 | OPC Foundation namespace | Not submitted | After bridge spec is finalized |

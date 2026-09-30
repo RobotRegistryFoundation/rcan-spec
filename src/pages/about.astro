@@ -100,13 +100,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         Any robot runtime, fleet system, or manufacturer can implement RCAN and register robots at the RCAN Registry. There is no exclusivity. The goal is a universal standard, not a proprietary ecosystem.
       </p>
       <p class="text-text-muted leading-relaxed mb-4">
-        The reference SDKs (<a href="https://github.com/continuonai/rcan-py" class="text-accent hover:underline" target="_blank" rel="noopener">rcan-py</a>,
-        <a href="https://github.com/continuonai/rcan-ts" class="text-accent hover:underline" target="_blank" rel="noopener">rcan-ts</a>)
+        The reference SDKs (<a href="https://github.com/RobotRegistryFoundation/rcan-py" class="text-accent hover:underline" target="_blank" rel="noopener">rcan-py</a>,
+        <a href="https://github.com/RobotRegistryFoundation/rcan-ts" class="text-accent hover:underline" target="_blank" rel="noopener">rcan-ts</a>)
         and the <a href="https://opencastor.com" class="text-accent hover:underline" target="_blank" rel="noopener">OpenCastor</a> open-core RCAN runtime are Apache 2.0 licensed. OpenCastor is one of multiple ways to implement RCAN — the protocol is implementation-independent.
       </p>
       <p class="text-text-muted leading-relaxed">
-        Standards engagement is underway with ISO/TC 299 WG3 (industrial robot safety) and
-        EU harmonized standards bodies ahead of the August 2026 EU AI Act high-risk provisions deadline.
+        RCAN has one maintainer and no third-party verification. We are seeking review and collaboration from
+        standards bodies and testing labs; no standards body has endorsed, adopted or approved RCAN. See
+        <a href="/governance/" class="text-accent hover:underline">Governance</a>.
       </p>
     </section>
 
@@ -119,7 +120,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           { version: "v1.2", status: "archived", label: "Archived", desc: "AI Accountability Layer (§16): confidence gates, HiTL gates, model identity, thought log. Ed25519 signing. Commitment chain. §17–§20 + Appendix B (Distributed Registry, Capability Advertisement, INVOKE, Telemetry Fields, WebSocket)." },
           { version: "v1.3", status: "archived", label: "Archived", desc: "§17–§20 + Appendix B promoted to Stable. §21 Robot Registry Integration — RRN↔RURI canonical mapping, ownership proof, registry handshake. Conformance L4." },
           { version: "v1.4", status: "archived", label: "Archived", desc: "§1–§16 dedicated section pages — all 16 core spec sections now have standalone pages with full content, code examples, and cross-references. CLAUDE.md agent context files added to all ecosystem repos." },
-          { version: "v1.5", status: "archived", label: "Archived", desc: "18 of 22 security/safety gaps addressed: replay attack prevention (30s window), robot identity revocation, command delegation chains, consent wire protocol, ESTOP QoS exactly-once, offline operation mode, training data consent (EU AI Act Art.10), cloud relay identity audit. P66 conformance 87%→94%. rcan-py v0.5.0, rcan-ts v0.5.0." },
+          { version: "v1.5", status: "archived", label: "Archived", desc: "18 of 22 security/safety gaps addressed: replay attack prevention (30s window), robot identity revocation, command delegation chains, consent wire protocol, ESTOP QoS exactly-once, offline operation mode, training data consent (EU AI Act Art.10), cloud relay identity audit. rcan-py v0.5.0, rcan-ts v0.5.0." },
           { version: "v1.6", status: "archived", label: "Archived", desc: "4 deferred gaps closed: federated consent protocol (FEDERATION_SYNC, cross-registry JWT trust, 3-tier registry hierarchy), bandwidth-constrained transports (32-byte RCAN-Minimal for LoRa, RCAN-Compact CBOR, BLE L2CAP), multi-modal payloads (media_chunks SHA-256 audit trail, streaming), human identity LoA 1/2/3 (FIDO2, min_loa_for_control). All 22 original audit gaps addressed. rcan-py v0.6.0, rcan-ts v0.6.0." },
           { version: "v1.10", status: "live", label: "Current", desc: "Competition protocol: COMPETITION_ENTER (37), COMPETITION_SCORE (38), SEASON_STANDING (39) for fleet competition events. PERSONAL_RESEARCH_RESULT (40) for private local research runs. Canonical MessageType table extended to 40 entries." },
           { version: "v2.1", status: "stable", label: "Stable", desc: "M2M_TRUSTED (level 6), signed firmware manifests, SBOM attestation, EU AI Act §12/§16. OpenCastor v2026.3.21.2." },

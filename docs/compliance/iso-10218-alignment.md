@@ -108,4 +108,4 @@ The gap analysis in this document applies equally to ISO 10218-2:2011 and ANSI/A
 
 ---
 
-*For questions regarding this alignment document, contact: [rcan.dev](https://rcan.dev) | [github.com/continuonai/rcan-spec](https://github.com/continuonai/rcan-spec)*
+*For questions regarding this alignment document, contact: [rcan.dev](https://rcan.dev) | [github.com/RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec)*

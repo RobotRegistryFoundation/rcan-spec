@@ -71,31 +71,31 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <tr>
             <td class="py-4 pr-4 font-mono text-accent text-xs align-top">Art. 9</td>
             <td class="py-4 pr-4 text-text-muted align-top">Risk management system — identify and mitigate known and foreseeable risks across the system lifecycle</td>
-            <td class="py-4 pr-4 text-text-muted align-top">§16.2 confidence gates (per-scope thresholds); §7 ConfidenceGate; <code class="text-accent/80 font-mono text-xs">castor fria generate</code> FRIA artifact (<a href="https://github.com/craigm26/OpenCastor/issues/858" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">OpenCastor#858</a>)</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.3 confidence gates (per-scope thresholds); ConfidenceGate; <code class="text-accent/80 font-mono text-xs">castor fria generate</code> FRIA artifact (<a href="https://github.com/craigm26/OpenCastor/issues/858" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">OpenCastor#858</a>)</td>
             <td class="py-4 align-top"><span class="text-xs bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">Substantial</span></td>
           </tr>
           <tr>
             <td class="py-4 pr-4 font-mono text-accent text-xs align-top">Art. 12</td>
             <td class="py-4 pr-4 text-text-muted align-top">Record keeping — automatic logging of operational events enabling post-deployment reconstruction</td>
-            <td class="py-4 pr-4 text-text-muted align-top">§6 AuditChain (HMAC-SHA256 append-only, chained); §16.1 AI block (model identity, confidence, latency, thought_id); QuantumLink-Sim commitment chain</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§6 AuditChain (HMAC-SHA256 append-only, chained); §16.2 AI block (model identity, confidence, latency, thought_id); QuantumLink-Sim commitment chain</td>
             <td class="py-4 align-top"><span class="text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full">Full (technical)</span></td>
           </tr>
           <tr>
             <td class="py-4 pr-4 font-mono text-accent text-xs align-top">Art. 13</td>
             <td class="py-4 pr-4 text-text-muted align-top">Transparency — deployers must be able to interpret outputs and understand system limitations</td>
-            <td class="py-4 pr-4 text-text-muted align-top">§16.4 thought log (<code class="text-accent/80 font-mono text-xs">GET /api/thoughts/&lt;id&gt;</code>, OWNER-gated); robot-memory.md structured operational history (<a href="https://github.com/continuonai/rcan-spec/issues/191" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">rcan-spec#191</a>)</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.5 thought log (<code class="text-accent/80 font-mono text-xs">GET /api/thoughts/&lt;id&gt;</code>, OWNER-gated); robot-memory.md structured operational history (<a href="https://github.com/RobotRegistryFoundation/rcan-spec/issues/191" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">rcan-spec#191</a>)</td>
             <td class="py-4 align-top"><span class="text-xs bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">Substantial</span></td>
           </tr>
           <tr>
             <td class="py-4 pr-4 font-mono text-accent text-xs align-top">Art. 14</td>
             <td class="py-4 pr-4 text-text-muted align-top">Human oversight — effective oversight during operation; ability to intervene, override, or halt</td>
-            <td class="py-4 pr-4 text-text-muted align-top">§16.3 HiTL gates (structural PENDING_AUTH → AUTHORIZE flow; cannot be bypassed by AI agent); §2 RBAC OWNER role enforcement; ESTOP protocol</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.4 HiTL gates (structural PENDING_AUTH → AUTHORIZE flow; cannot be bypassed by AI agent); §2 RBAC OWNER role enforcement; ESTOP protocol</td>
             <td class="py-4 align-top"><span class="text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full">Full (technical)</span></td>
           </tr>
           <tr>
             <td class="py-4 pr-4 font-mono text-accent text-xs align-top">Art. 17</td>
             <td class="py-4 pr-4 text-text-muted align-top">Quality management — documented methodology, testing, performance monitoring, change management</td>
-            <td class="py-4 pr-4 text-text-muted align-top">§16.2 confidence gate thresholds (performance floor); §16.1 inference_latency_ms in every audit record; robot-memory.md confidence decay (systematic degradation monitoring)</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.3 confidence gate thresholds (performance floor); §16.2 inference_latency_ms in every audit record; robot-memory.md confidence decay (systematic degradation monitoring)</td>
             <td class="py-4 align-top"><span class="text-xs bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">Partial</span></td>
           </tr>
           <tr>
@@ -107,14 +107,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <tr>
             <td class="py-4 pr-4 font-mono text-accent text-xs align-top">Art. 50</td>
             <td class="py-4 pr-4 text-text-muted align-top">AI-generated content marking — AI-generated outputs must be machine-detectable as AI-generated</td>
-            <td class="py-4 pr-4 text-text-muted align-top">§16.5 AI output watermarking — HMAC watermark token on every AI-generated COMMAND message; verification endpoint (<a href="https://github.com/continuonai/rcan-spec/issues/194" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">rcan-spec#194</a>, in progress)</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.6 AI output watermarking — HMAC watermark token on every AI-generated COMMAND message; verification endpoint (<a href="https://github.com/RobotRegistryFoundation/rcan-spec/issues/194" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">rcan-spec#194</a>, in progress)</td>
             <td class="py-4 align-top"><span class="text-xs bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">In progress</span></td>
           </tr>
         </tbody>
       </table>
     </div>
     <p class="text-text-muted text-xs mt-4">
-      Detailed article-level mapping: <a href="https://github.com/continuonai/rcan-spec/blob/master/docs/compliance/eu-ai-act-mapping.md" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">docs/compliance/eu-ai-act-mapping.md</a> — includes conformity assessment citation guidance.
+      Detailed article-level mapping: <a href="https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/docs/compliance/eu-ai-act-mapping.md" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">docs/compliance/eu-ai-act-mapping.md</a> — includes conformity assessment citation guidance.
     </p>
   </section>
 
@@ -147,7 +147,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <tr>
             <td class="py-4 pr-4 font-mono text-accent text-xs align-top">MAP</td>
             <td class="py-4 pr-4 text-text-muted align-top">Identify and characterize AI risks in deployment context</td>
-            <td class="py-4 pr-4 text-text-muted align-top">FRIA protocol §19 (risk entries from conformance gaps + robot-memory hardware observations); <a href="https://github.com/continuonai/rcan-spec/issues/195" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">rcan-spec#195</a></td>
+            <td class="py-4 pr-4 text-text-muted align-top">FRIA protocol §22 (risk entries from conformance gaps + robot-memory hardware observations); <a href="https://github.com/RobotRegistryFoundation/rcan-spec/issues/195" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">rcan-spec#195</a></td>
             <td class="py-4 align-top"><span class="text-xs bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">Partial</span></td>
           </tr>
           <tr>
@@ -159,14 +159,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <tr>
             <td class="py-4 pr-4 font-mono text-accent text-xs align-top">MANAGE</td>
             <td class="py-4 pr-4 text-text-muted align-top">Prioritize and address risks; communicate residual risks to stakeholders</td>
-            <td class="py-4 pr-4 text-text-muted align-top">§16.2–16.3 gating (risk prevention); §16.4 thought log (decision transparency); AuditChain (residual risk evidence); FRIA artifact (stakeholder communication)</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.3–16.4 gating (risk prevention); §16.5 thought log (decision transparency); AuditChain (residual risk evidence); FRIA artifact (stakeholder communication)</td>
             <td class="py-4 align-top"><span class="text-xs bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full">Substantial</span></td>
           </tr>
         </tbody>
       </table>
     </div>
     <p class="text-text-muted text-xs mt-4">
-      Detailed alignment: <a href="https://github.com/continuonai/rcan-spec/blob/master/docs/compliance/nist-ai-rmf-alignment.md" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">docs/compliance/nist-ai-rmf-alignment.md</a>
+      Detailed alignment: <a href="https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/docs/compliance/nist-ai-rmf-alignment.md" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">docs/compliance/nist-ai-rmf-alignment.md</a>
     </p>
   </section>
 
@@ -181,7 +181,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <span class="text-xs bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">Partial</span>
         </div>
         <p class="text-text-muted text-sm leading-relaxed mb-3">Safety requirements for industrial robots. RCAN provisions: Protocol 66 safety rules (15 rules across motion, force, workspace, human, thermal, electrical, software, emergency, property, privacy domains); geofencing with dead-reckoning odometry; emergency stop with callback chain.</p>
-        <a href="https://github.com/continuonai/rcan-spec/blob/master/docs/compliance/iso-10218-alignment.md" rel="noopener noreferrer" target="_blank" class="text-accent text-xs hover:underline">Full alignment doc →</a>
+        <a href="https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/docs/compliance/iso-10218-alignment.md" rel="noopener noreferrer" target="_blank" class="text-accent text-xs hover:underline">Full alignment doc →</a>
       </div>
 
       <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6">
@@ -190,7 +190,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <span class="text-xs bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">Partial</span>
         </div>
         <p class="text-text-muted text-sm leading-relaxed mb-3">Industrial automation and control system cybersecurity. RCAN provisions: ML-DSA-65 + Ed25519 message signing; RBAC with rate limiting and session timeouts; JWT authentication; mDNS discovery with peer verification.</p>
-        <a href="https://github.com/continuonai/rcan-spec/blob/master/docs/compliance/iec-62443-alignment.md" rel="noopener noreferrer" target="_blank" class="text-accent text-xs hover:underline">Full alignment doc →</a>
+        <a href="https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/docs/compliance/iec-62443-alignment.md" rel="noopener noreferrer" target="_blank" class="text-accent text-xs hover:underline">Full alignment doc →</a>
       </div>
 
       <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6">
@@ -198,7 +198,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <h3 class="font-bold">GDPR Article 22</h3>
           <span class="text-xs bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">Partial</span>
         </div>
-        <p class="text-text-muted text-sm leading-relaxed">Automated individual decision-making. RCAN provisions: §16.3 HiTL gates (human in the decision loop); §16.4 thought log (decision explainability); privacy-by-default sensor policy in OpenCastor (camera, microphone scope controls).</p>
+        <p class="text-text-muted text-sm leading-relaxed">Automated individual decision-making. RCAN provisions: §16.4 HiTL gates (human in the decision loop); §16.5 thought log (decision explainability); privacy-by-default sensor policy in OpenCastor (camera, microphone scope controls).</p>
       </div>
 
       <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6">
@@ -223,7 +223,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <span class="text-xs bg-blue-500/10 border border-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">Partial</span>
         </div>
         <p class="text-text-muted text-sm leading-relaxed">Functional safety for machinery. RCAN provisions: safety stop integration (<code class="text-accent/80 font-mono text-xs">agent.safety_stop</code> flag); latency budget constraint (<code class="text-accent/80 font-mono text-xs">latency_budget_ms</code>); Protocol 66 safety invariants provide evidence for safety function documentation.</p>
-        <a href="https://github.com/continuonai/rcan-spec/blob/master/docs/compliance/sil-ple-declarations.md" rel="noopener noreferrer" target="_blank" class="text-accent text-xs hover:underline">Declaration template →</a>
+        <a href="https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/docs/compliance/sil-ple-declarations.md" rel="noopener noreferrer" target="_blank" class="text-accent text-xs hover:underline">Declaration template →</a>
       </div>
 
     </div>
@@ -237,7 +237,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         RCAN is a protocol specification. The following compliance requirements are organizational, procedural, or regulatory in nature and are outside the scope of any protocol: EU AI Act Art. 43 conformity assessment and CE marking; Art. 49 registration in the EU AI public database; Art. 72 post-market monitoring organizational process; Art. 9(4) human-led risk estimation for unintended uses.
       </p>
       <p class="text-text-muted text-sm leading-relaxed">
-        RCAN provides the technical controls and audit infrastructure that support these obligations — it does not constitute the organizational process itself. For conformity assessment template guidance, see <a href="https://github.com/continuonai/rcan-spec/blob/master/docs/compliance/conformity-assessment-template.md" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">docs/compliance/conformity-assessment-template.md</a>.
+        RCAN provides the technical controls and audit infrastructure that support these obligations — it does not constitute the organizational process itself. For conformity assessment template guidance, see <a href="https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/docs/compliance/conformity-assessment-template.md" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">docs/compliance/conformity-assessment-template.md</a>.
       </p>
     </div>
   </section>
