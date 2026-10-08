@@ -19,6 +19,10 @@ const ENVELOPE = resolve(root, "fixtures/envelope/rover.valid.json");
 const run = (...args: string[]) =>
   spawnSync(process.execPath, ["--experimental-strip-types", "--no-warnings", SCRIPT, ...args], { encoding: "utf8" });
 
+// The flag exists from Node 22.6; under older Node (the deploy workflow uses 20)
+// the command line cannot run as documented, so these tests are skipped there.
+const stripTypes = spawnSync(process.execPath, ["--experimental-strip-types", "-e", ""]).status === 0;
+
 function tempChain(edit: (chain: Record<string, unknown>[]) => void): string {
   const chain = JSON.parse(readFileSync(CHAIN, "utf8"));
   edit(chain);
@@ -27,7 +31,7 @@ function tempChain(edit: (chain: Record<string, unknown>[]) => void): string {
   return path;
 }
 
-describe("evidence-chain.ts command line", () => {
+describe.skipIf(!stripTypes)("evidence-chain.ts command line (Node 22.6+)", () => {
   it("exits 0 on the fixture chain and envelope", () => {
     const r = run(CHAIN, ENVELOPE);
     expect(r.status).toBe(0);

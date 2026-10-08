@@ -187,7 +187,7 @@ describe("authority is a non-empty string", () => {
   });
   it("only an array of strings in required_for gates", () => {
     const c = executed({ authority: null });
-    expect(auditAuthority(c, { ...ENVELOPE, authority: { required_for: "motion" } })).toEqual([]);
+    expect(auditAuthority(c, { ...ENVELOPE, authority: { required_for: "motion" } } as never)).toEqual([]);
     expect(auditAuthority(c, { ...ENVELOPE, authority: ["motion"] } as never)).toEqual([]);
     expect(codes(auditAuthority(c, { ...ENVELOPE, authority: { required_for: [1, "motion"] } } as never))).toEqual([
       "NO_AUTHORITY",
