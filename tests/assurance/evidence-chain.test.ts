@@ -147,3 +147,127 @@ describe("replay against the envelope", () => {
     expect(codes(replayAgainstEnvelope(c, ENVELOPE))).toContain("UNCHECKED_FIELDS");
   });
 });
+
+describe("record shape is checked before anything is judged", () => {
+  const bad: [string, (c: Record<string, unknown>[]) => void][] = [
+    ["seq missing", (c) => delete c[1].seq],
+    ["seq a string", (c) => (c[1].seq = "1")],
+    ["seq negative", (c) => (c[0].seq = -1)],
+    ["seq a fraction", (c) => (c[1].seq = 1.5)],
+    ["record not an object", (c) => (c[1] = [] as unknown as Record<string, unknown>)],
+  ];
+  for (const [name, mutate] of bad) {
+    it(`${name}: every check throws TypeError`, () => {
+      const c = clone(CHAIN) as unknown as Record<string, unknown>[];
+      mutate(c);
+      const chain = c as unknown as GateDecision[];
+      expect(() => verifyChain(chain)).toThrowError(TypeError);
+      expect(() => auditAuthority(chain, ENVELOPE)).toThrowError(TypeError);
+      expect(() => replayAgainstEnvelope(chain, ENVELOPE)).toThrowError(TypeError);
+    });
+  }
+  it("verifyChain also needs string prev and hash", () => {
+    const c = clone(CHAIN) as unknown as Record<string, unknown>[];
+    c[2].hash = 7;
+    expect(() => verifyChain(c as unknown as GateDecision[])).toThrowError(TypeError);
+  });
+});
+
+describe("authority is a non-empty string", () => {
+  const executed = (patch: Record<string, unknown>) => {
+    const c = clone(CHAIN).slice(0, 1) as unknown as Record<string, unknown>[];
+    Object.assign(c[0], patch);
+    return c as unknown as GateDecision[];
+  };
+  it("a number is not an authority", () => {
+    expect(codes(auditAuthority(executed({ authority: 5 }), ENVELOPE))).toEqual(["NO_AUTHORITY"]);
+  });
+  it("true is not a principal", () => {
+    expect(codes(auditAuthority(executed({ principal: true }), ENVELOPE))).toEqual(["NO_PRINCIPAL"]);
+  });
+  it("only an array of strings in required_for gates", () => {
+    const c = executed({ authority: null });
+    expect(auditAuthority(c, { ...ENVELOPE, authority: { required_for: "motion" } })).toEqual([]);
+    expect(auditAuthority(c, { ...ENVELOPE, authority: ["motion"] } as never)).toEqual([]);
+    expect(codes(auditAuthority(c, { ...ENVELOPE, authority: { required_for: [1, "motion"] } } as never))).toEqual([
+      "NO_AUTHORITY",
+    ]);
+  });
+});
+
+describe("replay checks the decision table (C.1.1, C.6)", () => {
+  // Records are edited without re-hashing: replay does not check hashes.
+  const at = (seq: number, patch: Record<string, unknown>, drop: string[] = []) => {
+    const c = clone(CHAIN) as unknown as Record<string, unknown>[];
+    Object.assign(c[seq], patch);
+    for (const k of drop) delete c[seq][k];
+    return c as unknown as GateDecision[];
+  };
+  const replayCodes = (c: GateDecision[], env: object = ENVELOPE) =>
+    replayAgainstEnvelope(c, env).map((f) => (f.field ? `${f.code}:${f.field}` : f.code));
+
+  it("an allow that changed the command is flagged", () => {
+    const applied = { ...(CHAIN[0].applied as object), linear_mps: 0.25 };
+    expect(replayCodes(at(0, { applied }))).toEqual(["ALLOW_MODIFIED"]);
+  });
+  it("an allow equal to its command in another member order passes", () => {
+    const { target, kind, angular_radps, linear_mps } = CHAIN[0].cmd as Record<string, unknown>;
+    expect(replayCodes(at(0, { applied: { target, linear_mps, kind, angular_radps } }))).toEqual([]);
+  });
+  it("clamp, reject and stop without a reason are flagged", () => {
+    expect(replayCodes(at(1, {}, ["reason"]))).toEqual(["MISSING_REASON"]);
+    expect(replayCodes(at(2, { reason: "" }))).toEqual(["MISSING_REASON"]);
+    expect(replayCodes(at(4, {}, ["reason"]))).toEqual(["MISSING_REASON"]);
+  });
+  it("a reject with no applied member is flagged (absent is not null)", () => {
+    expect(replayCodes(at(2, {}, ["applied"]))).toEqual(["REJECT_APPLIED"]);
+  });
+  it("allow, clamp and stop must apply an object", () => {
+    expect(replayCodes(at(0, { applied: null }))).toEqual(["APPLIED_NOT_OBJECT"]);
+    expect(replayCodes(at(1, { applied: [0.5] }))).toEqual(["APPLIED_NOT_OBJECT"]);
+    expect(replayCodes(at(4, {}, ["applied"]))).toEqual(["APPLIED_NOT_OBJECT"]);
+  });
+  it("an unknown decision is flagged, not judged as allow", () => {
+    expect(replayCodes(at(0, { decision: "permit" }))).toEqual(["UNKNOWN_DECISION"]);
+  });
+});
+
+describe("replay judges only well-typed values", () => {
+  const withApplied = (patch: Record<string, unknown>) => {
+    const c = clone(CHAIN) as unknown as Record<string, unknown>[];
+    c[1].applied = { ...(c[1].applied as object), ...patch };
+    return c as unknown as GateDecision[];
+  };
+  const replayCodes = (c: GateDecision[], env: object = ENVELOPE) =>
+    replayAgainstEnvelope(c, env).map((f) => (f.field ? `${f.code}:${f.field}` : f.code));
+  const reenvelope = (motion: object, workspace: object) => {
+    // Replay compares each record's envelope hash, so rebuild the records under the new one.
+    const env = { ...ENVELOPE, motion: { ...ENVELOPE.motion, ...motion }, workspace: { ...ENVELOPE.workspace, ...workspace } };
+    const c = clone(CHAIN).map((r) => ({ ...r, envelope: envelopeHash(env) }));
+    return { env, c };
+  };
+
+  it("a bound written as a string is not used", () => {
+    const { env, c } = reenvelope({ max_speed_mps: "0.1" }, {});
+    expect(replayCodes(c, env)).toEqual([]);
+  });
+  it("a two-point keep-out is not a polygon", () => {
+    const { env, c } = reenvelope({}, { keep_out: [[[0, 1], [10, 1]]] });
+    expect(replayCodes(c, env)).toEqual([]);
+  });
+  it("a target that is not two finite numbers is unchecked, not tested", () => {
+    expect(replayCodes(withApplied({ target: ["99", 1] }))).toEqual(["UNCHECKED_FIELDS:target"]);
+  });
+  it("a speed written as a string is unchecked, not compared", () => {
+    expect(replayCodes(withApplied({ linear_mps: "9" }))).toEqual(["UNCHECKED_FIELDS:linear_mps"]);
+  });
+  it("unchecked names come once each, sorted by UTF-16 code units, with a field member", () => {
+    const c = withApplied({ "": 1, "😀": 1, gripper: 1, B: 1 });
+    expect(replayCodes(c)).toEqual([
+      "UNCHECKED_FIELDS:B",
+      "UNCHECKED_FIELDS:gripper",
+      "UNCHECKED_FIELDS:😀",
+      "UNCHECKED_FIELDS:",
+    ]);
+  });
+});
