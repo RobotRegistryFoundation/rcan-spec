@@ -101,8 +101,8 @@ import CodeWindow from '../../components/CodeWindow.astro';
             icon: '🪪',
             title: 'Identity Layer',
             subtitle: 'RRN + Verification Tiers',
-            desc: 'Every robot receives a globally unique Robot Registration Number (RRN) registered at <a href="https://robotregistryfoundation.org" class="text-cyan-300 hover:underline">robotregistryfoundation.org</a>. Verification tiers (community → verified → certified → accredited) give swarm members a cryptographically anchored trust signal. Before accepting any command, a robot can call <code class="text-cyan-300 bg-white/5 px-1 rounded">castor node resolve &lt;rrn&gt;</code> to check a peer\'s certification level in real time.',
-            tags: ['RRN-BD-000000000042', '⬜ community', '🟡 verified', '🔵 certified', '✅ accredited'],
+            desc: 'Every robot receives a globally unique Robot Registration Number (RRN) registered at <a href="https://robotregistryfoundation.org" class="text-cyan-300 hover:underline">robotregistryfoundation.org</a>. Verification tiers (community → verified → certified → accredited) record who vouched for a record and with what evidence; none of them is a safety certification, and the registry does not review the evidence. Before accepting a command, a robot can call <code class="text-cyan-300 bg-white/5 px-1 rounded">castor node resolve &lt;rrn&gt;</code> to read a peer\'s tier.',
+            tags: ['RRN-BD-000000000042', '⬜ community', '🟡 verified', '🔵 certified (owner evidence)', '✅ accredited (unreviewed)'],
           },
           {
             layer: '02',
@@ -162,7 +162,7 @@ import CodeWindow from '../../components/CodeWindow.astro';
         <span class="text-xs font-mono text-cyan-400/60 uppercase tracking-widest">Flow</span>
         <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">How swarm verification works</h2>
         <p class="text-text-muted max-w-xl mx-auto">
-          Every cross-robot interaction follows this protocol. Each step is cryptographically enforced.
+          Every cross-robot interaction follows these steps.
         </p>
       </div>
 
@@ -191,7 +191,7 @@ import CodeWindow from '../../components/CodeWindow.astro';
               color: 'purple',
               robot: 'Robot A',
               title: 'Checks Robot B\'s verification tier',
-              detail: 'Robot A reads verification_tier from the resolved record. If B is only "community" and this task requires "certified", the command is rejected before execution.',
+              detail: 'Robot A reads verification_tier from the resolved record. If B is only "community" and this task requires "certified", the command is rejected before execution. The tier reflects evidence B\'s owner supplied, which the registry does not review.',
             },
             {
               step: '4',
@@ -295,14 +295,15 @@ print(f"📝 Logged to chain: {record.content_hash[:16]}...")`}
     </div>
   </section>
 
-  <!-- RCAN-Swarm Certified Badge -->
+  <!-- RCAN-Swarm Safe self-check -->
   <section class="py-24 border-b border-white/5">
     <div class="max-w-5xl mx-auto px-6">
       <div class="text-center mb-14">
-        <span class="text-xs font-mono text-cyan-400/60 uppercase tracking-widest">Certification</span>
+        <span class="text-xs font-mono text-cyan-400/60 uppercase tracking-widest">Self-check</span>
         <h2 class="text-3xl md:text-4xl font-bold mt-2 mb-4">RCAN-Swarm Safe requirements</h2>
         <p class="text-text-muted max-w-2xl mx-auto">
           A robot can claim the <strong class="text-cyan-400">RCAN-Swarm Safe</strong> designation when it meets all five criteria below. Run <code class="text-cyan-300 bg-white/5 px-1 rounded text-sm">rcan-validate config myrobot.rcan.yaml</code> to check.
+          This is a self-run configuration check. It is not a certification, and meeting it does not show that a robot is safe.
         </p>
       </div>
 
@@ -317,7 +318,7 @@ print(f"📝 Logged to chain: {record.content_hash[:16]}...")`}
           {
             check: '✅',
             title: 'Verification tier ≥ verified',
-            desc: 'The robot\'s identity has been confirmed — at minimum, email/domain verification completed.',
+            desc: 'The owner has moved the robot\'s registry record to at least the verified tier by supplying an evidence URL. The registry does not review the evidence.',
             tag: 'verification_tier: verified',
           },
           {

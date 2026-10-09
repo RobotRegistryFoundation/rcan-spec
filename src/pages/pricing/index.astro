@@ -87,7 +87,7 @@ const faqs = [
   },
   {
     q: 'What is manufacturer verification?',
-    a: 'Verification tiers (⬜ community → 🟡 verified → 🔵 manufacturer-claimed → ✅ manufacturer-verified) indicate how strongly a robot\'s origin has been validated. All registered robots start at Community tier (⬜). Manufacturer-claimed (🔵) uses DNS TXT records to prove domain ownership. Manufacturer-verified (✅) involves a signed attestation review by the Registry Foundation — the gold standard for commercial and regulated deployments.'
+    a: 'Verification tiers record who vouched for a robot\'s record and with what evidence; none of them is a safety certification. All registered robots start at Community (⬜). Today every upgrade is requested by the owner with an evidence URL, and the registry does not review the evidence. The DNS TXT ownership check (🔵) and the signed attestation review (✅) listed for the paid tiers are planned, not built.'
   },
 ];
 ---
@@ -170,13 +170,16 @@ const faqs = [
   <!-- Comparison table summary -->
   <div class="py-10 border-t border-white/5">
     <div class="max-w-4xl mx-auto px-6">
-      <h2 class="text-2xl font-bold text-center mb-8">Verification Tiers Explained</h2>
+      <h2 class="text-2xl font-bold text-center mb-4">Verification Tiers Explained</h2>
+      <p class="text-sm text-text-muted text-center max-w-2xl mx-auto mb-8">
+        Tiers record who vouched for a record and with what evidence. None of them is a safety certification.
+      </p>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { badge: '⬜', label: 'Community', desc: 'Self-reported via public registry form. All robots start here.' },
-          { badge: '🟡', label: 'Verified', desc: 'Identity confirmed via registry verification process. Maker plan and above.' },
-          { badge: '🔵', label: 'Mfr-Claimed', desc: 'DNS TXT record proves domain ownership. Manufacturer plan.' },
-          { badge: '✅', label: 'Mfr-Verified', desc: 'Signed attestation review by Registry Foundation. Enterprise.' },
+          { badge: '🟡', label: 'Verified', desc: 'Today: requested by the owner with an evidence URL; the registry does not review it. Maker plan and above.' },
+          { badge: '🔵', label: 'Mfr-Claimed', desc: 'Planned, not built: a DNS TXT record check of domain ownership. Manufacturer plan.' },
+          { badge: '✅', label: 'Mfr-Verified', desc: 'Planned, not built: a signed attestation review. Enterprise.' },
         ].map(t => (
           <div class="bg-bg-alt/30 border border-white/5 rounded-xl p-4 text-center">
             <div class="text-3xl mb-2">{t.badge}</div>

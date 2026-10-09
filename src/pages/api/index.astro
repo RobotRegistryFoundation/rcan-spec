@@ -335,20 +335,20 @@ curl "https://rcan.dev/api/v1/nodes?prefix=BD"</code></pre>
         </tbody>
       </table>
 
-      <p>Tier values are what this registry records about the evidence an owner supplied. Conformance is not certification.</p>
+      <p>Tiers record who vouched for a record and with what evidence; none of them is a safety certification. The registry applies an upgrade when the owner's API key matches and does not review the evidence. Conformance is not certification.</p>
 
       <h4>Request Body</h4>
       <pre><code>&#123;
-  "verification_tier": "verified",
-  "verified_by": "registry-admin",
-  "notes": "Domain ownership confirmed via DNS TXT record"
+  "tier": "verified",
+  "evidence_url": "https://example.com/robot-evidence",
+  "notes": "Optional free text"
 &#125;</code></pre>
 
       <h4>Example Request</h4>
       <pre><code>curl -X PATCH "https://rcan.dev/api/v1/robots/RRN-000000000042/verify" \
   -H "Authorization: Bearer $RCAN_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '&#123;"verification_tier":"verified","verified_by":"registry-admin"&#125;'</code></pre>
+  -d '&#123;"tier":"verified","evidence_url":"https://example.com/robot-evidence"&#125;'</code></pre>
     </article>
   </section>
 

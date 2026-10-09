@@ -464,11 +464,11 @@ X-Audit-Issuer-Sig: ed25519:...      // Ed25519 signature over root hash</code><
 
     <section>
       <h2>Conformance Badges</h2>
-      <p>RCAN-compliant robots can display conformance badges to signal their safety posture. Badges are available for:</p>
+      <p>Robots can display self-applied badges. Nobody checks that a robot showing a badge meets its criteria, and none of the badges is a certification. Badges are available for:</p>
       <ul>
-        <li><strong>RCAN Compliant</strong> — passes schema validation and implements all 5 invariants</li>
+        <li><strong>RCAN conformance (self-declared)</strong> — the owner states that the robot passes schema validation and implements all 5 invariants</li>
         <li><strong>Protocol 66</strong> — exposes <code>GET /api/safety/manifest</code></li>
-        <li><strong>Verified</strong> — independently verified by the Robot Registry Foundation</li>
+        <li><strong>Verified</strong> — the robot's registry record is at the <code>verified</code> tier, which the owner requests with an evidence URL; the registry does not review the evidence</li>
       </ul>
       <p>See the <a href="/docs/badges">Conformance Badges</a> page for embed codes and SVG assets.</p>
     </section>
