@@ -237,3 +237,5 @@ The decisions taken, and why:
 | Stale org links | `continuonai/*` → `RobotRegistryFoundation/*`; `blob/main` → `blob/master`; conformance link to nonexistent `v1.10.json` → `v1.4.json` | Repos were transferred |
 
 Still open: OpenCastor's runtime enum (`castor/rcan/message.py`) uses a pre-v2.1 numbering throughout (DISCOVER 1, STATUS 2, COMMAND 3, AUTHORIZE 9), so it does not interoperate with §3.2 on the wire; `public/sdk-status.json` `spec_version` (written by CI from outside this repo); `CLAUDE.md` (the maintainer has uncommitted edits to it); the `/governance` route collision (`src/pages/governance/index.astro` redirect stub vs `governance.astro`; Astro serves the latter; removing the stub means deleting a file); the historical v1.5 entry in `public/compatibility.json`; dated blog posts on craigmerry.com and opencastor.com that use "Autonomy Network" or describe a Benefit Corporation.
+
+Note added 2026-10-08: the physical assurance levels A1–A3 referred to in this audit were renamed BE-1, BE-2, BE-3 (Bounded Embodiment), because "A3" is the Association for Advancing Automation, which publishes ANSI/A3 R15.06 and runs the US delegation to ISO/TC 299.

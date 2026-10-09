@@ -1,7 +1,7 @@
 [
   {
     "type": "gate_decision",
-    "envelope": "sha256:ef796735bbfa6b725807fe56199b4ed06d90fe16448c06e0777e599362f36731",
+    "envelope": "sha256:b36eaa8823b50ff231532b23444514e03fb9594b6bb3c8a0f9efea1bfd7ddb5e",
     "t": 1791849600000,
     "principal": "user:operator-01",
     "authority": "jwt:jti-0001",
@@ -27,11 +27,11 @@
     "state_digest": "sha256:ab02c919ebc43cc0ae087190d78d3982f52eddc621ea7b6b1d4ddf6c375e2519",
     "seq": 0,
     "prev": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
-    "hash": "sha256:33caf552cb05c68476481610c50b6c17beee48847256c9e76cf4f85d8b801acc"
+    "hash": "sha256:87c9053b33f88db741c6724c0c68109ea05b0c228e61143a8f5cf50002b4c907"
   },
   {
     "type": "gate_decision",
-    "envelope": "sha256:ef796735bbfa6b725807fe56199b4ed06d90fe16448c06e0777e599362f36731",
+    "envelope": "sha256:b36eaa8823b50ff231532b23444514e03fb9594b6bb3c8a0f9efea1bfd7ddb5e",
     "t": 1791849600020,
     "principal": "user:operator-01",
     "authority": "jwt:jti-0001",
@@ -57,12 +57,12 @@
     "reason": "motion.max_speed_mps",
     "state_digest": "sha256:12b04850704365ab1f247e41b53706790662698e3cbc00dc4fd36a0fad083d76",
     "seq": 1,
-    "prev": "sha256:33caf552cb05c68476481610c50b6c17beee48847256c9e76cf4f85d8b801acc",
-    "hash": "sha256:f0076568f735b602449273063dcf825bdb66bf37d8e90a244e6710afb0371b0d"
+    "prev": "sha256:87c9053b33f88db741c6724c0c68109ea05b0c228e61143a8f5cf50002b4c907",
+    "hash": "sha256:db9b717bd2bc0c9055ef55cd7d9649aff39b81d8d9b97a64f806a718648eeb40"
   },
   {
     "type": "gate_decision",
-    "envelope": "sha256:ef796735bbfa6b725807fe56199b4ed06d90fe16448c06e0777e599362f36731",
+    "envelope": "sha256:b36eaa8823b50ff231532b23444514e03fb9594b6bb3c8a0f9efea1bfd7ddb5e",
     "t": 1791849600040,
     "principal": "user:operator-01",
     "authority": "jwt:jti-0001",
@@ -80,12 +80,12 @@
     "reason": "workspace.keep_in",
     "state_digest": "sha256:f7fbcfd92c442449365c09b4184f8849db2328b49d69d40370d7285f9cbc217a",
     "seq": 2,
-    "prev": "sha256:f0076568f735b602449273063dcf825bdb66bf37d8e90a244e6710afb0371b0d",
-    "hash": "sha256:eb0f80fe1f22f574472d2a12ad9999d9aaa4f5b904bf6ec2cdd7826a1657ac9b"
+    "prev": "sha256:db9b717bd2bc0c9055ef55cd7d9649aff39b81d8d9b97a64f806a718648eeb40",
+    "hash": "sha256:d2a66b44707f2debde9c85f6395656baacaec3954383b2a31825686180423cf2"
   },
   {
     "type": "gate_decision",
-    "envelope": "sha256:ef796735bbfa6b725807fe56199b4ed06d90fe16448c06e0777e599362f36731",
+    "envelope": "sha256:b36eaa8823b50ff231532b23444514e03fb9594b6bb3c8a0f9efea1bfd7ddb5e",
     "t": 1791849600060,
     "principal": "agent:planner",
     "authority": null,
@@ -103,12 +103,12 @@
     "reason": "authority.required_for: motion",
     "state_digest": "sha256:87721c620835734b77a4c422a02971fef9b99db7a0c4c781d9178528b743dc10",
     "seq": 3,
-    "prev": "sha256:eb0f80fe1f22f574472d2a12ad9999d9aaa4f5b904bf6ec2cdd7826a1657ac9b",
-    "hash": "sha256:7f25f315b6864c51963d79e38d02143a2033f0587742cd2fc02f3aa8903f7ba0"
+    "prev": "sha256:d2a66b44707f2debde9c85f6395656baacaec3954383b2a31825686180423cf2",
+    "hash": "sha256:2719565d0198e0d2c108873d218ffff1bbb3297edf2be116f53daee96c631912"
   },
   {
     "type": "gate_decision",
-    "envelope": "sha256:ef796735bbfa6b725807fe56199b4ed06d90fe16448c06e0777e599362f36731",
+    "envelope": "sha256:b36eaa8823b50ff231532b23444514e03fb9594b6bb3c8a0f9efea1bfd7ddb5e",
     "t": 1791849600400,
     "principal": "gate:watchdog",
     "authority": null,
@@ -122,12 +122,12 @@
     "reason": "heartbeat.model_timeout_ms",
     "state_digest": "sha256:35ab84783bd347f14640e03207ca1cf7843cc7afebb69bf183e664eb7f662522",
     "seq": 4,
-    "prev": "sha256:7f25f315b6864c51963d79e38d02143a2033f0587742cd2fc02f3aa8903f7ba0",
-    "hash": "sha256:d8880752b8d60b3de441535522fc6feae56f2ab5876f18743c35b267c895f015"
+    "prev": "sha256:2719565d0198e0d2c108873d218ffff1bbb3297edf2be116f53daee96c631912",
+    "hash": "sha256:d9c40a90f70caedf28fcc69c3c73b153b68832a83e26a875839f0c5c9973d1af"
   },
   {
     "type": "gate_decision",
-    "envelope": "sha256:ef796735bbfa6b725807fe56199b4ed06d90fe16448c06e0777e599362f36731",
+    "envelope": "sha256:b36eaa8823b50ff231532b23444514e03fb9594b6bb3c8a0f9efea1bfd7ddb5e",
     "t": 1791849600900,
     "principal": "gate:proximity",
     "authority": null,
@@ -141,7 +141,7 @@
     "reason": "proximity: human_within_m 0.4",
     "state_digest": "sha256:6f90f632f8344db5d5ba2d4b1304e1f61a84f75382a077b4048b67c63fba7fa8",
     "seq": 5,
-    "prev": "sha256:d8880752b8d60b3de441535522fc6feae56f2ab5876f18743c35b267c895f015",
-    "hash": "sha256:ea41b7d8bbaaa247eb65334d9ff566bb8a7ccf1c2afc6347f51505985e378432"
+    "prev": "sha256:d9c40a90f70caedf28fcc69c3c73b153b68832a83e26a875839f0c5c9973d1af",
+    "hash": "sha256:b580f2833bcecc528cdce9f68e90706ede2c6d690e686b625ff4f35bc20b7032"
   }
 ]
