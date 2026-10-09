@@ -147,7 +147,7 @@ index "Version 3.2"; profile-freeze decision `3.2.0`; `VERSIONING.md` "Current v
 | `scripts/conformance/README.md` | "Safety" | "AI Accountability" | (not defined) |
 | rcan-docs `governance/robot-registry-foundation.md:205` | – | – | "**L4 — Safety**" |
 
-Appendix C does not depend on which definition wins: it only states that A-levels are
+Appendix C does not depend on which definition wins: it only states that BE-levels (then called A-levels) are
 independent of whichever L-levels RCAN settles on.
 
 ### 4.6 Appendix letters

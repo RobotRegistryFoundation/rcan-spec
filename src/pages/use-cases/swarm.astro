@@ -102,7 +102,7 @@ import CodeWindow from '../../components/CodeWindow.astro';
             title: 'Identity Layer',
             subtitle: 'RRN + Verification Tiers',
             desc: 'Every robot receives a globally unique Robot Registration Number (RRN) registered at <a href="https://robotregistryfoundation.org" class="text-cyan-300 hover:underline">robotregistryfoundation.org</a>. Verification tiers (community → verified → certified → accredited) record who vouched for a record and with what evidence; none of them is a safety certification, and the registry does not review the evidence. Before accepting a command, a robot can call <code class="text-cyan-300 bg-white/5 px-1 rounded">castor node resolve &lt;rrn&gt;</code> to read a peer\'s tier.',
-            tags: ['RRN-BD-000000000042', '⬜ community', '🟡 verified', '🔵 certified (owner evidence)', '✅ accredited (unreviewed)'],
+            tags: ['RRN-BD-000000000042', '⬜ community', '🟡 verified', '🔵 certified (evidence URL on file)', '✅ accredited (unreviewed)'],
           },
           {
             layer: '02',
@@ -190,8 +190,8 @@ import CodeWindow from '../../components/CodeWindow.astro';
               step: '3',
               color: 'purple',
               robot: 'Robot A',
-              title: 'Checks Robot B\'s verification tier',
-              detail: 'Robot A reads verification_tier from the resolved record. If B is only "community" and this task requires "certified", the command is rejected before execution. The tier reflects evidence B\'s owner supplied, which the registry does not review.',
+              title: 'Checks Robot B against its own trust list',
+              detail: 'Robot A accepts commands only from peers its operator has pinned (RRN and public key) and checks the message signature against that key. The verification_tier in the resolved record is shown as context, never used to authorize: an owner can raise it with any evidence URL, and the registry does not review it.',
             },
             {
               step: '4',
@@ -255,17 +255,17 @@ from rcan.audit import AuditChain
 client = NodeClient()
 peer_status = client.resolve("RRN-BD-000000000042")
 
-# Check verification tier before accepting any commands
-tier = peer_status['record'].get('verification_tier', 'community')
-TRUSTED_TIERS = ('verified', 'certified', 'accredited')
+# Authorize against peers this robot's operator pinned, never against the registry tier:
+# an owner can raise verification_tier with any evidence URL, and the registry does not review it.
+TRUSTED_PEERS = {"RRN-BD-000000000042": "<peer public key, pinned by the operator>"}
 
-if tier not in TRUSTED_TIERS:
-    raise SecurityError(
-        f"Peer robot not sufficiently verified: {tier}. "
-        f"Required one of: {TRUSTED_TIERS}"
-    )
+peer_rrn = peer_status['record']['rrn']
+if peer_rrn not in TRUSTED_PEERS:
+    raise SecurityError(f"Peer {peer_rrn} is not on this robot's trust list")
+# ...and verify the message signature against TRUSTED_PEERS[peer_rrn] before acting.
 
-print(f"✅ Peer verified: {peer_status['robot_name']} ({tier})")
+tier = peer_status['record'].get('verification_tier', 'community')   # context only
+print(f"Peer on trust list: {peer_status['robot_name']} (registry tier: {tier})")
 
 # ─────────────────────────────────────────────
 # Step 2: Gate on our own model's confidence
@@ -318,7 +318,7 @@ print(f"📝 Logged to chain: {record.content_hash[:16]}...")`}
           {
             check: '✅',
             title: 'Verification tier ≥ verified',
-            desc: 'The owner has moved the robot\'s registry record to at least the verified tier by supplying an evidence URL. The registry does not review the evidence.',
+            desc: 'The robot\'s registry record is at least at the verified tier, set with an evidence URL on the owner\'s API key or the registry admin token. The registry does not review the evidence.',
             tag: 'verification_tier: verified',
           },
           {

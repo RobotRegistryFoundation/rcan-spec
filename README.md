@@ -153,7 +153,7 @@ Current versions for all packages: see the [live compatibility matrix](https://r
 ## License
 
 Specification text and schemas: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (full text in [LICENSES/CC-BY-4.0.txt](LICENSES/CC-BY-4.0.txt)).
-Reference implementations: MIT.
+Reference SDKs (rcan-py, rcan-ts): MIT.
 The licence for the site code and the rest of this repository is still to be decided; see [LICENSE](LICENSE).
 
 ---
