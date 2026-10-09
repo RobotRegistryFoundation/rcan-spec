@@ -127,7 +127,7 @@ entries:
       Action types declared as requiring human authorization in the RCAN config cannot be dispatched by any means without a signed <code class="text-accent font-mono text-sm">AUTHORIZE</code> message from a principal holding <code class="text-accent font-mono text-sm">OWNER</code> or higher role. When a gated action is attempted, the protocol emits <code class="text-accent font-mono text-sm">PENDING_AUTH</code> status and the command waits. The AI agent cannot proceed, cannot re-issue the command, and cannot escalate its own role.
     </p>
     <p class="text-text-muted leading-relaxed mb-4">
-      This satisfies EU AI Act Article 14 (human oversight) at the protocol layer: the human-machine interface is the <code class="text-accent font-mono text-sm">PENDING_AUTH → AUTHORIZE</code> flow, and the gate is a structural constraint on the transport, not a UI affordance that can be bypassed.
+      This supports EU AI Act Article 14 (human oversight) at the protocol layer; it does not by itself meet it. The human-machine interface is the <code class="text-accent font-mono text-sm">PENDING_AUTH → AUTHORIZE</code> flow, and the gate is a structural constraint on the transport, not a UI affordance that can be bypassed.
     </p>
     <p class="text-text-muted leading-relaxed mb-6">
       HiTL gate configuration supports scope-based and context-based conditions (e.g., require authorization for NAVIGATE only when operating in a <code class="text-accent font-mono text-sm">human_proximate</code> location class).
@@ -142,10 +142,10 @@ entries:
       <h2 class="text-2xl font-bold">Tamper-evident audit chain</h2>
     </div>
     <p class="text-text-muted leading-relaxed mb-4">
-      Every RCAN command is recorded in an HMAC-SHA256 append-only audit chain at dispatch time — not reconstructed after the fact. Each record includes: principal identity, RURI, timestamp (millisecond precision), message_id, outcome, model provider, model identifier, inference confidence, inference latency, thought_id, escalation flag, and (from §16.5) a watermark token for EU AI Act Art. 50 compliance.
+      Every RCAN command is recorded in an HMAC-SHA256 append-only audit chain at dispatch time — not reconstructed after the fact. Each record includes: principal identity, RURI, timestamp (millisecond precision), message_id, outcome, model provider, model identifier, inference confidence, inference latency, thought_id, escalation flag, and (from §16.5) a watermark token that marks the command as AI-generated.
     </p>
     <p class="text-text-muted leading-relaxed mb-4">
-      Records are chained: each entry includes the SHA-256 hash of the previous record. Changing any record breaks the hash of every record after it, so the change shows up on verification. Two limits: whoever holds the HMAC key can recompute the whole chain, and a chain alone cannot show records removed from the end. Anchoring the latest hash somewhere the writer cannot rewrite (a signed checkpoint, a registry) narrows both. The chain is the authoritative record-keeping artifact for EU AI Act Article 12 compliance.
+      Records are chained: each entry includes the SHA-256 hash of the previous record. Changing any record breaks the hash of every record after it, so the change shows up on verification. Two limits: whoever holds the HMAC key can recompute the whole chain, and a chain alone cannot show records removed from the end. Anchoring the latest hash somewhere the writer cannot rewrite (a signed checkpoint, a registry) narrows both. The chain provides records for the automatic event logging that EU AI Act Article 12 requires of high-risk systems.
     </p>
     <p class="text-text-muted leading-relaxed mb-6">
       Messages are signed with the robot's ML-DSA-65 identity key (see post-quantum identity below). The combination of HMAC chaining and per-message signing means the chain is both tamper-evident and attributable.
