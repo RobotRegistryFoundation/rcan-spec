@@ -145,7 +145,7 @@ entries:
       Every RCAN command is recorded in an HMAC-SHA256 append-only audit chain at dispatch time — not reconstructed after the fact. Each record includes: principal identity, RURI, timestamp (millisecond precision), message_id, outcome, model provider, model identifier, inference confidence, inference latency, thought_id, escalation flag, and (from §16.5) a watermark token for EU AI Act Art. 50 compliance.
     </p>
     <p class="text-text-muted leading-relaxed mb-4">
-      Records are chained: each entry includes the SHA-256 hash of the previous record. Any modification to any record in the chain — by any party, including the operator — breaks all subsequent hashes and is detectable on verification. The chain is the authoritative record-keeping artifact for EU AI Act Article 12 compliance.
+      Records are chained: each entry includes the SHA-256 hash of the previous record. Changing any record breaks the hash of every record after it, so the change shows up on verification. Two limits: whoever holds the HMAC key can recompute the whole chain, and a chain alone cannot show records removed from the end. Anchoring the latest hash somewhere the writer cannot rewrite (a signed checkpoint, a registry) narrows both. The chain is the authoritative record-keeping artifact for EU AI Act Article 12 compliance.
     </p>
     <p class="text-text-muted leading-relaxed mb-6">
       Messages are signed with the robot's ML-DSA-65 identity key (see post-quantum identity below). The combination of HMAC chaining and per-message signing means the chain is both tamper-evident and attributable.
