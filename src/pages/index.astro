@@ -4,31 +4,30 @@ import HeroSection from '../components/HeroSection.astro';
 import FeatureGrid from '../components/FeatureGrid.astro';
 import CodeWindow from '../components/CodeWindow.astro';
 import { getCollection } from 'astro:content';
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { join } from 'node:path';
+import sdkStatusData from '../../public/sdk-status.json';
 
 const robots = await getCollection('robots');
 const robotCount = robots.length;
 
-// Load SDK status badges
-let sdkStatus: Record<string, { status: string; updated: string }> = {};
-try {
-  const statusPath = join(fileURLToPath(import.meta.url), '../../../../public/sdk-status.json');
-  sdkStatus = JSON.parse(readFileSync(statusPath, 'utf-8'));
-} catch {
-  // file missing — show neutral status
-}
+// SDK status is written by .github/workflows/sdk-smoke.yml, which installs each
+// published SDK and checks that it loads. The file nests entries under `sdks`
+// and uses "pass"/"fail". An SDK with no entry gets no badge.
+type SdkEntry = { version?: string; status?: string };
+const sdkStatus = sdkStatusData as { updated?: string; sdks?: Record<string, SdkEntry> };
+const sdks: Record<string, SdkEntry> = sdkStatus.sdks ?? {};
+const sdkUpdated = sdkStatus.updated ? sdkStatus.updated.slice(0, 10) : null;
 
-function sdkBadge(sdk: string): { label: string; color: string; bg: string; border: string } {
-  const entry = sdkStatus[sdk];
-  if (!entry) return { label: 'status unknown', color: 'text-text-muted/60', bg: 'bg-white/5', border: 'border-white/10' };
-  if (entry.status === 'passing') return { label: '✓ passing', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' };
-  return { label: '✗ failing', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' };
+function sdkBadge(sdk: string): { label: string; color: string; bg: string; border: string } | null {
+  const status = sdks[sdk]?.status;
+  if (status === 'pass' || status === 'success') return { label: '✓ smoke test passing', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' };
+  if (status === 'fail' || status === 'failure') return { label: '✗ smoke test failing', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' };
+  return null;
 }
 
 const pyBadge = sdkBadge('rcan-py');
 const tsBadge = sdkBadge('rcan-ts');
+const pyVersion = sdks['rcan-py']?.version || null;
+const tsVersion = sdks['rcan-ts']?.version || null;
 ---
 
 <BaseLayout title="RCAN Protocol" description="RCAN - Robot Communication and Addressing Network. An open protocol for addressing, discovering, and authenticating robotic agents.">
@@ -232,7 +231,7 @@ const tsBadge = sdkBadge('rcan-ts');
   <section class="py-24 border-b border-white/5">
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center mb-12">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">Official SDKs</h2>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Reference SDKs</h2>
         <p class="text-xl text-text-muted">One command to get started.</p>
       </div>
 
@@ -255,7 +254,7 @@ const tsBadge = sdkBadge('rcan-ts');
           </div>
           <code class="block text-sm font-mono text-emerald-300 bg-black/30 border border-white/5 rounded-lg px-4 py-2.5">pip install rcan</code>
           <div class="flex items-center gap-2 mt-2">
-            <span class="text-[10px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-mono">v0.6.0</span>
+            {pyVersion && <span class="text-[10px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-mono">v{pyVersion}</span>}
             <a href="https://pypi.org/project/rcan/" target="_blank" rel="noopener noreferrer" class="text-[10px] text-text-muted hover:text-accent">PyPI →</a>
           </div>
           <div class="flex flex-wrap gap-1.5 mt-3">
@@ -283,7 +282,7 @@ const tsBadge = sdkBadge('rcan-ts');
           </div>
           <code class="block text-sm font-mono text-emerald-300 bg-black/30 border border-white/5 rounded-lg px-4 py-2.5">npm install rcan-ts</code>
           <div class="flex items-center gap-2 mt-2">
-            <span class="text-[10px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-mono">v0.6.0</span>
+            {tsVersion && <span class="text-[10px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-mono">v{tsVersion}</span>}
             <a href="https://www.npmjs.com/package/rcan-ts" target="_blank" rel="noopener noreferrer" class="text-[10px] text-text-muted hover:text-accent">npm →</a>
             <span class="text-[10px] text-text-muted">·</span>
             <a href="https://unpkg.com/rcan-ts/dist/rcan.iife.js" target="_blank" rel="noopener noreferrer" class="text-[10px] text-text-muted hover:text-accent">CDN →</a>
@@ -401,17 +400,23 @@ if gate.allows(confidence):
   <section class="py-16 border-b border-white/5">
     <div class="max-w-3xl mx-auto px-6 text-center">
       <h2 class="text-2xl font-bold mb-2">SDK Status</h2>
-      <p class="text-text-muted text-sm mb-8">Official SDKs for the RCAN protocol</p>
+      <p class="text-text-muted text-sm mb-8">
+        Reference SDKs for the RCAN protocol, MIT-licensed. Status comes from this repository's SDK smoke test, which installs each published package and checks that it loads{sdkUpdated && <> (last run {sdkUpdated})</>}. It is not a conformance test.
+      </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="https://github.com/RobotRegistryFoundation/rcan-py" target="_blank" rel="noopener noreferrer"
-          class={`flex items-center gap-3 px-5 py-3 rounded-xl border ${pyBadge.bg} ${pyBadge.border} hover:opacity-80 transition-opacity`}>
+          class={`flex items-center gap-3 px-5 py-3 rounded-xl border ${pyBadge ? `${pyBadge.bg} ${pyBadge.border}` : 'bg-white/5 border-white/10'} hover:opacity-80 transition-opacity`}>
           <span class="text-sm font-mono font-semibold text-text">rcan-py</span>
-          <span class={`text-sm font-mono font-bold ${pyBadge.color}`}>{pyBadge.label}</span>
+          {pyBadge
+            ? <span class={`text-sm font-mono font-bold ${pyBadge.color}`}>{pyBadge.label}</span>
+            : <span class="text-sm font-mono text-text-muted/60">status not reported</span>}
         </a>
         <a href="https://github.com/RobotRegistryFoundation/rcan-ts" target="_blank" rel="noopener noreferrer"
-          class={`flex items-center gap-3 px-5 py-3 rounded-xl border ${tsBadge.bg} ${tsBadge.border} hover:opacity-80 transition-opacity`}>
+          class={`flex items-center gap-3 px-5 py-3 rounded-xl border ${tsBadge ? `${tsBadge.bg} ${tsBadge.border}` : 'bg-white/5 border-white/10'} hover:opacity-80 transition-opacity`}>
           <span class="text-sm font-mono font-semibold text-text">rcan-ts</span>
-          <span class={`text-sm font-mono font-bold ${tsBadge.color}`}>{tsBadge.label}</span>
+          {tsBadge
+            ? <span class={`text-sm font-mono font-bold ${tsBadge.color}`}>{tsBadge.label}</span>
+            : <span class="text-sm font-mono text-text-muted/60">status not reported</span>}
         </a>
       </div>
     </div>
