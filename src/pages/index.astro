@@ -9,6 +9,14 @@ import sdkStatusData from '../../public/sdk-status.json';
 const robots = await getCollection('robots');
 const robotCount = robots.length;
 
+// The counter shows this site's own listing (src/content/robots/). Say what is in it.
+const MAINTAINER_HANDLE = 'craigm26';
+const robotNoun = robotCount === 1 ? 'robot' : 'robots';
+const onlyMaintainerRobots = robotCount > 0 && robots.every((r) => r.data.submitted_by === MAINTAINER_HANDLE);
+const robotLabel = onlyMaintainerRobots
+  ? `${robotNoun} listed here: the maintainer's own test ${robotNoun}`
+  : `${robotNoun} listed here`;
+
 // SDK status is written by .github/workflows/sdk-smoke.yml, which installs each
 // published SDK and checks that it loads. The file nests entries under `sdks`
 // and uses "pass"/"fail". An SDK with no entry gets no badge.
@@ -140,7 +148,8 @@ const tsVersion = sdks['rcan-ts']?.version || null;
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6 text-center hover:border-accent/30 transition-all">
           <div class="text-4xl font-bold text-accent mb-2">{robotCount > 0 ? robotCount : 'Open'}</div>
-          <div class="text-sm text-text-muted">{robotCount > 0 ? 'Robots registered' : 'Registration now open'}</div>
+          <div class="text-sm text-text-muted">{robotCount > 0 ? robotLabel : 'Registration now open'}</div>
+          <div class="text-xs text-text-muted/70 mt-2">The registry is in early testing.</div>
         </div>
         <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6 text-center hover:border-accent/30 transition-all">
           <div class="text-4xl font-bold text-accent mb-2">4</div>
