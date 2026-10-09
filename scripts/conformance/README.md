@@ -120,4 +120,4 @@ L3 AI-ACCT    ✅ RCAN AI-Accountable v1.2
 
 ---
 
-*Maintained in [RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec). L4 (Registry Integration) is defined in spec §21.6. Physical assurance levels A1–A3 (Appendix C) are a separate axis from L1–L4.*
+*Maintained in [RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec). L4 (Registry Integration) is defined in spec §21.6. Physical assurance levels BE-1 to BE-3 (Appendix C) are a separate axis from L1–L4.*

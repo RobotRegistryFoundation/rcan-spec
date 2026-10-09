@@ -1,7 +1,11 @@
 ---
 /**
  * VerificationBadge — shows robot verification tier inline.
- * Tiers: community | verified | manufacturer | certified
+ * Wire values: community | verified | manufacturer | certified | accredited.
+ * The values are part of the registry format and do not change; the labels below
+ * say what the registry code (functions/api/v1/robots/[rrn]/verify.ts) does.
+ * Tiers record who vouched for a record and with what evidence; none of them is a
+ * safety certification.
  */
 
 interface Props {
@@ -12,11 +16,12 @@ interface Props {
 
 const { tier = 'community', size = 'md', showLabel = true } = Astro.props;
 
-const tiers: Record<string, { emoji: string; label: string; color: string; bg: string; border: string }> = {
-  community:    { emoji: '⬜', label: 'Community',    color: 'text-text-muted',   bg: 'bg-white/5',         border: 'border-white/10' },
-  verified:     { emoji: '🟡', label: 'Verified',     color: 'text-yellow-400',   bg: 'bg-yellow-500/10',   border: 'border-yellow-500/25' },
-  manufacturer: { emoji: '🔵', label: 'Manufacturer', color: 'text-blue-400',     bg: 'bg-blue-500/10',     border: 'border-blue-500/25' },
-  certified:    { emoji: '✅', label: 'Certified',    color: 'text-emerald-400',  bg: 'bg-emerald-500/10',  border: 'border-emerald-500/25' },
+const tiers: Record<string, { emoji: string; label: string; note: string; color: string; bg: string; border: string }> = {
+  community:    { emoji: '⬜', label: 'Community',                  note: 'Self-registered; no identity check.',                                                                                  color: 'text-text-muted',   bg: 'bg-white/5',         border: 'border-white/10' },
+  verified:     { emoji: '🟡', label: 'Verified',                   note: 'Upgrade applied on the owner\'s API key or the registry admin token, with an evidence URL; the registry does not review the evidence.',     color: 'text-yellow-400',   bg: 'bg-yellow-500/10',   border: 'border-yellow-500/25' },
+  manufacturer: { emoji: '🔵', label: 'Manufacturer',               note: 'Not assigned by the registry\'s upgrade endpoint.',                                                                  color: 'text-blue-400',     bg: 'bg-blue-500/10',     border: 'border-blue-500/25' },
+  certified:    { emoji: '🔵', label: 'Evidence URL on file',       note: 'Upgrade applied on the owner\'s API key or the registry admin token, with an evidence URL. Not a certification: no third-party test or audit is involved.', color: 'text-blue-400',     bg: 'bg-blue-500/10',     border: 'border-blue-500/25' },
+  accredited:   { emoji: '✅', label: 'Evidence URL on file, unreviewed', note: 'Fourth step, applied on the owner\'s API key or the registry admin token with an evidence URL, without review. Not an accreditation.', color: 'text-emerald-400',  bg: 'bg-emerald-500/10',  border: 'border-emerald-500/25' },
 };
 
 const t = tiers[tier.toLowerCase()] ?? tiers.community;
@@ -26,7 +31,7 @@ const sizeClass = size === 'sm' ? 'text-[10px] px-1.5 py-0.5 gap-1' : 'text-xs p
 <a
   href={`/registry/verification/#${tier.toLowerCase()}`}
   class={`inline-flex items-center font-medium rounded-full border transition-opacity hover:opacity-80 ${sizeClass} ${t.color} ${t.bg} ${t.border}`}
-  title={`Verification tier: ${t.label}`}
+  title={`Verification tier: ${t.label}. ${t.note} None of the tiers is a safety certification.`}
 >
   <span>{t.emoji}</span>
   {showLabel && <span>{t.label}</span>}

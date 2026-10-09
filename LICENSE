@@ -1,0 +1,33 @@
+Licensing for this repository
+=============================
+
+This repository holds several kinds of material. They are licensed
+separately.
+
+1. Specification text and schemas: CC BY 4.0
+
+   The RCAN specification text and schemas in this repository are
+   licensed under the Creative Commons Attribution 4.0 International
+   License (SPDX: CC-BY-4.0). This covers:
+
+     spec/             specification text
+     schemas/          JSON Schema and OpenAPI files
+     public/schemas/   the published copies of those schemas
+
+   The full legal code is in LICENSES/CC-BY-4.0.txt and at
+   https://creativecommons.org/licenses/by/4.0/legalcode
+
+2. Reference SDKs: MIT, in their own repositories
+
+   The reference SDKs are not in this repository. rcan-py
+   (https://github.com/RobotRegistryFoundation/rcan-py) and rcan-ts
+   (https://github.com/RobotRegistryFoundation/rcan-ts) are published
+   under the MIT License, as their PyPI and npm package metadata state.
+
+3. Everything else: licence to be decided by the maintainer
+
+   The licence for the rest of this repository has not been decided
+   yet. That includes the rcan.dev site code (src/, functions/,
+   migrations/, schema/, the rest of public/), scripts/, tests/,
+   fixtures/, profiles/ and docs/. This file does not grant a licence
+   for that material.

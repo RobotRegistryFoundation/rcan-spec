@@ -109,15 +109,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     </section>
 
     <section>
-      <h2>P66 Compliant Badge</h2>
-      <p>The <strong>P66 Compliant</strong> badge signals that your robot implements Protocol 66 — RCAN's safety manifest protocol — and meets the minimum conformance criteria.</p>
+      <h2>Protocol 66 Badge (self-applied)</h2>
+      <p>The <strong>Protocol 66</strong> badge says that the robot's owner states it implements Protocol 66 — RCAN's safety manifest protocol — and meets the criteria below. The badge is self-applied: nobody checks that a robot showing it meets the criteria, and it is not a certification.</p>
 
       <div class="badge-item" style="display:inline-block; padding:1rem; background:var(--color-bg-alt); border:1px solid var(--color-border); border-radius:8px; margin-bottom:1.5rem;">
-        <img src="/badges/p66-compliant.svg" alt="P66 Compliant badge" />
+        <img src="/badges/p66-compliant.svg" alt="Protocol 66 badge (self-applied)" />
       </div>
 
       <h3>Criteria</h3>
-      <p>To qualify for the P66 Compliant badge, your robot must:</p>
+      <p>Before showing the badge, check that your robot meets these criteria:</p>
       <ul>
         <li>Expose <code>GET /api/safety/manifest</code> (Protocol 66 endpoint)</li>
         <li>Return <code>manifest.summary.conformance_pct &gt;= 80</code></li>
@@ -130,7 +130,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 # Must be &gt;= 80.0</code></pre>
 
       <h3>Embed in README</h3>
-      <pre><code>[![P66 Compliant](https://rcan.dev/badges/p66-compliant.svg)](https://rcan.dev/docs/safety)</code></pre>
+      <pre><code>[![Protocol 66 (self-declared)](https://rcan.dev/badges/p66-compliant.svg)](https://rcan.dev/docs/safety)</code></pre>
 
       <p>SVG asset: <a href="/badges/p66-compliant.svg"><code>/badges/p66-compliant.svg</code></a></p>
     </section>

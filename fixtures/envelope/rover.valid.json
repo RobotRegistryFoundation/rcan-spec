@@ -1,7 +1,7 @@
 {
   "envelope_version": "0.1",
   "machine": { "id": "rover-01", "class": "mobile_ground", "mass_kg": 2.1 },
-  "level": "A2",
+  "level": "BE-2",
   "workspace": { "frame": "map", "keep_in": [[0, 0], [6, 0], [6, 4], [0, 4]], "keep_out": [] },
   "motion": { "max_speed_mps": 0.5, "max_turn_radps": 1.5, "max_accel_mps2": 1.0 },
   "proximity": [

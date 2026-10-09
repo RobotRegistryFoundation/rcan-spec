@@ -42,7 +42,7 @@ Robots today are islands. A Boston Dynamics Spot and a Raspberry Pi rover can't 
 
 **Mandatory safety layer (Protocol 66):** local safety always wins; ESTOP is never blocked. Cloud commands pass through the same confidence gates and bounds checks as local commands.
 
-**Physical assurance:** [Appendix C](spec/appendix-c-physical-assurance.md) (informative) applies a simple rule to AI-driven machines: the model proposes, a bounded layer disposes. A small, deterministic gate between the model and the actuators decides what executes, and the safety claim rests on that gate, not on the model. This is prior art (the Simplex architecture, Sha 2001; run-time assurance, ASTM F3269); what the appendix adds is a vendor-neutral test method for machines driven by learned policies. It maps five requirements (declared envelope, enforcement below the model, stop always wins, accountable commands, tamper-evident evidence) onto existing RCAN sections, adds an optional machine-readable [envelope](schemas/envelope.json) and a hash-chained [`gate_decision`](schemas/gate-decision.json) record, and defines tests EV-01 to EV-09 ([status](tests/assurance/README.md)). Physical assurance levels A1–A3 are a separate axis from protocol conformance levels L1–L4: an L3 robot can be A1. An RCAN ESTOP message and a hardwired power cut are both needed and are not the same thing. It complements, and replaces none of, ISO 10218, ISO/TS 15066, ISO 13482, IEC 60204-1, ISO 13849, IEC 61508 and ITU-T F.748.44. To be presented at the ITU-T FG-EAI workshop on embodied AI, 16 October 2026 (remote); that is not an endorsement. RCAN has one maintainer and no third-party verification. Conformance is not certification.
+**Physical assurance:** [Appendix C](spec/appendix-c-physical-assurance.md) (informative) applies a simple rule to AI-driven machines: the model proposes, a bounded layer disposes. A small, deterministic gate between the model and the actuators decides what executes, and the safety claim rests on that gate, not on the model. This is prior art (the Simplex architecture, Sha 2001; run-time assurance, ASTM F3269); what the appendix adds is a vendor-neutral test method for machines driven by learned policies. It maps five requirements (declared envelope, enforcement below the model, stop always wins, accountable commands, tamper-evident evidence) onto existing RCAN sections, adds an optional machine-readable [envelope](schemas/envelope.json) and a hash-chained [`gate_decision`](schemas/gate-decision.json) record, and defines tests EV-01 to EV-09 ([status](tests/assurance/README.md)). Physical assurance levels BE-1 to BE-3 are a separate axis from protocol conformance levels L1–L4: an L3 robot can be BE-1. An RCAN ESTOP message and a hardwired power cut are both needed and are not the same thing. It complements, and replaces none of, ISO 10218, ISO/TS 15066, ISO 13482, IEC 60204-1, ISO 13849, IEC 61508 and ITU-T F.748.44. To be presented at the ITU-T FG-EAI workshop on embodied AI, 16 October 2026 (remote); that is not an endorsement. RCAN has one maintainer and no third-party verification. Conformance is not certification.
 
 **Message Types** — 31 defined message types covering commands, telemetry, consent, audit, federation sync, and ESTOP. Every message carries a `msg_id` for replay prevention and a `confidence` field for AI accountability.
 
@@ -109,7 +109,7 @@ Implementations can declare a conformance level in their `/.well-known/rcan-node
 | **L3** | AI Accountability | L2 + model identity in audit, HiTL gates and authorization, thought-log scope, offline chain verification |
 | **L4** | Registry Integration | L3 + REGISTRY_REGISTER/RESOLVE, RRN validation, ownership proof (§21.6) |
 
-Definitions follow the published suite at [rcan.dev/conformance](https://rcan.dev/conformance) and [`scripts/conformance/`](scripts/conformance/). Conformance is self-asserted; only L1 has an executable live checker today. Conformance is not certification. Physical assurance levels A1–A3 (Appendix C) are a separate axis.
+Definitions follow the published suite at [rcan.dev/conformance](https://rcan.dev/conformance) and [`scripts/conformance/`](scripts/conformance/). Conformance is self-asserted; only L1 has an executable live checker today. Conformance is not certification. Physical assurance levels BE-1 to BE-3 (Appendix C) are a separate axis.
 
 ## Spec Versioning
 
@@ -152,9 +152,10 @@ Current versions for all packages: see the [live compatibility matrix](https://r
 
 ## License
 
-Specification text: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-Reference implementations: MIT.
+Specification text and schemas: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (full text in [LICENSES/CC-BY-4.0.txt](LICENSES/CC-BY-4.0.txt)).
+Reference SDKs (rcan-py, rcan-ts): MIT.
+The licence for the site code and the rest of this repository is still to be decided; see [LICENSE](LICENSE).
 
 ---
 
-> **Stewarded by the [Robot Registry Foundation](https://github.com/RobotRegistryFoundation).** RCAN is an open standard; issues, proposals, and PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+> **Maintained by one person, Craig Merry, in the [Robot Registry Foundation](https://github.com/RobotRegistryFoundation) GitHub organization.** The foundation is proposed, not incorporated. RCAN is an open specification; issues, proposals, and PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).

@@ -10,7 +10,7 @@ first, this becomes v3.4.0.
 - `spec/appendix-c-physical-assurance.md`: the model proposes, a bounded layer
   disposes. States the prior art (Simplex, Sha 2001; run-time assurance, ASTM F3269),
   maps requirements R1–R5 onto existing RCAN sections, defines physical assurance
-  levels A1–A3 as an axis independent of protocol levels L1–L4, separates the RCAN
+  levels BE-1 to BE-3 as an axis independent of protocol levels L1–L4, separates the RCAN
   ESTOP message from a hardwired stop, and lists what is out of scope. MUST/SHOULD are
   used only to restate requirements RCAN already makes.
 - `schemas/envelope.json` (JSON Schema 2020-12, also published under
@@ -53,6 +53,7 @@ first, this becomes v3.4.0.
 - `VERSIONING.md` current version is v3.2.0.
 
 ### Changed
+- Physical assurance levels renamed A1–A3 → BE-1, BE-2, BE-3 (Bounded Embodiment), because "A3" is the Association for Advancing Automation, which publishes ANSI/A3 R15.06 and runs the US delegation to ISO/TC 299.
 - `/.well-known/rcan-node.json` builds its `capabilities` list from the key material
   actually configured on the deployment. `register` and `resolve` are always listed;
   `verify` only when `RCAN_NODE_ED25519_PUBKEY` is set; `delegate` only when the

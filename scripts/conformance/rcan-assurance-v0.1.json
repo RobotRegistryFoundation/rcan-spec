@@ -66,7 +66,7 @@
       "requirement": "R3",
       "runnable_in": "software",
       "needs": ["implementation under test", "ability to kill the gate process"],
-      "description": "Kill the gate process while the machine is moving. Actuators MUST reach a safe state within heartbeat.gate_timeout_ms through a path that does not depend on the gate (A2: independent watchdog). In software the pass criterion is that no command reaches the actuator interface after the timeout; the stop itself is measured under EV-02.",
+      "description": "Kill the gate process while the machine is moving. Actuators MUST reach a safe state within heartbeat.gate_timeout_ms through a path that does not depend on the gate (BE-2: independent watchdog). In software the pass criterion is that no command reaches the actuator interface after the timeout; the stop itself is measured under EV-02.",
       "test_type": "physical_assurance",
       "input": { "fault": "gate_process_killed", "moving": true },
       "expect": { "actuator_commands_after_timeout": 0, "within_ms": "heartbeat.gate_timeout_ms" }
