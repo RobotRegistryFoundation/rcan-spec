@@ -4,7 +4,7 @@
 
 ## What Is rcan-spec?
 
-The official specification for the RCAN (Robot Communication and Autonomy Network) protocol. Published at **rcan.dev** via Cloudflare Pages. Astro-based static site.
+The official specification for the RCAN (Robot Communication and Addressing Network) protocol. Published at **rcan.dev** via Cloudflare Pages. Astro-based static site.
 
 **Current version**: v3.2 | **Repo**: RobotRegistryFoundation/rcan-spec | **Branch**: master
 
