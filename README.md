@@ -157,4 +157,4 @@ Reference implementations: MIT.
 
 ---
 
-> **Stewarded by the [Robot Registry Foundation](https://github.com/RobotRegistryFoundation).** RCAN is an open standard; issues, proposals, and PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+> **Maintained by one person, Craig Merry, in the [Robot Registry Foundation](https://github.com/RobotRegistryFoundation) GitHub organization.** The foundation is proposed, not incorporated. RCAN is an open specification; issues, proposals, and PRs are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
