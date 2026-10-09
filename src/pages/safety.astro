@@ -98,7 +98,7 @@ entries:
       RCAN addresses this by making safety constraints structural at the message transport layer. Confidence thresholds and human authorization gates are declared in the robot's RCAN configuration and enforced at dispatch time — not as application-layer checks the AI agent reasons around, but as protocol invariants the runtime enforces before it dispatches a command to an actuator.
     </p>
     <p class="text-text-muted leading-relaxed">
-      The reference implementation is <a href="https://github.com/craigm26/OpenCastor" rel="noopener noreferrer" class="text-accent hover:underline">OpenCastor</a>, an open-source robot runtime that implements RCAN on production hardware (Raspberry Pi 5, Hailo-8, OAK-D). The safety mechanisms described here are not theoretical — they are running on physical robots.
+      One implementation is <a href="https://github.com/craigm26/OpenCastor" rel="noopener noreferrer" class="text-accent hover:underline">OpenCastor</a>, an open-source robot runtime by the same maintainer that implements RCAN on Raspberry Pi 5, Hailo-8 and OAK-D hardware. It is not the reference for RCAN. The mechanisms described here run on the maintainer's own robots; they have not been tested by an independent party.
     </p>
   </section>
 
@@ -166,7 +166,7 @@ entries:
       ML-DSA-65 provides security against quantum adversaries. Classical HMAC-SHA256 is used for per-record chaining within audit sessions (fast, symmetric); ML-DSA-65 is used for per-message attribution (asymmetric, forward-secure, quantum-resistant). The combination is appropriate for systems with lifetimes measured in years operating in environments where key material may be exposed to future quantum attack.
     </p>
     <p class="text-text-muted leading-relaxed">
-      The OpenCastor reference implementation uses the <code class="text-accent font-mono text-sm">dilithium-py</code> binding. Key generation, signing, and verification are implemented in <code class="text-accent font-mono text-sm">castor/rcan/pqc.py</code>.
+      OpenCastor uses the <code class="text-accent font-mono text-sm">dilithium-py</code> binding. Key generation, signing, and verification are implemented in <code class="text-accent font-mono text-sm">castor/rcan/pqc.py</code>.
     </p>
   </section>
 
@@ -216,7 +216,7 @@ entries:
     </p>
     <CodeWindow code={memoryEntry} language="yaml" title="robot-memory.md — operational memory entry" />
     <p class="text-text-muted text-sm mt-4">
-      Schema specification: <a href="https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/docs/robot-memory-schema.md" rel="noopener noreferrer" class="text-accent hover:underline">continuonai/rcan-spec — robot-memory-schema.md</a>
+      Schema specification: <a href="https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/docs/robot-memory-schema.md" rel="noopener noreferrer" class="text-accent hover:underline">RobotRegistryFoundation/rcan-spec — robot-memory-schema.md</a>
     </p>
   </section>
 
@@ -228,7 +228,7 @@ entries:
         Performance measurements for confidence gate rejection rates, HiTL gate round-trip latency, audit chain write latency (p50/p95/p99), and ML-DSA-65 signing overhead on production hardware (Raspberry Pi 5, Hailo-8) are in progress.
       </p>
       <p class="text-text-muted text-sm">
-        Tracking: <a href="https://github.com/craigm26/OpenCastor/issues/859" rel="noopener noreferrer" class="text-accent hover:underline">craigm26/OpenCastor#859</a> — results will be published to <code class="text-accent font-mono">docs/safety-benchmarks.md</code> in the OpenCastor reference implementation.
+        Tracking: <a href="https://github.com/craigm26/OpenCastor/issues/859" rel="noopener noreferrer" class="text-accent hover:underline">craigm26/OpenCastor#859</a> — results will be published to <code class="text-accent font-mono">docs/safety-benchmarks.md</code> in the OpenCastor repository.
       </p>
     </div>
   </section>
@@ -238,14 +238,14 @@ entries:
     <div class="flex flex-col sm:flex-row gap-4 justify-between">
       <div>
         <p class="text-text-muted text-sm mb-3">Regulatory framework coverage</p>
-        <a href="/compliance/frameworks" class="text-accent hover:underline text-sm">See all supported frameworks →</a>
+        <a href="/compliance/frameworks" class="text-accent hover:underline text-sm">See the framework mapping →</a>
       </div>
       <div>
         <p class="text-text-muted text-sm mb-3">Conformance levels L1–L4</p>
         <a href="/conformance/" class="text-accent hover:underline text-sm">Conformance test suite →</a>
       </div>
       <div>
-        <p class="text-text-muted text-sm mb-3">Reference implementation</p>
+        <p class="text-text-muted text-sm mb-3">One implementation</p>
         <a href="https://github.com/craigm26/OpenCastor" rel="noopener noreferrer" class="text-accent hover:underline text-sm">OpenCastor on GitHub →</a>
       </div>
     </div>
