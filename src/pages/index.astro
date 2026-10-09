@@ -119,7 +119,7 @@ const tsVersion = sdks['rcan-ts']?.version || null;
     <ol class="space-y-3 text-sm text-text-muted max-w-3xl mx-auto">
       <li><strong class="text-white">Layer 1 — Declaration.</strong> ROBOT.md, robot-md CLI, robot-md-mcp (Advisory).</li>
       <li><strong class="text-white">Layer 2 — Agent runtime.</strong> Claude Code, Codex, Gemini, any MCP host.</li>
-      <li><strong class="text-white">Layer 3 — Gateway / Enforcement.</strong> robot-md-gateway. Mandatory exclusive path.</li>
+      <li><strong class="text-white">Layer 3 — Gateway / Enforcement.</strong> robot-md-gateway, designed to be the only path from an agent to the actuators. That holds only when the deployment enforces it (the gateway's service account owns the device); by default another local process can still reach the servos.</li>
       <li><strong class="text-white">Layer 4 — Robot-facing runtime.</strong> OpenCastor and other RCAN runtimes.</li>
       <li><strong class="text-white">Layer 5 — Protocol.</strong> RCAN spec + SDKs. <em>This site.</em></li>
       <li><strong class="text-white">Layer 6 — Registry.</strong> Robot Registry Foundation.</li>
@@ -220,7 +220,7 @@ const tsVersion = sdks['rcan-ts']?.version || null;
       </div>
       <div class="space-y-6 text-text-muted leading-relaxed">
         <p>
-          A safety layer that wraps a model's output sits outside the execution boundary — it observes what the model generates but cannot constrain what it attempts or when dispatch occurs. For text applications, this trade-off is acceptable. For physical robots, the failure mode is different: a command that clears a post-generation safety filter but targets the wrong actuator causes physical harm before any check can intervene. Protocol-level enforcement closes this gap. RCAN's confidence thresholds and HiTL gates are structural constraints on the message transport — not filters — enforced before any command reaches an actuator.
+          A safety layer that wraps a model's output sits outside the execution boundary — it observes what the model generates but cannot constrain what it attempts or when dispatch occurs. For text applications, this trade-off is acceptable. For physical robots, the failure mode is different: a command that clears a post-generation safety filter but targets the wrong actuator causes physical harm before any check can intervene. Protocol-level enforcement closes this gap. RCAN's confidence thresholds and HiTL gates are structural constraints on the message transport — not filters — enforced by the runtime before a command it dispatches reaches an actuator.
         </p>
         <p>
           Auditability is similarly structural in RCAN. The ML-DSA-65 signed audit chain records every command with principal identity, model confidence, thought provenance, and delegation path at dispatch time — not reconstructed afterward. Each record is cryptographically chained to the previous; any modification breaks chain verification. It supports the automatic event recording that EU AI Act Article 12 requires of high-risk systems, and it is built into the protocol layer rather than added as a reporting feature.

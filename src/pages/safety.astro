@@ -95,7 +95,7 @@ entries:
       A safety layer that wraps a model's output sits outside the execution boundary — it observes outputs but cannot constrain what the model attempts or when dispatch occurs. For text applications, this is an acceptable trade-off. For physical robots, the failure mode is different: a command that clears a post-generation filter but targets the wrong actuator causes physical harm before any check can intervene.
     </p>
     <p class="text-text-muted leading-relaxed mb-4">
-      RCAN addresses this by making safety constraints structural at the message transport layer. Confidence thresholds and human authorization gates are declared in the robot's RCAN configuration and enforced at dispatch time — not as application-layer checks the AI agent reasons around, but as protocol invariants the transport enforces before a command reaches any actuator.
+      RCAN addresses this by making safety constraints structural at the message transport layer. Confidence thresholds and human authorization gates are declared in the robot's RCAN configuration and enforced at dispatch time — not as application-layer checks the AI agent reasons around, but as protocol invariants the runtime enforces before it dispatches a command to an actuator.
     </p>
     <p class="text-text-muted leading-relaxed">
       The reference implementation is <a href="https://github.com/craigm26/OpenCastor" rel="noopener noreferrer" class="text-accent hover:underline">OpenCastor</a>, an open-source robot runtime that implements RCAN on production hardware (Raspberry Pi 5, Hailo-8, OAK-D). The safety mechanisms described here are not theoretical — they are running on physical robots.
@@ -112,7 +112,7 @@ entries:
       Every RCAN action scope has a configurable minimum confidence threshold declared in the robot's config. If the AI model's reported confidence for a proposed action falls below that threshold, the protocol rejects dispatch and emits a <code class="text-accent font-mono text-sm">CONFIDENCE_GATE_BLOCKED</code> audit record. The threshold is per-scope, so fine-grained control (higher threshold for physical manipulation, lower for camera streaming) is expressed in configuration rather than code.
     </p>
     <p class="text-text-muted leading-relaxed mb-6">
-      This gate fires before the command reaches the transport layer. There is no path through which a model can dispatch a low-confidence MANIPULATE command — not by rephrasing, not through a different code path, not through a tool call that bypasses the gate.
+      In a conforming runtime this gate runs before the command reaches the transport layer, so rephrasing, another code path in the runtime or a different tool call does not get a low-confidence MANIPULATE command past it. It cannot stop another process on the same machine from driving the actuators directly; closing that path is the deployment's job (Layer 3, the gateway, holds it only when the gateway's service account owns the device).
     </p>
     <CodeWindow code={confidenceGateConfig} language="yaml" title="rcan-config.yaml — confidence gate configuration" />
   </section>
@@ -124,7 +124,7 @@ entries:
       <h2 class="text-2xl font-bold">Human-in-the-Loop gates</h2>
     </div>
     <p class="text-text-muted leading-relaxed mb-4">
-      Action types declared as requiring human authorization in the RCAN config cannot be dispatched by any means without a signed <code class="text-accent font-mono text-sm">AUTHORIZE</code> message from a principal holding <code class="text-accent font-mono text-sm">OWNER</code> or higher role. When a gated action is attempted, the protocol emits <code class="text-accent font-mono text-sm">PENDING_AUTH</code> status and the command waits. The AI agent cannot proceed, cannot re-issue the command, and cannot escalate its own role.
+      Action types declared as requiring human authorization in the RCAN config cannot be dispatched through a conforming runtime without a signed <code class="text-accent font-mono text-sm">AUTHORIZE</code> message from a principal holding <code class="text-accent font-mono text-sm">OWNER</code> or higher role. When a gated action is attempted, the protocol emits <code class="text-accent font-mono text-sm">PENDING_AUTH</code> status and the command waits. The AI agent cannot proceed, cannot re-issue the command, and cannot escalate its own role.
     </p>
     <p class="text-text-muted leading-relaxed mb-4">
       This supports EU AI Act Article 14 (human oversight) at the protocol layer; it does not by itself meet it. The human-machine interface is the <code class="text-accent font-mono text-sm">PENDING_AUTH → AUTHORIZE</code> flow, and the gate is a structural constraint on the transport, not a UI affordance that can be bypassed.
