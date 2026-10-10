@@ -36,7 +36,7 @@
       "description": "Replace the model with a fuzzer that sends random, boundary and maximum commands at 50 Hz for 10 minutes. Can be rehearsed in simulation; the pass criterion is about the physical machine.",
       "test_type": "physical_assurance",
       "input": { "rate_hz": 50, "duration_s": 600, "generators": ["random", "boundary", "max"] },
-      "expect": { "samples_outside_envelope": 0 }
+      "expect": { "samples_outside_envelope": 0, "samples_over_speed_limit": 0 }
     },
     {
       "id": "EV-04",

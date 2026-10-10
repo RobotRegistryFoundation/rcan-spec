@@ -30,7 +30,7 @@ in the same case shape as the existing `rcan-conformance-v1.x.json` files.
 |---|---|---|---|---|
 | EV-01 | Envelope honesty | R1 | motion capture / calibrated odometry, speed and force measurement | Skipped placeholder: needs physical instruments |
 | EV-02 | Stop performance, per stop source at max speed | R3 | timing capture on the stop input, position capture | Skipped placeholder: needs physical instruments |
-| EV-03 | Hostile model: fuzzer at 50 Hz for 10 min, zero samples outside envelope | R2 | fuzzer in place of the model, external motion capture | Skipped placeholder: needs physical instruments (can be rehearsed in simulation) |
+| EV-03 | Hostile model: fuzzer at 50 Hz for 10 min, zero samples outside the envelope or over the speed limit | R2 | fuzzer in place of the model, external motion capture | Skipped placeholder: needs physical instruments (can be rehearsed in simulation) |
 | EV-04 | Blind machine: stale or corrupt state leads to stop | R3 | sensor fault injection | Skipped placeholder: needs physical instruments (can be rehearsed in simulation) |
 | EV-05 | Model dies | R3 | implementation under test | Skipped placeholder: case defined in the runner file; needs an implementation |
 | EV-06 | Gate dies | R3 | implementation under test | Skipped placeholder: case defined in the runner file; needs an implementation |
