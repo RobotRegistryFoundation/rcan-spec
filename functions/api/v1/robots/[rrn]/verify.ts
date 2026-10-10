@@ -4,14 +4,18 @@
  *
  * D1 database binding: DB (configured in wrangler.toml or Pages dashboard)
  *
- * Upgrades a robot's verification tier through the trust ladder:
+ * Self-service upgrade of a robot's verification tier. The tiers are
  *   community → verified → certified → accredited
+ * and self-service stops at verified.
  *
  * Rules:
+ *   - A request for certified or accredited is refused with 403, whoever sends
+ *     it (owner API key or admin token). Those tiers require manual review by
+ *     the foundation and are not available by self-service. Test results,
+ *     including Bounded Embodiment results, are not certification evidence.
  *   - Must upgrade exactly one tier (no skipping)
- *   - All upgrades require evidence_url
- *   - certified → accredited is auto-approved (no manual review yet)
- *   - Authentication via Bearer token (same API key as robot owner)
+ *   - All upgrades require evidence_url; the registry does not review it
+ *   - Authentication via Bearer token (the robot owner's API key, or the admin token)
  */
 
 interface Env {
@@ -23,6 +27,9 @@ interface Env {
 // Tier order — index defines rank
 const TIERS = ["community", "verified", "certified", "accredited"] as const;
 type Tier = (typeof TIERS)[number];
+
+// Highest tier this endpoint grants. Anything above it needs manual review.
+const MAX_SELF_SERVICE_TIER: Tier = "verified";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -151,6 +158,15 @@ export async function onRequest(context: {
   if (!isTier(tier)) {
     return err(`Invalid tier — must be one of: ${TIERS.join(", ")}`);
   }
+  if (TIERS.indexOf(tier) > TIERS.indexOf(MAX_SELF_SERVICE_TIER)) {
+    return err(
+      `The ${tier} tier is not available by self-service: certified and accredited ` +
+        "require manual review by the foundation, and this endpoint upgrades a robot " +
+        "no further than verified. Test results, including Bounded Embodiment results, " +
+        "are not certification evidence.",
+      403
+    );
+  }
   if (!evidence_url || typeof evidence_url !== "string" || !isValidUrl(evidence_url)) {
     return err("evidence_url is required and must be a valid URL");
   }
@@ -201,9 +217,6 @@ export async function onRequest(context: {
 
     const now = new Date().toISOString();
     const verifiedBy = request.headers.get("CF-Connecting-IP") ?? "unknown";
-
-    // For certified → accredited, flag as auto-approved (future: require manual review)
-    // Currently auto-approves immediately.
 
     // Update robot record
     await env.DB.prepare(

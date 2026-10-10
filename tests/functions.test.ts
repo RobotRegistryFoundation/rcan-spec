@@ -5,7 +5,8 @@
  *   - RRN parsing (root and delegated namespaces, expanded address space)
  *   - verifyAuth helper
  *   - Rate limit bucket logic
- *   - Verification tier upgrade rules (valid transitions, invalid skips)
+ *   - Verification tier upgrade rules (self-service stops at verified; certified and
+ *     accredited get 403 from the real handler)
  *   - /.well-known/rcan-node.json response structure
  *
  * Uses a lightweight in-memory D1 mock — no Cloudflare runtime required.
@@ -22,6 +23,7 @@ import {
   handleGet,
 } from "../functions/api/v1/robots/[rrn]/fria.js";
 import { deriveComplianceStatus, handleCompliance } from "../functions/api/v1/robots/[rrn]/compliance.js";
+import { onRequest as verifyOnRequest } from "../functions/api/v1/robots/[rrn]/verify.js";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import {
@@ -149,6 +151,7 @@ async function verifyAuth(
 /** Mirrors tier upgrade validation from functions/api/v1/robots/[rrn]/verify.ts */
 const TIERS = ["community", "verified", "certified", "accredited"] as const;
 type Tier = (typeof TIERS)[number];
+const MAX_SELF_SERVICE_TIER: Tier = "verified";
 
 function isTier(value: unknown): value is Tier {
   return typeof value === "string" && (TIERS as readonly string[]).includes(value);
@@ -161,6 +164,12 @@ function validateTierUpgrade(
   const currentIdx = TIERS.indexOf(currentTier);
   const targetIdx = TIERS.indexOf(targetTier);
 
+  if (targetIdx > TIERS.indexOf(MAX_SELF_SERVICE_TIER)) {
+    return {
+      valid: false,
+      reason: `The ${targetTier} tier is not available by self-service`,
+    };
+  }
   if (targetIdx <= currentIdx) {
     return {
       valid: false,
@@ -307,31 +316,36 @@ describe("Verification Tier Upgrade Rules", () => {
     it("community → verified is valid", () => {
       expect(validateTierUpgrade("community", "verified")).toEqual({ valid: true });
     });
-
-    it("verified → certified is valid", () => {
-      expect(validateTierUpgrade("verified", "certified")).toEqual({ valid: true });
-    });
-
-    it("certified → accredited is valid", () => {
-      expect(validateTierUpgrade("certified", "accredited")).toEqual({ valid: true });
-    });
   });
 
-  describe("invalid transitions — skipping", () => {
-    it("community → certified is rejected (skip)", () => {
-      const result = validateTierUpgrade("community", "certified");
+  describe("certified and accredited are not available by self-service", () => {
+    it("verified → certified is rejected", () => {
+      const result = validateTierUpgrade("verified", "certified");
       expect(result.valid).toBe(false);
       if (!result.valid) {
-        expect(result.reason).toContain("skipping");
+        expect(result.reason).toContain("not available by self-service");
       }
     });
 
-    it("community → accredited is rejected (skip)", () => {
+    it("certified → accredited is rejected (no longer auto-approved)", () => {
+      const result = validateTierUpgrade("certified", "accredited");
+      expect(result.valid).toBe(false);
+      if (!result.valid) {
+        expect(result.reason).toContain("not available by self-service");
+      }
+    });
+
+    it("community → certified is rejected", () => {
+      const result = validateTierUpgrade("community", "certified");
+      expect(result.valid).toBe(false);
+    });
+
+    it("community → accredited is rejected", () => {
       const result = validateTierUpgrade("community", "accredited");
       expect(result.valid).toBe(false);
     });
 
-    it("verified → accredited is rejected (skip)", () => {
+    it("verified → accredited is rejected", () => {
       const result = validateTierUpgrade("verified", "accredited");
       expect(result.valid).toBe(false);
     });
@@ -357,8 +371,11 @@ describe("Verification Tier Upgrade Rules", () => {
     });
 
     it("same tier is rejected", () => {
-      const result = validateTierUpgrade("certified", "certified");
+      const result = validateTierUpgrade("verified", "verified");
       expect(result.valid).toBe(false);
+      if (!result.valid) {
+        expect(result.reason).toContain("re-verify");
+      }
     });
   });
 });
@@ -379,6 +396,97 @@ describe("isTier — type guard", () => {
     expect(isTier(42)).toBe(false);
     expect(isTier(null)).toBe(false);
     expect(isTier(undefined)).toBe(false);
+  });
+});
+
+// Not a mirror: the deployed handler, with a D1 stub holding one robot.
+describe("PATCH /api/v1/robots/:rrn/verify: self-service stops at verified", () => {
+  const RRN = "RRN-000000000042";
+  const OWNER_KEY = "rcan_owner_key";
+  const ADMIN_TOKEN = "test-admin-token";
+  const EVIDENCE = { evidence_url: "https://example.com/robot-evidence" };
+
+  /** One robot at `tier`, owned by OWNER_KEY. `writes` records every run(). */
+  async function verifyDb(tier: string) {
+    const writes: string[] = [];
+    const robot = {
+      id: 1,
+      rrn: RRN,
+      api_key_hash: await sha256(OWNER_KEY + "rcan-dev"),
+      verification_tier: tier,
+    };
+    const db = {
+      exec: async () => {},
+      prepare(sql: string) {
+        const stmt = {
+          bind() {
+            return stmt;
+          },
+          async run() {
+            writes.push(sql.trim().split(/\s+/)[0].toUpperCase());
+            return { success: true };
+          },
+          async first() {
+            if (/FROM robots WHERE rrn = \?/i.test(sql)) return robot;
+            if (/FROM robots WHERE id = \?/i.test(sql)) return { rrn: RRN };
+            return null;
+          },
+        };
+        return stmt;
+      },
+    } as unknown as D1Database;
+    return { db, writes };
+  }
+
+  async function patch(token: string, currentTier: string, body: unknown) {
+    const { db, writes } = await verifyDb(currentTier);
+    const res = await verifyOnRequest({
+      request: new Request(`https://rcan.dev/api/v1/robots/${RRN}/verify`, {
+        method: "PATCH",
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      }),
+      env: { DB: db, RCAN_ADMIN_TOKEN: ADMIN_TOKEN },
+      params: { rrn: RRN },
+    });
+    return { res, writes };
+  }
+
+  it("community → verified is still applied on the owner's key", async () => {
+    const { res, writes } = await patch(OWNER_KEY, "community", { tier: "verified", ...EVIDENCE });
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { message: string };
+    expect(body.message).toBe("Verification tier upgraded: community → verified");
+    expect(writes).toEqual(["UPDATE", "INSERT"]);
+  });
+
+  for (const [from, to] of [
+    ["verified", "certified"],
+    ["certified", "accredited"],
+    ["community", "accredited"],
+  ] as const) {
+    it(`${from} → ${to} on the owner's key is refused with 403 and nothing is written`, async () => {
+      const { res, writes } = await patch(OWNER_KEY, from, { tier: to, ...EVIDENCE });
+      expect(res.status).toBe(403);
+      expect(writes).toEqual([]);
+    });
+  }
+
+  it("the admin token gets the same 403", async () => {
+    const { res, writes } = await patch(ADMIN_TOKEN, "verified", { tier: "certified", ...EVIDENCE });
+    expect(res.status).toBe(403);
+    expect(writes).toEqual([]);
+  });
+
+  it("the 403 says why, and that test results are not certification evidence", async () => {
+    const { res } = await patch(OWNER_KEY, "verified", { tier: "certified", ...EVIDENCE });
+    expect(res.headers.get("Content-Type")).toBe("application/json");
+    const body = (await res.json()) as { error: string };
+    expect(body.error).toContain("not available by self-service");
+    expect(body.error).toContain("require manual review by the foundation");
+    expect(body.error).toContain(
+      "Test results, including Bounded Embodiment results, are not certification evidence",
+    );
   });
 });
 
