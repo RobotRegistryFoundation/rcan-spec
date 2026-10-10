@@ -24,10 +24,22 @@ separately.
    (https://github.com/RobotRegistryFoundation/rcan-ts) are published
    under the MIT License, as their PyPI and npm package metadata state.
 
-3. Everything else: licence to be decided by the maintainer
+3. Scripts, tests and fixtures: Apache 2.0
+
+   The scripts, tests and test fixtures in this repository are licensed
+   under the Apache License, Version 2.0 (SPDX: Apache-2.0). This
+   covers:
+
+     scripts/          conformance checkers, case files and other tools
+     tests/            the test suites
+     fixtures/         test vectors
+
+   The full text is in LICENSES/Apache-2.0.txt and at
+   https://www.apache.org/licenses/LICENSE-2.0
+
+4. Everything else: licence to be decided by the maintainer
 
    The licence for the rest of this repository has not been decided
    yet. That includes the rcan.dev site code (src/, functions/,
-   migrations/, schema/, the rest of public/), scripts/, tests/,
-   fixtures/, profiles/ and docs/. This file does not grant a licence
-   for that material.
+   migrations/, schema/, the rest of public/), profiles/ and docs/.
+   This file does not grant a licence for that material.
