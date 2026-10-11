@@ -191,7 +191,7 @@ import CodeWindow from '../../components/CodeWindow.astro';
               color: 'purple',
               robot: 'Robot A',
               title: 'Checks Robot B against its own trust list',
-              detail: 'Robot A accepts commands only from peers its operator has pinned (RRN and public key) and checks the message signature against that key. The verification_tier in the resolved record is shown as context, never used to authorize: an owner can raise it with any evidence URL, and the registry does not review it.',
+              detail: 'Robot A accepts commands only from peers its operator has pinned (RRN and public key) and checks the message signature against that key. The verification_tier in the resolved record is shown as context, never used to authorize: an owner can raise it to verified with any evidence URL, and the registry does not review it.',
             },
             {
               step: '4',
@@ -256,7 +256,7 @@ client = NodeClient()
 peer_status = client.resolve("RRN-BD-000000000042")
 
 # Authorize against peers this robot's operator pinned, never against the registry tier:
-# an owner can raise verification_tier with any evidence URL, and the registry does not review it.
+# an owner can raise verification_tier to verified with any evidence URL, and the registry does not review it.
 TRUSTED_PEERS = {"RRN-BD-000000000042": "<peer public key, pinned by the operator>"}
 
 peer_rrn = peer_status['record']['rrn']

@@ -329,13 +329,13 @@ curl "https://rcan.dev/api/v1/nodes?prefix=BD"</code></pre>
         <thead><tr><th>Badge</th><th>Tier Value</th><th>Description</th></tr></thead>
         <tbody>
           <tr><td>⬜</td><td><code>community</code></td><td>Default; self-registered, no identity check</td></tr>
-          <tr><td>🟡</td><td><code>verified</code></td><td>Owner-requested upgrade, one step at a time, with an <code>evidence_url</code></td></tr>
-          <tr><td>🔵</td><td><code>certified</code></td><td>Owner-requested upgrade with an <code>evidence_url</code>. Despite the name, not a certification: no third-party test suite or audit exists</td></tr>
-          <tr><td>✅</td><td><code>accredited</code></td><td>Owner-requested upgrade with an <code>evidence_url</code>; currently auto-approved without review</td></tr>
+          <tr><td>🟡</td><td><code>verified</code></td><td>Owner-requested upgrade from <code>community</code>, with an <code>evidence_url</code>; the registry does not review the evidence. The highest tier available by self-service</td></tr>
+          <tr><td>🔵</td><td><code>certified</code></td><td>Not available by self-service: the endpoint answers 403 to every caller, the registry admin token included. Reserved for manual review by the foundation, and no review process is open. Records already at this tier were set without review. Not a certification</td></tr>
+          <tr><td>✅</td><td><code>accredited</code></td><td>As <code>certified</code>: refused by the endpoint, reserved for manual review, none open; records already at this tier were set without review. Not an accreditation</td></tr>
         </tbody>
       </table>
 
-      <p>Tiers record who vouched for a record and with what evidence; none of them is a safety certification. The registry applies an upgrade when the owner's API key or the registry admin token matches and does not review the evidence. Conformance is not certification.</p>
+      <p>Tiers record who vouched for a record and with what evidence; none of them is a safety certification. Self-service upgrades stop at <code>verified</code>, which the registry applies when the owner's API key or the registry admin token matches, without reviewing the evidence. Test results, including Bounded Embodiment results, are not certification evidence. Conformance is not certification.</p>
 
       <h4>Request Body</h4>
       <pre><code>&#123;
