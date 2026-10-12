@@ -41,19 +41,53 @@ export interface Finding {
   detail: string;
 }
 
+/** Thrown by canonicalJson for a value that has no canonical form. */
+export class CanonicalJsonError extends Error {
+  // A plain field, not a constructor parameter property: this file also runs under
+  // `node --experimental-strip-types`, which only removes type syntax.
+  readonly code: "non_finite_number" | "invalid_string";
+  constructor(code: "non_finite_number" | "invalid_string", message: string) {
+    super(message);
+    this.name = "CanonicalJsonError";
+    this.code = code;
+  }
+}
+
+// A high surrogate not followed by a low one, or a low surrogate not preceded by a high one.
+const UNPAIRED_SURROGATE = /[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/;
+
+function canonicalString(s: string): string {
+  if (UNPAIRED_SURROGATE.test(s)) {
+    throw new CanonicalJsonError(
+      "invalid_string",
+      "a string with an unpaired surrogate has no UTF-8 form (RFC 8785 § 3.2.2.2)",
+    );
+  }
+  return JSON.stringify(s);
+}
+
 /**
- * Canonical JSON per spec/audit-bundle-v1.md and fixtures/canonical-json-v1.json:
- * keys sorted by UTF-16 code unit, recursively, no whitespace, raw UTF-8.
- * Whole-number floats already serialise as integers in JavaScript.
+ * Canonical JSON per spec/audit-bundle-v1.md (RFC 8785), checked against
+ * fixtures/canonical-json-v1.json: members sorted by UTF-16 code unit, recursively,
+ * no whitespace, numbers as ECMAScript writes them, raw UTF-8. JSON.stringify
+ * writes NaN and Infinity as null and escapes unpaired surrogates; neither has a
+ * canonical form, so both throw CanonicalJsonError instead.
  */
 export function canonicalJson(value: unknown): string {
+  if (typeof value === "number") {
+    if (!Number.isFinite(value)) {
+      throw new CanonicalJsonError("non_finite_number", "NaN and Infinity have no canonical form (RFC 8785 § 3.2.2.3)");
+    }
+    return JSON.stringify(value);
+  }
+  if (typeof value === "string") return canonicalString(value);
   if (value === null || typeof value !== "object") return JSON.stringify(value);
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
   const obj = value as Record<string, unknown>;
   const keys = Object.keys(obj)
     .filter((k) => obj[k] !== undefined)
     .sort();
-  return `{${keys.map((k) => `${JSON.stringify(k)}:${canonicalJson(obj[k])}`).join(",")}}`;
+  return `{${keys.map((k) => `${canonicalString(k)}:${canonicalJson(obj[k])}`).join(",")}}`;
 }
 
 export function sha256(text: string): string {
