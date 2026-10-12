@@ -183,8 +183,13 @@ records who asked, the gate record records what the machine was allowed to do).
 | `hash` | sha256 over the canonical JSON of the record with `hash` removed. |
 
 A reference verifier, `scripts/assurance/evidence-chain.ts`, checks chain linkage,
-audits authority on executed commands, and replays every applied command against the
-envelope. It reports fields it cannot judge rather than passing them silently.
+audits authority on executed commands, and replays every record against the envelope
+and against the decision table in C.1.1: an `allow` applies the command unchanged, a
+`reject` applies `null`, `allow`, `clamp` and `stop` apply an object, and `clamp`,
+`reject` and `stop` give a `reason`. It uses an envelope bound, polygon or target only
+when it has the type the check needs, and reports fields it cannot judge rather than
+passing them silently. Records without a non-negative integer `seq` are refused as
+input rather than judged.
 
 **Stated limit.** A hash chain detects mutation, insertion, deletion and reordering. It
 cannot detect records removed from the end unless the last hash is anchored somewhere
