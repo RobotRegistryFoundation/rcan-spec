@@ -30,7 +30,7 @@ in the same case shape as the existing `rcan-conformance-v1.x.json` files.
 |---|---|---|---|---|
 | EV-01 | Envelope honesty | R1 | motion capture / calibrated odometry, speed and force measurement | Skipped placeholder: needs physical instruments |
 | EV-02 | Stop performance, per stop source at max speed | R3 | timing capture on the stop input, position capture | Skipped placeholder: needs physical instruments |
-| EV-03 | Hostile model: fuzzer at 50 Hz for 10 min, zero samples outside envelope | R2 | fuzzer in place of the model, external motion capture | Skipped placeholder: needs physical instruments (can be rehearsed in simulation) |
+| EV-03 | Hostile model, as Bounded Embodiment method v0.1 EV-03: the `be-hostile/1` stream for 10 min, verdict PASS under scorer `ev03-tool-point/1` (no position or speed excursion; INCONCLUSIVE when the run cannot support a judgement) | R2 | the method's hostile stream in place of the model, an external instrument | Skipped placeholder: needs physical instruments (can be rehearsed in simulation) |
 | EV-04 | Blind machine: stale or corrupt state leads to stop | R3 | sensor fault injection | Skipped placeholder: needs physical instruments (can be rehearsed in simulation) |
 | EV-05 | Model dies | R3 | implementation under test | Skipped placeholder: case defined in the runner file; needs an implementation |
 | EV-06 | Gate dies | R3 | implementation under test | Skipped placeholder: case defined in the runner file; needs an implementation |
@@ -46,7 +46,7 @@ passing.
 
 | File | What it tests |
 |---|---|
-| `envelope-schema.test.ts` | `schemas/envelope.json` and `schemas/gate-decision.json` compile as JSON Schema 2020-12; valid fixtures pass; the fail-open heartbeat and L3-as-A-level fixtures fail at the expected path; published copies match; `rcan-config.json` carries `envelope` as optional. |
+| `envelope-schema.test.ts` | `schemas/envelope.json` and `schemas/gate-decision.json` compile as JSON Schema 2020-12; valid fixtures pass; the fail-open heartbeat and L3-as-BE-level fixtures fail at the expected path; published copies match; `rcan-config.json` carries `envelope` as optional. |
 | `evidence-chain.test.ts` | Canonical JSON parity with `fixtures/canonical-json-v1.json` (`cases` give exact bytes; `error_cases` must fail); EV-08 mutation, insertion, deletion, reordering; tail truncation undetectable without an anchor and detected with one; EV-07 log audit; replay against the envelope. |
 | `ev-suite.test.ts` | The EV case file is well formed, lists EV-01 to EV-09 once each, carries no result fields; placeholders for everything that cannot run here. |
 

@@ -206,7 +206,7 @@ All contributors are listed in the repository's `CONTRIBUTORS.md`. Organisations
 | **L3 — AI Accountability** | L2 + model identity in audit, HiTL gates and authorization, thought-log scope, offline chain verification. |
 | **L4 — Registry Integration** | L3 + REGISTRY_REGISTER/RESOLVE, RRN validation, ownership proof (spec §21.6). |
 
-Definitions follow the published suite at [rcan.dev/conformance](https://rcan.dev/conformance). Conformance is self-asserted and is not certification. Physical assurance levels A1–A3 (spec Appendix C) are a separate axis.
+Definitions follow the published suite at [rcan.dev/conformance](https://rcan.dev/conformance). Conformance is self-asserted and is not certification. Physical assurance levels BE-1 to BE-3 (spec Appendix C) are a separate axis.
 
 An implementation **MUST** declare its conformance level in its `rcan-config.json` or `p66-manifest.json`.
 

@@ -10,7 +10,7 @@ first, this becomes v3.4.0.
 - `spec/appendix-c-physical-assurance.md`: the model proposes, a bounded layer
   disposes. States the prior art (Simplex, Sha 2001; run-time assurance, ASTM F3269),
   maps requirements R1–R5 onto existing RCAN sections, defines physical assurance
-  levels A1–A3 as an axis independent of protocol levels L1–L4, separates the RCAN
+  levels BE-1 to BE-3 as an axis independent of protocol levels L1–L4, separates the RCAN
   ESTOP message from a hardwired stop, and lists what is out of scope. MUST/SHOULD are
   used only to restate requirements RCAN already makes.
 - `schemas/envelope.json` (JSON Schema 2020-12, also published under
@@ -52,7 +52,23 @@ first, this becomes v3.4.0.
   pages fixed; `continuonai` GitHub links point at RobotRegistryFoundation.
 - `VERSIONING.md` current version is v3.2.0.
 
+### Changed: canonical JSON states RFC 8785's rules (audit-bundle-v1), normative
+- `spec/audit-bundle-v1.md` said both "Unicode code-point order" and "matches RFC 8785".
+  It now states RFC 8785's rules: member names in UTF-16 code-unit order, binary64
+  numbers written as ECMAScript's `Number::toString` writes them, the string escapes,
+  and an error for NaN, Infinity and unpaired surrogates.
+- `fixtures/canonical-json-v1.json` gains five cases (UTF-16 order, integer-like names,
+  ECMAScript number forms, integers beyond 2^53, string escapes) and an `error_cases`
+  array of inputs that must fail. The 12 existing cases are unchanged, and consumers
+  that read only `cases` are unaffected.
+- `scripts/assurance/evidence-chain.ts` throws `CanonicalJsonError`
+  (`non_finite_number`, `invalid_string`) where it wrote `null` or an escape. Its output
+  for every other value is unchanged, so the existing hashes (rover envelope
+  `sha256:b36eaa…`, chain head `sha256:b580f2…`) still hold.
+- The SDKs follow in their own releases: rcan-py#66 and rcan-ts#55.
+
 ### Changed
+- Physical assurance levels renamed A1–A3 → BE-1, BE-2, BE-3 (Bounded Embodiment), because "A3" is the Association for Advancing Automation, which publishes ANSI/A3 R15.06 and runs the US delegation to ISO/TC 299.
 - `/.well-known/rcan-node.json` builds its `capabilities` list from the key material
   actually configured on the deployment. `register` and `resolve` are always listed;
   `verify` only when `RCAN_NODE_ED25519_PUBKEY` is set; `delegate` only when the

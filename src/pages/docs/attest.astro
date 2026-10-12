@@ -44,7 +44,7 @@ GET  /api/attest          → manifest metadata + signature prefix
 POST /api/attest/verify   → live ML-DSA-65 signature verification
 GET  /api/sbom            → SBOM metadata (serial, components, ref)
 GET  /api/sbom/download   → full CycloneDX JSON
-GET  /api/conformance     → v2.1/v2.2 L5 compliance report`;
+GET  /api/conformance     → self-run conformance report (v2.1/v2.2 checks)`;
 ---
 
 <DocsLayout
@@ -92,8 +92,9 @@ GET  /api/conformance     → v2.1/v2.2 L5 compliance report`;
 
   <h2>5. Conformance</h2>
   <p>
-    Run <code>castor conformance</code> to see your full <a href="https://docs.rcan.dev/spec/">RCAN protocol</a> L5 compliance report inline.
-    A robot must pass all 7 checks to be <strong>compliant</strong>:
+    Run <code>castor conformance</code> to see a self-run <a href="https://docs.rcan.dev/spec/">RCAN protocol</a> conformance report inline.
+    The report passes when all 7 checks below pass. It is a conformance check you run on your own robot, not legal compliance
+    and not a certification:
   </p>
   <ul>
     <li><code>rcan_v21.firmware_manifest</code> — signed manifest present</li>

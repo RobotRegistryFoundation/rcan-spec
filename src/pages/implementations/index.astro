@@ -5,26 +5,26 @@ const implementations = [
   {
     name: "OpenCastor",
     lang: "Python 3.12+",
-    description: "Robot Runtime / AI Brain Harness (v2026.3.14.6). TieredBrain, HiTL gates, confidence gates, thought log, 18+ hardware drivers, SO-ARM101 arm support, Protocol 66 safety stack. RCAN protocol — P66 Conformance ≥ 80% (GET /api/safety/manifest). Docs: https://opencastor.com/docs",
+    description: "Robot Runtime / AI Brain Harness. TieredBrain, HiTL gates, confidence gates, thought log, 18+ hardware drivers, SO-ARM101 arm support, Protocol 66 safety stack. RCAN protocol — P66 Conformance ≥ 80% (GET /api/safety/manifest). Docs: https://opencastor.com/docs",
     tier: "verified",
     github: "https://github.com/craigm26/OpenCastor",
-    tags: ["Python", "Raspberry Pi", "Safety Gates", "P66", "TieredBrain", "HiTL", "SO-ARM101", "v2026.3.14.6"],
+    tags: ["Python", "Raspberry Pi", "Safety Gates", "P66", "TieredBrain", "HiTL", "SO-ARM101"],
   },
   {
     name: "rcan-py",
     lang: "Python",
-    description: "Official Python SDK (v0.4.1). RURI parsing, message construction, Ed25519 signing, schema validation, RegistryClient for rcan.dev API, TypedDicts, exception hierarchy, MessageType 6 safety helpers. RCAN protocol compatible.",
+    description: "Reference Python SDK (MIT). RURI parsing, message construction, Ed25519 signing, schema validation, RegistryClient for rcan.dev API, TypedDicts, exception hierarchy, MessageType 6 safety helpers. RCAN protocol compatible.",
     tier: "verified",
     github: "https://github.com/RobotRegistryFoundation/rcan-py",
-    tags: ["Python", "SDK", "Registry", "TypedDicts", "Safety Helpers", "v0.4.1"],
+    tags: ["Python", "SDK", "Registry", "TypedDicts", "Safety Helpers"],
   },
   {
     name: "rcan-ts",
     lang: "TypeScript",
-    description: "Official TypeScript / Node.js SDK (v0.4.1). RURI parsing, message construction, audit chain, Ed25519 signing. Works in Node, browser (ESM), and CDN (IIFE bundle via unpkg/jsDelivr). RCAN protocol compatible.",
+    description: "Reference TypeScript / Node.js SDK (MIT). RURI parsing, message construction, audit chain, Ed25519 signing. Works in Node, browser (ESM), and CDN (IIFE bundle via unpkg/jsDelivr). RCAN protocol compatible.",
     tier: "verified",
     github: "https://github.com/RobotRegistryFoundation/rcan-ts",
-    tags: ["TypeScript", "Node.js", "SDK", "ESM", "CDN bundle", "v0.4.1"],
+    tags: ["TypeScript", "Node.js", "SDK", "ESM", "CDN bundle"],
   },
   {
     name: "Bob",
@@ -77,7 +77,7 @@ const tierMeta: Record<string, { label: string; color: string; icon: string }> =
     <!-- Tier legend -->
     <div class="flex flex-wrap gap-3 mb-10">
       <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-400/10 border border-green-400/20 text-green-400 text-xs font-medium">
-        ✅ Verified — tested against official conformance suite
+        ✅ Verified — self-reported by the maintainer against the published conformance suite; not independently tested
       </div>
       <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-text-muted text-xs font-medium">
         ⬜ Community — self-reported, not independently tested

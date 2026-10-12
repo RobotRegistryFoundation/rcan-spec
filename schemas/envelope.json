@@ -28,8 +28,8 @@
     },
     "level": {
       "type": "string",
-      "enum": ["A1", "A2", "A3"],
-      "description": "Physical assurance level claimed by the integrator (A1 Declared, A2 Enforced, A3 Assured). Self-declared unless third-party evidence accompanies it. Independent of the RCAN protocol conformance levels L1-L4: do not put an L-level here."
+      "enum": ["BE-1", "BE-2", "BE-3"],
+      "description": "Physical assurance level claimed by the integrator (BE-1 Declared, BE-2 Enforced, BE-3 Assured; BE for Bounded Embodiment). Self-declared unless third-party evidence accompanies it. Independent of the RCAN protocol conformance levels L1-L4: do not put an L-level here."
     },
     "workspace": {
       "type": "object",
