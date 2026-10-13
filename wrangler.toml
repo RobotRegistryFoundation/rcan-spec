@@ -7,8 +7,11 @@ pages_build_output_dir = "dist"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "rcan-registry"
-database_id = "ef718040-dc35-4ace-9959-dc6a57eb71b9"   # wrangler d1 create rcan-registry
+# Registry reset on 2026-10-13. The previous database, rcan-registry
+# (ef718040-dc35-4ace-9959-dc6a57eb71b9), is kept unchanged as the archive;
+# pointing these two lines back at it undoes the reset.
+database_name = "rcan-registry-2026-10-13"
+database_id = "a8e8933f-5d82-4783-8ac4-9d664615a656"
 
 # Secrets (set via `wrangler pages secret put --project-name=rcan-spec`):
 #   RCAN_API_KEY_SALT — salt for API key hashing (already set)
