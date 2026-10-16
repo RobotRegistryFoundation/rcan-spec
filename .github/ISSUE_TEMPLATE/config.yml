@@ -1,8 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Ecosystem CONTRIBUTING guide
-    url: https://github.com/craigm26/opencastor-ops/blob/master/CONTRIBUTING.md
+  - name: rcan-spec CONTRIBUTING guide
+    url: https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/CONTRIBUTING.md
     about: "Not sure which repo to file on? Read this first."
+  - name: Bounded Embodiment requirements and test method
+    url: https://github.com/RobotRegistryFoundation/bounded-embodiment/issues/new/choose
+    about: "Feedback on the physical-assurance requirements or test method goes here, not to rcan-spec."
   - name: robotmd.dev/report
     url: https://robotmd.dev/report
     about: "Decision-tree landing page for bug reports and feature requests."

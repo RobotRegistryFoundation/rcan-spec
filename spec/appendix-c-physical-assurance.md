@@ -4,13 +4,16 @@
 
 > **Status of this appendix.** RCAN has one maintainer and no third-party verification
 > of any claim in this appendix. Nothing here has been tested on a machine by an
-> independent party. To be presented at the ITU-T FG-EAI workshop on embodied AI,
-> 16 October 2026 (remote). That is a presentation slot, not an endorsement: FG-EAI
-> outputs are not ITU-T Recommendations, and neither ITU nor any other body has
-> reviewed, adopted or approved this profile. RCAN, with the Robot Registry
-> Foundation registry, has been proposed to the AAIF (Linux Foundation) as a Sandbox
-> project ([aaif/project-proposals#43](https://github.com/aaif/project-proposals/issues/43));
-> the proposal has not been accepted.
+> independent party. Bounded Embodiment, the vendor-neutral method this appendix maps onto
+> RCAN, was presented remotely in Session 1 (“Core Technologies for Embodied AI”) of the
+> [ITU Workshop on “Embodied AI for Multimedia Technologies”](https://www.itu.int/en/ITU-T/Workshops-and-Seminars/2026/1016/Pages/default.aspx),
+> Hangzhou, China, 16 October 2026, held with ITU-T FG-EAI. That was a presentation, not an
+> endorsement: FG-EAI outputs are not ITU-T Recommendations, and neither ITU nor any other body
+> has reviewed, adopted or approved the method or this profile. RCAN, with the Robot Registry
+> Foundation registry, was proposed to the AAIF (Linux Foundation) as a Sandbox project; the
+> proposal was declined as too early on 2 October 2026
+> ([aaif/project-proposals#43](https://github.com/aaif/project-proposals/issues/43)), and the
+> maintainer intends to resubmit once its requirements are met.
 >
 > **Conformance is not certification.**
 
@@ -28,11 +31,19 @@ small, deterministic, independently testable gate between the model and the actu
 decides what executes. The safety claim rests on the gate, not the model.
 
 This is not a new idea. It is the Simplex architecture (Sha, 2001) and run-time
-assurance as standardised for aircraft in ASTM F3269. What this appendix adds is a
-vendor-neutral **test method** for machines driven by learned policies: five
-requirements, each with a pass/fail test a third party can run without the model's
-weights, and a machine-readable envelope and evidence record that make the tests
-repeatable.
+assurance as standardised for aircraft in ASTM F3269. The requirements and
+test method for machines driven by learned policies are defined vendor-neutrally in the
+[Bounded Embodiment repository](https://github.com/RobotRegistryFoundation/bounded-embodiment)
+([requirements and test plan](https://github.com/RobotRegistryFoundation/bounded-embodiment/blob/main/docs/requirements.md)), not by
+RCAN: five requirements (R1 to R5), a test plan (EV-01 to EV-10) and assurance levels BE-1 to
+BE-3. Its method v0.1 defines EV-03 and EV-10 normatively. RCAN is one implementation. This
+appendix maps those requirements onto RCAN: it shows where existing RCAN sections already cover
+each one, and adds a machine-readable envelope and evidence record that make the tests
+repeatable on an RCAN machine.
+
+Feedback on the requirements or the test method goes to the Bounded Embodiment
+[issue forms](https://github.com/RobotRegistryFoundation/bounded-embodiment/issues/new/choose).
+Feedback on this mapping or on RCAN itself goes to rcan-spec.
 
 It complements, and replaces none of: ISO 10218-1/-2, ISO/TS 15066, ISO 13482,
 IEC 60204-1, ISO 13849-1, IEC 61508, and ITU-T F.748.44. F.748.44 benchmarks the model;
@@ -58,6 +69,9 @@ gate miss.
 
 ## C.2 Requirements R1–R5 and where RCAN implements them
 
+The requirements and their tests are Bounded Embodiment's (C.1); the coverage and additions
+columns are RCAN's mapping.
+
 Section numbers refer to the published spec at docs.rcan.dev.
 
 | # | Requirement | Existing RCAN coverage | What this appendix adds | Verified by |
@@ -72,8 +86,8 @@ Section numbers refer to the published spec at docs.rcan.dev.
 
 ## C.3 Assurance levels BE-1 to BE-3
 
-Physical assurance levels (BE, for Bounded Embodiment) describe how much a third party
-can trust the gate and the stop path. They are **a separate axis** from RCAN's protocol conformance levels L1–L4
+Physical assurance levels (BE, for Bounded Embodiment) are defined in the Bounded Embodiment
+requirements (C.1) and describe how much a third party can trust the gate and the stop path. They are **a separate axis** from RCAN's protocol conformance levels L1–L4
 and are never merged with or renumbered into them.
 
 | Level | Name | Expected of the machine |
@@ -192,12 +206,15 @@ the writer cannot rewrite (a signed checkpoint, a registry, a second log).
 
 ---
 
-## C.7 Test method EV-01 to EV-09
+## C.7 Tests EV-01 to EV-09
 
-EV-03 is defined by the Bounded Embodiment method v0.1
-(https://github.com/RobotRegistryFoundation/bounded-embodiment/tree/main/method). That method
-also defines a liveness test, EV-10, which this appendix does not list yet. The other EV tests
-below are RCAN's own. For EV-03 the RCAN envelope (C.4) is the method's envelope input: the
+The test identifiers, and the requirement each test verifies, follow the Bounded Embodiment
+[test plan](https://github.com/RobotRegistryFoundation/bounded-embodiment/blob/main/docs/requirements.md). Its
+[method v0.1](https://github.com/RobotRegistryFoundation/bounded-embodiment/tree/main/method) defines EV-03
+and a liveness test, EV-10, normatively; this appendix does not list EV-10 yet. The other tests
+are scope only in Bounded Embodiment so far. The short descriptions below are RCAN's working
+versions for its own conformance suite, and they will follow the method as it defines each test.
+For EV-03 the RCAN envelope (C.4) is the method's envelope input: the
 method's reference loader reads an envelope 0.1 and upgrades it to its envelope 0.2. The method
 treats the system under test as a black box at its command interface and does not use
 `gate_decision` records (C.6); those stay RCAN's record of what the gate decided.

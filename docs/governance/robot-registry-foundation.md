@@ -3,7 +3,7 @@
 > **Status: DRAFT** · Last revised: 2026-03-04
 > Seeking co-founders, stakeholder input, and review and collaboration from standards bodies and testing labs.
 >
-> **Status, 2026-09-29.** Draft charter for a proposed foundation. RCAN and the registry currently have one maintainer and no board, co-founders, endorsing organizations or partners. Nothing here has had third-party verification. RCAN, with the registry, has been proposed to the AAIF (Linux Foundation) as a Sandbox project ([aaif/project-proposals#43](https://github.com/aaif/project-proposals/issues/43)); the proposal has not been accepted. Conformance is not certification.
+> **Status, 2026-09-29.** Draft charter for a proposed foundation. RCAN and the registry currently have one maintainer and no board, co-founders, endorsing organizations or partners. Nothing here has had third-party verification. RCAN, with the registry, was proposed to the AAIF (Linux Foundation) as a Sandbox project; the proposal was declined as too early on 2 October 2026 ([aaif/project-proposals#43](https://github.com/aaif/project-proposals/issues/43)), and the maintainer intends to resubmit once its requirements are met. Conformance is not certification.
 > → Discuss in [RobotRegistryFoundation/rcan-spec issues](https://github.com/RobotRegistryFoundation/rcan-spec/issues) (the original thread, [#13](https://github.com/RobotRegistryFoundation/rcan-spec/issues/13), is closed)
 
 ---
@@ -58,7 +58,7 @@ The founding board shall consist of **10 voting seats** plus non-voting observer
 | Seat(s) | Constituency | Selection |
 |---------|-------------|-----------|
 | 2 seats | Robot manufacturers | Elected by manufacturer member organizations; rotating 2-year terms; no single manufacturer may hold both seats simultaneously |
-| 2 seats | Safety standards bodies | Designated by ISO/TC 299 (1 seat) and A3 — Association for Advancing Automation (1 seat) |
+| 2 seats | Safety standards bodies | Proposed: designated by ISO/TC 299 (1 seat) and A3, the Association for Advancing Automation (1 seat), if they agree. Neither has been approached. |
 | 2 seats | Academic / research institutions | Elected by academic member organizations |
 | 1 seat | Civil society | Elected by contributor-tier members |
 | 3 seats | Foundation general | Elected at large by all member classes combined |
@@ -262,7 +262,7 @@ The RCAN specification is designed to align with and complement existing interna
 | **EU AI Act (Regulation 2024/1689)** | Art. 13 transparency obligations; Art. 49 high-risk AI registration; informs transparency manifest spec | Tracked in #159; target v1.5 |
 | **IEC 62443** (Industrial cybersecurity) | Security levels for industrial control systems; informs RCAN auth and registry security requirements | Partially aligned; full alignment target v1.6 |
 | **NIST AI RMF** (AI Risk Management) | AI risk categorisation and documentation; informs P66 manifest and transparency disclosure fields | Tracked; target v1.5 |
-| **ISO/TC 299** (Robotics terminology) | Common vocabulary for robot types and capabilities; informs RCAN robot type taxonomy | Ongoing alignment |
+| **ISO/TC 299** (Robotics terminology) | Common vocabulary for robot types and capabilities; informs RCAN robot type taxonomy | Planned; not contacted yet |
 | **IEC 61508** (Functional safety) | SIL (Safety Integrity Level) classification; informs hardware_safety SIL attestation fields | Target v1.5 |
 
 The RRF seeks formal liaison status with ISO/TC 299 and will apply for W3C liaison once formally incorporated.
