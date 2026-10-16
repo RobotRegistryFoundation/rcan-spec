@@ -12,7 +12,9 @@ const versions = [
       { type: 'added', text: 'Optional envelope block in rcan-config and schemas/envelope.json (workspace, motion, force, proximity, sensing, stop, heartbeat; heartbeat loss always stops).' },
       { type: 'updated', text: 'Physical assurance levels renamed A1–A3 → BE-1, BE-2, BE-3 (Bounded Embodiment): "A3" is the Association for Advancing Automation, which publishes ANSI/A3 R15.06 and runs the US delegation to ISO/TC 299.' },
       { type: 'added', text: 'AUTHORIZE (§16.4) is MessageType 45 in the canonical table. Its schema previously carried 9, which is DISCOVER.' },
-      { type: 'added', text: 'Optional gate_decision audit record (allow, clamp, reject, stop), hash-chained, with a reference verifier and EV-01..EV-09 test cases. Tests that need an implementation or physical instruments are placeholders, not results.' },
+      { type: 'added', text: 'Optional gate_decision audit record (allow, clamp, reject, stop), hash-chained, with a reference verifier and EV-01..EV-10 test cases. Tests that need an implementation or physical instruments are placeholders, not results.' },
+      { type: 'updated', text: 'Appendix C aligned with the Bounded Embodiment talk of 16 October 2026: requirement names and verification wording, the standards it complements (ISO 10218:2025, ISO 13482, ISO/CD 25785-1, ISO 13849-1, IEC 61508, IEC 60204-1, ISO/IEC TR 5469, IEEE 7009, ITU-T F.748.44), architecture, recovery after the gate says no, declared safe state per machine, what passing proves and does not, and the EV-10 liveness test. Informative; no new conformance obligation.' },
+      { type: 'added', text: 'Optional, additive schema fields: envelope stop.safe_state and recovery (on_reject, repeated_stops, estop_reset); gate_decision stop_kind and reason_returned. Existing envelopes and records still validate.' },
     ],
   },
   {
