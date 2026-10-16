@@ -58,7 +58,7 @@ The founding board shall consist of **10 voting seats** plus non-voting observer
 | Seat(s) | Constituency | Selection |
 |---------|-------------|-----------|
 | 2 seats | Robot manufacturers | Elected by manufacturer member organizations; rotating 2-year terms; no single manufacturer may hold both seats simultaneously |
-| 2 seats | Safety standards bodies | Designated by ISO/TC 299 (1 seat) and A3 — Association for Advancing Automation (1 seat) |
+| 2 seats | Safety standards bodies | Proposed: designated by ISO/TC 299 (1 seat) and A3, the Association for Advancing Automation (1 seat), if they agree. Neither has been approached. |
 | 2 seats | Academic / research institutions | Elected by academic member organizations |
 | 1 seat | Civil society | Elected by contributor-tier members |
 | 3 seats | Foundation general | Elected at large by all member classes combined |
