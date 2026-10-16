@@ -7,6 +7,7 @@ export default {
 				bg: {
 					DEFAULT: '#0a0a0f',
 					alt: '#12121a',
+					card: '#12121a',
 				},
 				accent: {
 					DEFAULT: '#22d3ee',
@@ -16,6 +17,7 @@ export default {
 				text: {
 					DEFAULT: '#e8e6e3',
 					muted: '#9ca3af',
+					faint: '#8b919c',
 				},
 				border: '#27272a',
 			},

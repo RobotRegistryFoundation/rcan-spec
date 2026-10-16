@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" description="This page does not exist on rcan.dev.">
+  <div class="max-w-2xl mx-auto py-16">
+    <p class="text-sm font-mono uppercase tracking-widest text-accent mb-4">404</p>
+    <h1 class="text-4xl font-bold mb-6">Page not found</h1>
+    <p class="text-text-muted leading-relaxed mb-8">
+      Nothing lives at this address. The specification text moved to
+      <a href="https://docs.rcan.dev/spec/" class="text-accent">docs.rcan.dev</a>,
+      and the robot registry moved to
+      <a href="https://robotregistryfoundation.org/registry/" class="text-accent">robotregistryfoundation.org</a>.
+    </p>
+    <ul class="space-y-2 text-text-muted">
+      <li><a href="/" class="text-accent">Home</a></li>
+      <li><a href="/quickstart/" class="text-accent">Quickstart</a></li>
+      <li><a href="https://docs.rcan.dev/spec/" class="text-accent">Specification</a></li>
+      <li><a href="/conformance/" class="text-accent">Conformance</a></li>
+      <li><a href="/#bounded-embodiment" class="text-accent">RCAN and Bounded Embodiment</a></li>
+    </ul>
+  </div>
+</BaseLayout>

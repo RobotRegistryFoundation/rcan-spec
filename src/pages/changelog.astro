@@ -174,7 +174,7 @@ const versions = [
     version: 'v1.0',
     date: '2025-01-20',
     tag: 'Initial',
-    tagColor: 'bg-white/5 text-text-muted/60 border-white/5',
+    tagColor: 'bg-white/5 text-text-muted border-white/5',
     changes: [
       { type: 'feat', text: 'RobotURI — hierarchical robot addressing (rcan://<registry>/<org>/<model>/<version>/<unit>)' },
       { type: 'feat', text: 'RCANMessage — structured command envelope with params + target URI' },
@@ -193,7 +193,7 @@ const typeStyle: Record<string, string> = {
   fix:      'bg-amber-500/10 text-amber-400 border-amber-500/20',
   breaking: 'bg-red-500/10 text-red-400 border-red-500/20',
   updated:  'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  chore:    'bg-white/5 text-text-muted/60 border-white/10',
+  chore:    'bg-white/5 text-text-muted border-white/10',
 };
 ---
 
@@ -230,7 +230,7 @@ const typeStyle: Record<string, string> = {
               <div class="flex flex-wrap items-center gap-3 mb-4">
                 <h2 class="text-2xl font-bold font-mono text-text">{v.version}</h2>
                 <span class={`text-xs px-2.5 py-0.5 rounded-full border font-medium ${v.tagColor}`}>{v.tag}</span>
-                <span class="text-sm text-text-muted/50 ml-auto font-mono">{v.date}</span>
+                <span class="text-sm text-text-muted ml-auto font-mono">{v.date}</span>
               </div>
 
               <ul class="space-y-2.5">
@@ -260,7 +260,7 @@ const typeStyle: Record<string, string> = {
 
     <!-- Footer note -->
     <div class="mt-16 text-center">
-      <p class="text-sm text-text-muted/50">
+      <p class="text-sm text-text-muted">
         The RCAN spec is versioned independently of the SDKs.<br />
         SDK-specific changelogs live in their respective GitHub repositories.
       </p>
@@ -269,7 +269,7 @@ const typeStyle: Record<string, string> = {
         <a href="https://github.com/RobotRegistryFoundation/rcan-ts/releases" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">rcan-ts releases →</a>
       </div>
       <div class="flex items-center justify-center gap-6 mt-6 pt-6 border-t border-white/5 text-sm">
-        <span class="text-text-muted/40 text-xs uppercase tracking-wider font-mono">Ecosystem</span>
+        <span class="text-text-muted text-xs uppercase tracking-wider font-mono">Ecosystem</span>
         <a href="https://opencastor.com" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">OpenCastor →</a>
         <a href="https://robotregistryfoundation.org" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">Robot Registry Foundation →</a>
       </div>

@@ -68,24 +68,32 @@ entries:
 ---
 
 <BaseLayout
-  title="Physical AI Safety Architecture — RCAN Protocol"
-  description="How RCAN enforces safety at the protocol layer for autonomous robot systems: confidence gating, HiTL gates, ML-DSA-65 signed audit chains, multi-robot delegation, and structured operational memory with EU AI Act alignment."
+  title="Safety Architecture — RCAN Protocol"
+  description="How RCAN constrains AI-proposed commands at the protocol layer for autonomous robot systems: confidence gating, HiTL gates, ML-DSA-65 signed audit chains, multi-robot delegation, and structured operational memory with EU AI Act alignment."
 >
   <!-- Hero -->
   <section class="max-w-4xl mx-auto px-6 pt-20 pb-12 border-b border-white/5">
     <p class="text-sm font-mono uppercase tracking-widest text-accent mb-4">Safety Architecture</p>
     <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-      Physical AI Safety.<br/>
-      <span class="text-text-muted">At the protocol layer.</span>
+      Safety constraints<br/>
+      <span class="text-text-muted">at the protocol layer</span>
     </h1>
     <p class="text-xl text-text-muted max-w-2xl leading-relaxed">
       In systems where incorrect decisions have physical consequences, safety constraints must be structural — not filters applied after generation. RCAN enforces safety at the protocol layer: before dispatch, at the transport boundary, in the audit record.
     </p>
     <div class="flex flex-wrap gap-3 mt-8">
       <a href="https://docs.rcan.dev/spec/" class="px-4 py-2 bg-accent/10 border border-accent/20 text-accent text-sm rounded-lg hover:bg-accent/20 transition-colors">Read the spec →</a>
-      <a href="/compliance/frameworks" class="px-4 py-2 bg-white/5 border border-white/10 text-text-muted text-sm rounded-lg hover:bg-white/10 transition-colors">Regulatory coverage →</a>
+      <a href="/compliance/frameworks/" class="px-4 py-2 bg-white/5 border border-white/10 text-text-muted text-sm rounded-lg hover:bg-white/10 transition-colors">Regulatory coverage →</a>
       <a href="/conformance/" class="px-4 py-2 bg-white/5 border border-white/10 text-text-muted text-sm rounded-lg hover:bg-white/10 transition-colors">Conformance levels →</a>
     </div>
+    <p class="mt-8 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg text-sm text-text-muted leading-relaxed">
+      <strong class="text-text">What this page covers.</strong> The gates below bound what a conforming runtime dispatches. On their own
+      they do not keep a machine inside physical limits such as workspace, speed and force. That is the Bounded Embodiment property
+      (a learned model's commands cannot push the machine outside its declared limits), defined vendor-neutrally in the
+      <a href="https://github.com/RobotRegistryFoundation/bounded-embodiment" class="text-accent">Bounded Embodiment method</a> and mapped onto
+      RCAN in <a href="https://docs.rcan.dev/spec/appendix-c/" class="text-accent">Appendix C</a> (informative). RCAN has one maintainer and no
+      third-party verification; conformance is not certification.
+    </p>
   </section>
 
   <!-- Section 1: Protocol constraint -->
@@ -105,7 +113,7 @@ entries:
   <!-- Section 2: Confidence gating -->
   <section class="max-w-4xl mx-auto px-6 py-16 border-b border-white/5">
     <div class="flex items-start gap-4 mb-6">
-      <span class="text-xs font-mono bg-accent/10 border border-accent/20 text-accent px-2 py-1 rounded mt-1 shrink-0">§16.2</span>
+      <span class="text-xs font-mono bg-accent/10 border border-accent/20 text-accent px-2 py-1 rounded mt-1 shrink-0">§16.3</span>
       <h2 class="text-2xl font-bold">Confidence gating</h2>
     </div>
     <p class="text-text-muted leading-relaxed mb-4">
@@ -120,7 +128,7 @@ entries:
   <!-- Section 3: HiTL -->
   <section class="max-w-4xl mx-auto px-6 py-16 border-b border-white/5">
     <div class="flex items-start gap-4 mb-6">
-      <span class="text-xs font-mono bg-accent/10 border border-accent/20 text-accent px-2 py-1 rounded mt-1 shrink-0">§16.3</span>
+      <span class="text-xs font-mono bg-accent/10 border border-accent/20 text-accent px-2 py-1 rounded mt-1 shrink-0">§16.4</span>
       <h2 class="text-2xl font-bold">Human-in-the-Loop gates</h2>
     </div>
     <p class="text-text-muted leading-relaxed mb-4">
@@ -138,11 +146,11 @@ entries:
   <!-- Section 4: Audit chain -->
   <section class="max-w-4xl mx-auto px-6 py-16 border-b border-white/5">
     <div class="flex items-start gap-4 mb-6">
-      <span class="text-xs font-mono bg-accent/10 border border-accent/20 text-accent px-2 py-1 rounded mt-1 shrink-0">§16.1</span>
+      <span class="text-xs font-mono bg-accent/10 border border-accent/20 text-accent px-2 py-1 rounded mt-1 shrink-0">§16.2</span>
       <h2 class="text-2xl font-bold">Tamper-evident audit chain</h2>
     </div>
     <p class="text-text-muted leading-relaxed mb-4">
-      Every RCAN command is recorded in an HMAC-SHA256 append-only audit chain at dispatch time — not reconstructed after the fact. Each record includes: principal identity, RURI, timestamp (millisecond precision), message_id, outcome, model provider, model identifier, inference confidence, inference latency, thought_id, escalation flag, and (from §16.5) a watermark token that marks the command as AI-generated.
+      Every RCAN command is recorded in an HMAC-SHA256 append-only audit chain at dispatch time — not reconstructed after the fact. Each record includes: principal identity, RURI, timestamp (millisecond precision), message_id, outcome, model provider, model identifier, inference confidence, inference latency, thought_id, escalation flag, and (from §16.6) a watermark token that marks the command as AI-generated.
     </p>
     <p class="text-text-muted leading-relaxed mb-4">
       Records are chained: each entry includes the SHA-256 hash of the previous record. Changing any record breaks the hash of every record after it, so the change shows up on verification. Two limits: whoever holds the HMAC key can recompute the whole chain, and a chain alone cannot show records removed from the end. Anchoring the latest hash somewhere the writer cannot rewrite (a signed checkpoint, a registry) narrows both. The chain provides records for the automatic event logging that EU AI Act Article 12 requires of high-risk systems.
@@ -238,7 +246,7 @@ entries:
     <div class="flex flex-col sm:flex-row gap-4 justify-between">
       <div>
         <p class="text-text-muted text-sm mb-3">Regulatory framework coverage</p>
-        <a href="/compliance/frameworks" class="text-accent hover:underline text-sm">See the framework mapping →</a>
+        <a href="/compliance/frameworks/" class="text-accent hover:underline text-sm">See the framework mapping →</a>
       </div>
       <div>
         <p class="text-text-muted text-sm mb-3">Conformance levels L1–L4</p>

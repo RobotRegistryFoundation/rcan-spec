@@ -1,6 +1,6 @@
 # RCAN MessageType Numbering Plan
 
-> **Version**: v1.10.0 | **Updated**: 2026-03-24 | **Status**: Canonical
+> **Version**: v3.3.0 (draft) | **Updated**: 2026-10-15 | **Status**: Canonical
 
 This document is the **single source of truth** for RCAN MessageType integer assignments.
 Both `rcan-py` and `rcan-ts` SDKs **MUST** use these exact values.
@@ -49,6 +49,11 @@ Both `rcan-py` and `rcan-ts` SDKs **MUST** use these exact values.
 | 38 | COMPETITION_SCORE | Competition | §competitions | robot → fleet | v1.10 |
 | 39 | SEASON_STANDING | Competition | §competitions | cloud → robot | v1.10 |
 | 40 | PERSONAL_RESEARCH_RESULT | Competition | §competitions | robot → local gateway | v1.10 |
+| 41 | AUTHORITY_ACCESS | Authority & attestation | §authority | authority → robot | v2.1 |
+| 42 | AUTHORITY_RESPONSE | Authority & attestation | §authority | robot → authority | v2.1 |
+| 43 | FIRMWARE_ATTESTATION | Authority & attestation | §firmware | robot → registry | v2.1 |
+| 44 | SBOM_UPDATE | Authority & attestation | §sbom | robot → registry | v2.1 |
+| 45 | AUTHORIZE | HiTL authorization | §16.4 | authorising principal → robot | v3.3 |
 
 ## Numbering Rules
 
@@ -75,12 +80,14 @@ Both `rcan-py` and `rcan-ts` SDKs **MUST** use these exact values.
 | 33–35 | Idle compute contribution | Castor Credits work unit protocol |
 | 36 | Multimodal training data | Multi-modal training data payloads |
 | 37–40 | Competition | Fleet competition events and personal research |
+| 41–44 | Authority & attestation | Regulator audit requests, firmware attestation, SBOM updates |
+| 45 | HiTL authorization | AUTHORIZE: approve or deny a PENDING_AUTH (§16.4) |
 
 ## Reserved Ranges
 
 | Range | Purpose |
 |-------|---------|
-| 41–50 | Reserved for future competition/research extensions |
+| 46–50 | Reserved for future extensions |
 | 51–99 | Reserved for future protocol extensions |
 | 100+ | Available for vendor-specific extensions (non-standard) |
 
@@ -95,3 +102,5 @@ Both `rcan-py` and `rcan-ts` SDKs **MUST** use these exact values.
 | v1.7 | CONTRIBUTE_REQUEST, CONTRIBUTE_RESULT, CONTRIBUTE_CANCEL | 33–35 |
 | v1.8 | TRAINING_DATA | 36 |
 | v1.10 | COMPETITION_ENTER, COMPETITION_SCORE, SEASON_STANDING, PERSONAL_RESEARCH_RESULT | 37–40 |
+| v2.1 | AUTHORITY_ACCESS, AUTHORITY_RESPONSE, FIRMWARE_ATTESTATION, SBOM_UPDATE | 41–44 |
+| v3.3 | AUTHORIZE (previously unnumbered; an earlier schema carried 9, which is DISCOVER) | 45 |

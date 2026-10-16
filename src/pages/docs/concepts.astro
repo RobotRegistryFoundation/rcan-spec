@@ -109,12 +109,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <h3>RRN vs RURI</h3>
       <div class="comparison">
         <div class="compare-item">
-          <h4>RRN</h4>
+          <h3>RRN</h3>
           <p>Registry identity - "who is this robot?"</p>
           <p>Static, permanent, for documentation</p>
         </div>
         <div class="compare-item">
-          <h4>RURI</h4>
+          <h3>RURI</h3>
           <p>Network address - "where is this robot?"</p>
           <p>Dynamic, can change, for communication</p>
         </div>
@@ -138,41 +138,41 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     <section id="roles">
       <h2>Role-Based Access Control</h2>
-      <p>RCAN defines five permission levels:</p>
+      <p>RCAN v1.x defined the five permission levels below. Since v2.1 the hierarchy has seven levels: GUEST (1), OPERATOR (2), CONTRIBUTOR (2.5), ADMIN (3), M2M_PEER (4), CREATOR (5) and M2M_TRUSTED (6). OWNER maps to ADMIN and LEASEE to OPERATOR. See <a href="https://docs.rcan.dev/spec/section-2/">§2</a> for the current table.</p>
 
       <div class="roles-list">
         <div class="role role-5">
           <span class="role-level">5</span>
           <div class="role-info">
-            <h4>CREATOR</h4>
+            <h3>CREATOR</h3>
             <p>Full hardware/software control, OTA updates, safety overrides</p>
           </div>
         </div>
         <div class="role role-4">
           <span class="role-level">4</span>
           <div class="role-info">
-            <h4>OWNER</h4>
+            <h3>OWNER</h3>
             <p>Configuration, skill installation, user management</p>
           </div>
         </div>
         <div class="role role-3">
           <span class="role-level">3</span>
           <div class="role-info">
-            <h4>LEASEE</h4>
+            <h3>LEASEE</h3>
             <p>Time-bound operational control</p>
           </div>
         </div>
         <div class="role role-2">
           <span class="role-level">2</span>
           <div class="role-info">
-            <h4>USER</h4>
+            <h3>USER</h3>
             <p>Operational control within allowed modes</p>
           </div>
         </div>
         <div class="role role-1">
           <span class="role-level">1</span>
           <div class="role-info">
-            <h4>GUEST</h4>
+            <h3>GUEST</h3>
             <p>Limited interaction, status viewing</p>
           </div>
         </div>
@@ -255,7 +255,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     padding: 1.25rem;
   }
 
-  .compare-item h4 {
+  .compare-item h3 {
     margin: 0 0 0.5rem;
     color: var(--color-accent);
   }
@@ -301,7 +301,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   .role-2 .role-level { background: #3b82f6; color: white; }
   .role-1 .role-level { background: #6b7280; color: white; }
 
-  .role-info h4 {
+  .role-info h3 {
     margin: 0 0 0.25rem;
     font-size: 1rem;
   }
