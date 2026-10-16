@@ -36,15 +36,15 @@ A function is **not safety-relevant** (in the ISO 13849 / IEC 62061 sense) if it
 | Safe-stop on network loss | §8 | **YES** | Loss of communications could leave the robot in an undefined dynamic state. The safe-stop response (commanded deceleration to zero velocity and hold) is a protective measure that reduces the probability of collision or uncontrolled motion. |
 | Local safety invariants — "local safety always wins" | §8 | **YES** | Prevents remote operators or LLM-generated commands from overriding on-device protective stops (e.g., proximitytriggered E-stop, joint limit enforcement). The invariant ensures that even a compromised or malfunctioning supervisory layer cannot disable local protective measures. |
 | Priority bypass for SAFETY-class messages | §8 | **YES** | Ensures that emergency stop and safety-state signals are not queued behind normal-priority COMMAND traffic. Failure of this priority mechanism could delay E-stop propagation, increasing the probability and severity of injury. |
-| HiTL gate — blocking of high-consequence autonomous actions | §16.3 | **YES** | Prevents the robot from autonomously executing action classes designated as high-consequence (e.g., full-force motion in a shared workspace) without explicit operator confirmation. The blocking behavior, when triggered, functions as a protective measure. |
+| HiTL gate — blocking of high-consequence autonomous actions | §16.4 | **YES** | Prevents the robot from autonomously executing action classes designated as high-consequence (e.g., full-force motion in a shared workspace) without explicit operator confirmation. The blocking behavior, when triggered, functions as a protective measure. |
 | RBAC (5-tier role model) | §2 | **NO** | Access control function. Failure (e.g., privilege escalation) increases security risk but does not directly cause a hazardous mechanical event. Not a safety function in the ISO 13849 sense. |
 | Audit trail and HMAC-keyed log chain | §6 | **NO** | Quality and forensic function. Audit log failure does not affect robot motion or protective stop behavior. |
-| Model identity logging and attestation | §16.1 | **NO** | Accountability function. Model identity log failure does not prevent protective stops from firing. |
-| Confidence gates (output confidence scoring) | §16.2 | **CONDITIONAL** | The confidence *score* itself is not a safety function. However, **if** confidence gates are configured to block command execution when confidence falls below a threshold in a context involving humans in the workspace, the *blocking behavior* is safety-relevant. Integrators must classify the confidence gate function on a per-deployment basis by assessing whether a gate failure (gate does not block a low-confidence command) increases the probability of a hazardous event. |
+| Model identity logging and attestation | §16.2 | **NO** | Accountability function. Model identity log failure does not prevent protective stops from firing. |
+| Confidence gates (output confidence scoring) | §16.3 | **CONDITIONAL** | The confidence *score* itself is not a safety function. However, **if** confidence gates are configured to block command execution when confidence falls below a threshold in a context involving humans in the workspace, the *blocking behavior* is safety-relevant. Integrators must classify the confidence gate function on a per-deployment basis by assessing whether a gate failure (gate does not block a low-confidence command) increases the probability of a hazardous event. |
 
-### Notes on the Conditional Classification of §16.2 Confidence Gates
+### Notes on the Conditional Classification of §16.3 Confidence Gates
 
-The dual classification of §16.2 reflects the difference between:
+The dual classification of §16.3 reflects the difference between:
 
 - **The scoring mechanism** (computing a confidence value for LLM output) — not safety-relevant regardless of deployment.
 - **The enforcement mechanism** (blocking or deferring command execution based on the threshold) — safety-relevant if and only if the blocked action class could otherwise produce a hazardous event.
@@ -97,7 +97,7 @@ The following requirements apply to each safety-relevant RCAN function. They are
 
 ---
 
-### §16.3 HiTL Gate — Blocking of High-Consequence Autonomous Actions
+### §16.4 HiTL Gate — Blocking of High-Consequence Autonomous Actions
 
 **Recommended ISO 13849 Software Category:** Category 1 (single-channel, well-tried components) for supplementary use; Category 3 if the HiTL gate is the primary risk reduction measure for a given action class.
 
@@ -155,8 +155,8 @@ The following RCAN-defined functions are classified as safety-relevant for the p
 | Safe-stop on network loss | §8 | Network loss not detected; robot continues motion in undefined state |
 | Local safety invariant enforcement | §8 | Remote command overrides on-device protective stop |
 | SAFETY-class message priority bypass | §8 | Emergency signal queued behind normal traffic; delayed E-stop |
-| HiTL gate — high-consequence action blocking | §16.3 | Autonomous high-risk action executes without operator confirmation |
-| Confidence gate enforcement (conditional) | §16.2 | Low-confidence command executes in proximity to humans (deployment-specific) |
+| HiTL gate — high-consequence action blocking | §16.4 | Autonomous high-risk action executes without operator confirmation |
+| Confidence gate enforcement (conditional) | §16.3 | Low-confidence command executes in proximity to humans (deployment-specific) |
 
 Implementors SHALL document the applicable safety functions for their deployment in the machinery safety case and SHALL reference the relevant RCAN specification clause as the design specification for each function.
 

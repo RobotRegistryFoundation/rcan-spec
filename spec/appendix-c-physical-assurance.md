@@ -167,9 +167,9 @@ checks that the machine still does its job: the liveness test, EV-10 (C.7).
 | | **BE-1** Declared | **BE-2** Enforced | **BE-3** Assured |
 |---|---|---|---|
 | **L1** Core | possible | possible | possible |
-| **L2** | possible | possible | possible |
-| **L3** | possible | possible | possible |
-| **L4** Registry | possible | possible | possible |
+| **L2** Safety | possible | possible | possible |
+| **L3** AI Accountability | possible | possible | possible |
+| **L4** Registry Integration | possible | possible | possible |
 
 Every combination is possible. **An RCAN L3 robot can be BE-1.** An L-level says how
 well the robot speaks the protocol; a BE-level says how well its motion is bounded.

@@ -3,7 +3,7 @@
 **Status:** Draft  
 **Version:** 1.4  
 **Authors:** the RCAN maintainer  
-**Related:** [Governance](/governance) · [RURI Specification](/spec) · [Conformance](/conformance)
+**Related:** [Governance](../governance/robot-registry-foundation.md) · [RURI Specification](https://docs.rcan.dev/spec/) · [Conformance](https://rcan.dev/conformance)
 
 > **v1.4 update:** Added REGISTRY_REGISTER (MessageType 13), REGISTRY_RESOLVE (14), REGISTRY_REGISTER_RESULT (16), REGISTRY_RESOLVE_RESULT (17) wire types. Ed25519 ownership verification in registry. `hardware_safety` field in `rcan-config.json`. P66 conformance manifest as federated discovery data.
 
@@ -89,7 +89,7 @@ The root registry is operated by the RCAN maintainer and serves as:
 
 - The **registry of last resort** for robots without a dedicated organisational registry.
 - The **bootstrap anchor** for federation: federated registries register themselves with the root so other parties can discover them.
-- The **governance reference**: root registry policies are set by an independent governance body (see [/governance](/governance)).
+- The **governance reference**: root registry policies are set by an independent governance body (see [Governance](../governance/robot-registry-foundation.md)).
 
 The root registry **MUST NOT** be a required runtime dependency. If `rcan.dev` is unreachable, robot operations using organisational or local registries **MUST** continue normally.
 
@@ -240,7 +240,7 @@ A federation proof is the signed, authoritative response from a registry confirm
 
 ### 6.3a v1.4 Federation Proof — Extended Fields
 
-In RCAN v1.4, the federation proof is extended to include P66 safety data and ownership verification:
+In RCAN protocol v1.4+, the federation proof is extended to include P66 safety data and ownership verification:
 
 ```json
 {
@@ -364,8 +364,8 @@ Every registry **MUST** publish a descriptor at `/.well-known/rcan-registry.json
 
 **Step 1 — Implement the API**
 
-Implement the required endpoints from §7.2. Reference implementations are available:
-- [rcan-registry-reference](https://github.com/RobotRegistryFoundation/rcan-spec/tree/master/examples/registry) (TypeScript / Node.js)
+Implement the required endpoints from §7.2. A reference implementation is available:
+- The Robot Registry Foundation registry, [craigm26/RobotRegistryFoundation](https://github.com/craigm26/RobotRegistryFoundation) (TypeScript, Cloudflare Pages Functions under `functions/`)
 
 **Step 2 — Generate and Publish Your Key Pair**
 
@@ -517,7 +517,7 @@ Governance responsibilities include:
 - Establishing policies for registry suspension or revocation.
 - Publishing the governance charter and meeting records publicly.
 
-> **See:** [/governance](/governance) for the full governance charter, board composition, and decision-making process.
+> **See:** [Governance](../governance/robot-registry-foundation.md) for the full governance charter, board composition, and decision-making process.
 
 The root registry **MUST NOT** be used as a runtime dependency for local or organisational registries. Its role is bootstrap, governance, and discoverability — not operational control.
 
@@ -586,9 +586,9 @@ The following codes are specific to the Distributed Registry Node Protocol (§17
 
 ---
 
-## 11. RCAN v1.4 Wire Types for Registry Operations
+## 11. RCAN Wire Types for Registry Operations
 
-RCAN v1.4 defines four new MessageTypes for registry operations over the RCAN wire protocol. These allow robots and clients to register and resolve RRNs directly via the RCAN message protocol (not just via REST API).
+These MessageTypes for registry operations were introduced in the RCAN protocol (see [rcan.dev/compatibility](https://rcan.dev/compatibility)) and define how robots and clients register and resolve RRNs directly via the RCAN message protocol (not just via REST API).
 
 ### 11.1 MessageType Table (Registry)
 
