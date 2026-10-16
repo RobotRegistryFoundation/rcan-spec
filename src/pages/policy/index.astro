@@ -21,8 +21,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     </p>
     <div class="flex flex-wrap gap-3 mt-8">
       <a href="#proposals" class="px-4 py-2 bg-accent/10 border border-accent/20 text-accent text-sm rounded-lg hover:bg-accent/20 transition-colors">Policy proposals ↓</a>
-      <a href="/compliance/frameworks" class="px-4 py-2 bg-white/5 border border-white/10 text-text-muted text-sm rounded-lg hover:bg-white/10 transition-colors">Framework coverage →</a>
-      <a href="/safety" class="px-4 py-2 bg-white/5 border border-white/10 text-text-muted text-sm rounded-lg hover:bg-white/10 transition-colors">Safety architecture →</a>
+      <a href="/compliance/frameworks/" class="px-4 py-2 bg-white/5 border border-white/10 text-text-muted text-sm rounded-lg hover:bg-white/10 transition-colors">Framework coverage →</a>
+      <a href="/safety/" class="px-4 py-2 bg-white/5 border border-white/10 text-text-muted text-sm rounded-lg hover:bg-white/10 transition-colors">Safety architecture →</a>
     </div>
   </section>
 
@@ -131,7 +131,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   <section class="max-w-4xl mx-auto px-6 py-16 border-b border-white/5">
     <h2 class="text-2xl font-bold mb-2">How RCAN provides these guardrails</h2>
     <p class="text-text-muted leading-relaxed mb-8">
-      RCAN already specifies the deployment-layer controls a transparent process would rely on. These are not proposals — they are defined in the RCAN specification today and running on physical hardware via the <a href="https://github.com/craigm26/OpenCastor" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">OpenCastor</a> reference runtime. For the authoritative version/feature mapping, see the <a href="/compatibility" class="text-accent hover:underline">live compatibility matrix</a>.
+      RCAN already specifies the deployment-layer controls a transparent process would rely on. These are not proposals — they are defined in the RCAN specification today and running on physical hardware via the <a href="https://github.com/craigm26/OpenCastor" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">OpenCastor</a> reference runtime. For the authoritative version/feature mapping, see the <a href="/compatibility/" class="text-accent hover:underline">live compatibility matrix</a>.
     </p>
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
@@ -144,7 +144,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <tbody class="divide-y divide-white/5">
           <tr>
             <td class="py-4 pr-4 text-text-muted align-top"><strong class="text-text">"Which model did this, and how sure was it?"</strong> — model identity is opaque after the fact.</td>
-            <td class="py-4 pr-4 text-text-muted align-top">§16.1 AI block — every audit record carries <code class="text-accent/80 font-mono text-xs">model_provider</code>, <code class="text-accent/80 font-mono text-xs">model_id</code>, <code class="text-accent/80 font-mono text-xs">inference_confidence</code>, <code class="text-accent/80 font-mono text-xs">inference_latency_ms</code>, and <code class="text-accent/80 font-mono text-xs">thought_id</code>. Model attribution is a structural field, not a log line.</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.2 AI block — every audit record carries <code class="text-accent/80 font-mono text-xs">model_provider</code>, <code class="text-accent/80 font-mono text-xs">model_id</code>, <code class="text-accent/80 font-mono text-xs">inference_confidence</code>, <code class="text-accent/80 font-mono text-xs">inference_latency_ms</code>, and <code class="text-accent/80 font-mono text-xs">thought_id</code>. Model attribution is a structural field, not a log line.</td>
           </tr>
           <tr>
             <td class="py-4 pr-4 text-text-muted align-top"><strong class="text-text">"Can the operator quietly edit the record?"</strong> — evidence integrity depends on trusting the operator.</td>
@@ -152,15 +152,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </tr>
           <tr>
             <td class="py-4 pr-4 text-text-muted align-top"><strong class="text-text">"A jailbreak produced an unsafe action."</strong> — a bad output reaches an actuator before any filter can intervene.</td>
-            <td class="py-4 pr-4 text-text-muted align-top">§16.2 confidence gates + §16.3 HiTL gates — per-scope thresholds and structural human-authorization gates enforced <em>before</em> dispatch. A low-confidence or gated action cannot reach an actuator regardless of how the model was manipulated.</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.3 confidence gates + §16.4 HiTL gates — per-scope thresholds and structural human-authorization gates enforced <em>before</em> dispatch. A low-confidence or gated action cannot reach an actuator regardless of how the model was manipulated.</td>
           </tr>
           <tr>
             <td class="py-4 pr-4 text-text-muted align-top"><strong class="text-text">"Was a human actually in control?"</strong> — human oversight is asserted but not provable.</td>
-            <td class="py-4 pr-4 text-text-muted align-top">§16.3 structural <code class="text-accent/80 font-mono text-xs">PENDING_AUTH → AUTHORIZE</code> flow signed by an OWNER principal; §2 RBAC role boundaries an agent cannot self-escalate. Oversight is recorded as a signed event.</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.4 structural <code class="text-accent/80 font-mono text-xs">PENDING_AUTH → AUTHORIZE</code> flow signed by an OWNER principal; §2 RBAC role boundaries an agent cannot self-escalate. Oversight is recorded as a signed event.</td>
           </tr>
           <tr>
             <td class="py-4 pr-4 text-text-muted align-top"><strong class="text-text">"Is this output AI-generated?"</strong> — provenance of agent actions is unverifiable downstream.</td>
-            <td class="py-4 pr-4 text-text-muted align-top">§16.5 AI output watermarking — an HMAC watermark token on every AI-generated COMMAND, with a verification endpoint, so downstream systems can confirm provenance.</td>
+            <td class="py-4 pr-4 text-text-muted align-top">§16.6 AI output watermarking — an HMAC watermark token on every AI-generated COMMAND, with a verification endpoint, so downstream systems can confirm provenance.</td>
           </tr>
           <tr>
             <td class="py-4 pr-4 text-text-muted align-top"><strong class="text-text">"What standard was the deployment held to?"</strong> — no measurable, comparable bar.</td>
@@ -198,7 +198,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </div>
     <p class="text-text-muted text-sm leading-relaxed mt-6">
-      One honest boundary: RRF's conformance is <strong>self-asserted and independently replayable</strong>, not third-party certification. That is a feature for a fast-moving field — but if the US wants certification-grade assurance, RRF's bundles are the substrate an accredited body would audit against. See <a href="/compliance/frameworks" class="text-accent hover:underline">Framework Coverage</a> for the "conformance is not certification" boundary.
+      One honest boundary: RRF's conformance is <strong>self-asserted and independently replayable</strong>, not third-party certification. That is a feature for a fast-moving field — but if the US wants certification-grade assurance, RRF's bundles are the substrate an accredited body would audit against. See <a href="/compliance/frameworks/" class="text-accent hover:underline">Framework Coverage</a> for the "conformance is not certification" boundary.
     </p>
   </section>
 
@@ -230,7 +230,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <p class="text-text-muted text-sm leading-relaxed mb-3">
           Rather than recalling a general-purpose model over a narrow jailbreak — which, applied consistently, would halt all deployment — hold the <em>deployment</em> accountable through verifiable guardrails and audit. A jailbreak that cannot produce an unsafe physical action because a structural gate blocks it is a contained risk, and the audit chain records each decision the gate made.
         </p>
-        <p class="text-text-muted text-xs leading-relaxed m-0"><span class="text-accent font-mono">RCAN/RRF role:</span> §16.2/§16.3 gates plus §6 AuditChain shift the question from "can this model ever be tricked?" (unanswerable) to "can this deployment act unsafely, and can we prove it?" (testable).</p>
+        <p class="text-text-muted text-xs leading-relaxed m-0"><span class="text-accent font-mono">RCAN/RRF role:</span> §16.3/§16.4 gates plus §6 AuditChain shift the question from "can this model ever be tricked?" (unanswerable) to "can this deployment act unsafely, and can we prove it?" (testable).</p>
       </div>
 
       <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6">
@@ -241,7 +241,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <p class="text-text-muted text-sm leading-relaxed mb-3">
           Establish a safe-harbor: providers and deployers who disclose known limitations and maintain verifiable guardrails receive procedural protection — graduated remediation before any blunt restriction. This inverts the corrosive incentive June created, where candor invited action and silence did not.
         </p>
-        <p class="text-text-muted text-xs leading-relaxed m-0"><span class="text-accent font-mono">RCAN/RRF role:</span> watermarking (§16.5), model-identity audit (§16.1), and signed conformance bundles give a deployer concrete artifacts that earn the safe harbor.</p>
+        <p class="text-text-muted text-xs leading-relaxed m-0"><span class="text-accent font-mono">RCAN/RRF role:</span> watermarking (§16.6), model-identity audit (§16.2), and signed conformance bundles give a deployer concrete artifacts that earn the safe harbor.</p>
       </div>
 
       <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6">
@@ -301,13 +301,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             <td class="py-4 pr-4 text-text align-top font-medium">Transparency</td>
             <td class="py-4 pr-4 text-text-muted align-top">Art. 13, Art. 50 marking</td>
             <td class="py-4 pr-4 text-text-muted align-top">Voluntary; disclosure can backfire</td>
-            <td class="py-4 text-text-muted align-top">§16.5 watermarking + §16.1 model identity + safe harbor</td>
+            <td class="py-4 text-text-muted align-top">§16.6 watermarking + §16.2 model identity + safe harbor</td>
           </tr>
           <tr>
             <td class="py-4 pr-4 text-text align-top font-medium">Human oversight</td>
             <td class="py-4 pr-4 text-text-muted align-top">Art. 14</td>
             <td class="py-4 pr-4 text-text-muted align-top">Asserted, not provable</td>
-            <td class="py-4 text-text-muted align-top">§16.3 signed HiTL gates</td>
+            <td class="py-4 text-text-muted align-top">§16.4 signed HiTL gates</td>
           </tr>
           <tr>
             <td class="py-4 pr-4 text-text align-top font-medium">Public registry</td>
@@ -325,7 +325,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </table>
     </div>
     <p class="text-text-muted text-sm leading-relaxed mt-6">
-      Detailed article-level mapping of RCAN provisions to the EU AI Act, NIST AI RMF, ISO 10218-1, and others is maintained on the <a href="/compliance/frameworks" class="text-accent hover:underline">Framework Coverage</a> page.
+      Detailed article-level mapping of RCAN provisions to the EU AI Act, NIST AI RMF, ISO 10218-1, and others is maintained on the <a href="/compliance/frameworks/" class="text-accent hover:underline">Framework Coverage</a> page.
     </p>
   </section>
 

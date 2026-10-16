@@ -3,22 +3,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const messageSchemas = [
   { file: 'command.json',      type: 1,  name: 'COMMAND',       desc: 'Robot command with action, scope, parameters, priority, and session token' },
-  { file: 'config.json',       type: 2,  name: 'CONFIG',        desc: 'Configuration patch message; minimum role level 4 (OWNER) enforced' },
+  { file: 'config.json',       type: 5,  name: 'CONFIG',        desc: 'Configuration patch message; minimum role level 4 (OWNER) enforced' },
   { file: 'status.json',       type: 3,  name: 'STATUS',        desc: 'Robot status report with state, battery, and telemetry sub-object' },
-  { file: 'auth.json',         type: 4,  name: 'AUTH',          desc: 'Authentication message carrying session token and expiry' },
-  { file: 'heartbeat.json',    type: 5,  name: 'HEARTBEAT',     desc: 'Keepalive with latency budget declaration' },
+  { file: 'auth.json',         type: 7,  name: 'AUTH',          desc: 'Authentication message carrying session token and expiry' },
+  { file: 'heartbeat.json',    type: 4,  name: 'HEARTBEAT',     desc: 'Keepalive with latency budget declaration' },
   { file: 'safety.json',       type: 6,  name: 'SAFETY',        desc: 'Highest-priority safety event — STOP, ESTOP, or RESUME' },
-  { file: 'authorize.json',    type: 9,  name: 'AUTHORIZE',     desc: '§16 HiTL — approve or reject a pending AI command (OWNER+ only)' },
+  { file: 'authorize.json',    type: 45,  name: 'AUTHORIZE',     desc: '§16 HiTL — approve or reject a pending AI command (OWNER+ only)' },
   { file: 'pending_auth.json', type: 10, name: 'PENDING_AUTH',  desc: '§16 HiTL gate — AI command awaiting human authorization' },
   { file: 'invoke.json',       type: 11, name: 'INVOKE',        desc: '§19 Behavior/skill invocation request — skill name, parameters, and session context' },
   { file: 'invoke-result.json', type: 12, name: 'INVOKE_RESULT', desc: '§19 Invocation response — result payload, status, and execution metadata' },
-  { file: 'invoke-cancel.json', type: 15, name: 'INVOKE_CANCEL', desc: '§19.4 Best-effort cancellation of an in-flight INVOKE — correlates by cancel_msg_id' },
+  { file: 'invoke-cancel.json', type: 13, name: 'INVOKE_CANCEL', desc: '§19.4 Best-effort cancellation of an in-flight INVOKE — correlates by cancel_msg_id' },
 ];
 
 const coreSchemas = [
   { file: 'ruri.json',         name: 'RURI',                desc: 'Robot Universal Resource Identifier — regex pattern and structure validation' },
   { file: 'commitment.json',   name: 'Commitment Record',   desc: 'QuantumLink-Sim commitment record with classical/quantum/hybrid modes and AI block' },
   { file: 'rcan-config.json',  name: 'RCAN Config (.rcan.yaml)', desc: 'Full .rcan.yaml configuration file — robot identity, brain, safety, security, messaging' },
+  { file: 'envelope.json',     name: 'Envelope (Appendix C)', desc: 'Declared physical limits: workspace, motion, force, proximity, sensing, stop and heartbeat. Informative; JSON Schema 2020-12.' },
+  { file: 'gate-decision.json', name: 'Gate decision (Appendix C)', desc: 'Optional hash-chained audit record of each allow, clamp, reject or stop decision. Informative; JSON Schema 2020-12.' },
 ];
 
 const apiSchemas = [
@@ -26,7 +28,7 @@ const apiSchemas = [
 ];
 ---
 
-<BaseLayout title="Schemas — RCAN Protocol" description="Machine-readable JSON Schema (draft-07) definitions for all RCAN message types, RURI format, commitment records, and config. OpenAPI 3.1 spec for the registry API.">
+<BaseLayout title="Schemas — RCAN Protocol" description="Machine-readable JSON Schema definitions for RCAN message types, the RURI format, commitment records, config, and the Appendix C envelope and gate-decision records. OpenAPI 3.1 spec for the registry API.">
 
   <div class="py-16 border-b border-white/5 mb-12">
     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-text-muted mb-6">
@@ -35,7 +37,7 @@ const apiSchemas = [
     </div>
     <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">RCAN Schemas</h1>
     <p class="text-xl text-text-muted max-w-2xl leading-relaxed mb-6">
-      JSON Schema (draft-07) definitions for every RCAN message type, RURI format, commitment records,
+      JSON Schema definitions for the core RCAN message types, the RURI format, commitment records,
       and the full <code class="text-accent text-base">.rcan.yaml</code> config structure.
       Use these to validate implementations, generate types, and build conformant tooling.
     </p>
@@ -52,7 +54,7 @@ const apiSchemas = [
   <!-- Message Schemas -->
   <section class="mb-16">
     <h2 class="text-2xl font-bold mb-2">Message Schemas</h2>
-    <p class="text-text-muted mb-8">One JSON Schema file per RCAN message type. All use <code class="text-accent text-sm">$schema: draft-07</code>, include realistic examples, and enforce <code class="text-accent text-sm">additionalProperties: false</code>.</p>
+    <p class="text-text-muted mb-8">One JSON Schema file for each message type listed here (not every type in the canonical table has one yet). All use <code class="text-accent text-sm">$schema: draft-07</code>, include realistic examples, and enforce <code class="text-accent text-sm">additionalProperties: false</code>.</p>
 
     <div class="overflow-x-auto">
       <table class="w-full text-sm border-collapse">
@@ -114,7 +116,7 @@ const apiSchemas = [
         <div>
           <h3 class="font-semibold text-text mb-1">registry-api.openapi.yaml</h3>
           <p class="text-text-muted text-sm">540 lines · 5 endpoints · Full Robot schema with all sub-schemas · Error responses documented</p>
-          <p class="text-text-muted/60 text-xs mt-2">Endpoints: GET /api/v1.json · /api/v1/robots.json · /api/v1/robots/{'{rrn}'}.json · /api/v1/ruri/{'{ruri}'}.json · /api/v1/verify/{'{rrn}'}.json</p>
+          <p class="text-text-muted text-xs mt-2">Endpoints: GET /api/v1.json · /api/v1/robots.json · /api/v1/robots/{'{rrn}'}.json · /api/v1/ruri/{'{ruri}'}.json · /api/v1/verify/{'{rrn}'}.json</p>
         </div>
         <a href="/schemas/registry-api.openapi.yaml" class="inline-flex items-center gap-2 px-4 py-2 bg-accent text-bg font-semibold text-sm rounded-lg hover:bg-accent-hover transition-colors shrink-0" download>
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
