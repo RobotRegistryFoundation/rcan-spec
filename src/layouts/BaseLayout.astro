@@ -16,6 +16,8 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, "https://rcan.dev");
 const ogImageURL = new URL(ogImage, "https://rcan.dev");
+// Pages that already name RCAN in their title keep it as is; others get the site suffix.
+const fullTitle = /\bRCAN\b/.test(title) ? title : `${title} | RCAN Protocol`;
 ---
 
 <!doctype html>
@@ -25,14 +27,14 @@ const ogImageURL = new URL(ogImage, "https://rcan.dev");
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title} | RCAN Protocol</title>
+    <title>{fullTitle}</title>
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:title" content={`${title} | RCAN Protocol`} />
+    <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageURL} />
     <meta property="og:image:width" content="1200" />
@@ -41,7 +43,7 @@ const ogImageURL = new URL(ogImage, "https://rcan.dev");
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={`${title} | RCAN Protocol`} />
+    <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
   </head>
@@ -54,6 +56,27 @@ const ogImageURL = new URL(ogImage, "https://rcan.dev");
     <SiteFooter />
   </body>
 </html>
+
+<style is:global>
+  /* Links inside running text are underlined so they don't rely on colour alone (WCAG 1.4.1). */
+  main p a:not([class*="px-"]),
+  main li a:not([class*="px-"]):not([class*="block"]),
+  main td a,
+  main blockquote a {
+    text-decoration-line: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+
+  /* Phone widths: long code, tables and identifiers scroll or wrap instead of widening the page. */
+  @media (max-width: 640px) {
+    main pre { max-width: 100%; overflow-x: auto; }
+    main table { display: block; max-width: 100%; overflow-x: auto; }
+    main .flex-1, main .grid > * { min-width: 0; }
+    main p, main li, main span, main :not(pre) > code { overflow-wrap: anywhere; }
+    main td, main th, main td code, main th code, main h1 span, main h2 span { overflow-wrap: normal; }
+  }
+</style>
 
 <style>
   .noise-background {
