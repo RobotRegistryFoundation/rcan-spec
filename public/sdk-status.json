@@ -1,6 +1,6 @@
 {
   "updated": "2026-10-16T04:44:43Z",
-  "spec_version": "3.0",
+  "spec_version": "3.2",
   "sdks": {
     "rcan-py": {
       "version": "3.6.0",
