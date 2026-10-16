@@ -1602,6 +1602,43 @@ describe("rcan-node.json validates against the published schema", () => {
     expect(validate(manifest, schema)).toEqual([]);
   });
 
+  // The deployed node's public key is committed in wrangler.toml [vars]. The
+  // private half is a Pages secret this test cannot see, so it checks the
+  // public side: the manifest built from the committed vars carries a key,
+  // validates, and stays in the verify-capable shape clients require.
+  const committedVars = (() => {
+    const toml = readFileSync(
+      fileURLToPath(new URL("../wrangler.toml", import.meta.url)),
+      "utf8",
+    );
+    const section = toml.split(/^\[vars\]\s*$/m)[1]?.split(/^\[/m)[0] ?? "";
+    const vars: Record<string, string> = {};
+    for (const m of section.matchAll(/^([A-Z0-9_]+)\s*=\s*"([^"]*)"\s*$/gm)) vars[m[1]] = m[2];
+    return vars;
+  })();
+
+  it("wrangler.toml publishes the root node key in both encodings, consistently", () => {
+    const raw = committedVars.RCAN_NODE_ED25519_PUBKEY;
+    expect(raw, "RCAN_NODE_ED25519_PUBKEY missing from wrangler.toml [vars]").toMatch(
+      /^[A-Za-z0-9_-]+$/,
+    );
+    expect(b64ToBytes(raw).length).toBe(32);
+    expect(committedVars.RCAN_NODE_PUBKEY).toBe(`ed25519:${raw}`);
+    // The private key is a secret, never a var.
+    expect(committedVars.RCAN_NODE_ED25519_PRIVKEY).toBeUndefined();
+  });
+
+  it("the manifest served from the committed vars contains a key and validates", async () => {
+    const manifest = await buildManifest({
+      RCAN_NODE_ED25519_PUBKEY: committedVars.RCAN_NODE_ED25519_PUBKEY,
+      RCAN_NODE_PUBKEY: committedVars.RCAN_NODE_PUBKEY,
+    });
+    expect(validate(manifest, schema)).toEqual([]);
+    expect(String(manifest.public_key)).toMatch(/^ed25519:/);
+    expect(manifest.ed25519_public_key).toBe(committedVars.RCAN_NODE_ED25519_PUBKEY);
+    expect(manifest.capabilities).toContain("verify");
+  });
+
   it("the schema still refuses a public_key that is neither null nor ed25519:", async () => {
     const bad = { ...(await buildManifest({})), public_key: "rsa:nope" };
     expect(validate(bad, schema)).not.toEqual([]);

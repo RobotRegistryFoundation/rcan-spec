@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+### Fixed: the rcan.dev root node now publishes its public key
+- `/.well-known/rcan-node.json` served `public_key: null`, so SDK `NodeClient`
+  discovery against rcan.dev failed with `missing_pubkey`. The manifest code was
+  already in place; the deployment had no key configured. The root node now has an
+  Ed25519 key (kid `ed25519-d626701596f726df`, minted 2026-10-16): the public half is
+  committed in `wrangler.toml` `[vars]`, the private half is the Pages secret
+  `RCAN_NODE_ED25519_PRIVKEY`, and the manifest is self-signed. No wire or schema
+  change. `pqc_public_key` stays null.
+- Tests check that the committed vars hold a consistent 32-byte key and that the
+  manifest built from them carries a key and validates against
+  `rcan-node.schema.json`.
+
 Proposed as **v3.3.0** (MINOR: additive and optional, no breaking change, per
 VERSIONING.md). v3.3 was earlier pencilled in for the §8.7 voice block; if voice ships
 first, this becomes v3.4.0.
