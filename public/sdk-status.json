@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-16T04:44:43Z",
+  "updated": "2026-10-16T04:52:49Z",
   "spec_version": "3.2",
   "sdks": {
     "rcan-py": {
@@ -8,8 +8,8 @@
       "pypi": "https://pypi.org/project/rcan/"
     },
     "rcan-ts": {
-      "version": "",
-      "status": "failure",
+      "version": "3.4.2",
+      "status": "pass",
       "npm": "https://www.npmjs.com/package/rcan-ts"
     }
   }
