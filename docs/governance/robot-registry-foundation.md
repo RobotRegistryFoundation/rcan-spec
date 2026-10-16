@@ -262,7 +262,7 @@ The RCAN specification is designed to align with and complement existing interna
 | **EU AI Act (Regulation 2024/1689)** | Art. 13 transparency obligations; Art. 49 high-risk AI registration; informs transparency manifest spec | Tracked in #159; target v1.5 |
 | **IEC 62443** (Industrial cybersecurity) | Security levels for industrial control systems; informs RCAN auth and registry security requirements | Partially aligned; full alignment target v1.6 |
 | **NIST AI RMF** (AI Risk Management) | AI risk categorisation and documentation; informs P66 manifest and transparency disclosure fields | Tracked; target v1.5 |
-| **ISO/TC 299** (Robotics terminology) | Common vocabulary for robot types and capabilities; informs RCAN robot type taxonomy | Ongoing alignment |
+| **ISO/TC 299** (Robotics terminology) | Common vocabulary for robot types and capabilities; informs RCAN robot type taxonomy | Planned; not contacted yet |
 | **IEC 61508** (Functional safety) | SIL (Safety Integrity Level) classification; informs hardware_safety SIL attestation fields | Target v1.5 |
 
 The RRF seeks formal liaison status with ISO/TC 299 and will apply for W3C liaison once formally incorporated.
