@@ -111,7 +111,7 @@ RCAN makes the audit trail a conformance requirement, not a recommendation. Ever
 
 This satisfies the spirit of ISO 10218-1:2025 Clause 5.4 audit logging while extending it to the AI command layer, and directly satisfies EU AI Act Article 12 record-keeping requirements.
 
-**§16.1 Model Identity — AI command provenance**
+**§16.2 Model Identity — AI command provenance**
 
 Every audit record for an AI-generated command MUST include:
 - The model provider (the organization operating the AI service)
@@ -123,19 +123,19 @@ Every audit record for an AI-generated command MUST include:
 
 This is the minimum information needed to investigate an AI-caused incident forensically. No current robot standard requires it. RCAN makes it mandatory.
 
-**§16.2 Confidence Gates — Pre-dispatch AI quality control**
+**§16.3 Confidence Gates — Pre-dispatch AI quality control**
 
 Operators configure a minimum confidence threshold for each action scope (navigation, manipulation, verbal output, etc.) in the robot's configuration file. Before dispatching any AI-generated command, the protocol checks whether the model's reported confidence meets the threshold for that scope. If it does not, the command is rejected — the robot does not act.
 
 This is a structural safety control for an AI-specific failure mode (confidence miscalibration) that has no equivalent in current robot safety standards.
 
-**§16.3 Human-in-the-Loop Gates — Mandatory authorization**
+**§16.4 Human-in-the-Loop Gates — Mandatory authorization**
 
 Operators declare, in the robot's configuration file, which action types require explicit human authorization before execution. For declared action types, the protocol enforces a waiting state: the robot cannot proceed until it receives an AUTHORIZE message from a principal holding OWNER or higher role. The pending state is communicated via a PENDING_AUTH message to the human operator's interface.
 
 The AI agent cannot reason around this gate. It is structural at the protocol layer. This directly implements the EU AI Act Article 14 human oversight requirement as a protocol primitive.
 
-**§16.4 Thought Log — Queryable AI reasoning records**
+**§16.5 Thought Log — Queryable AI reasoning records**
 
 Every AI decision produces a thought record containing: the prompt presented to the model, the model's reasoning output, the action taken, the confidence score, and the thought_id referenced in the audit trail. Thought records are stored and accessible via `GET /api/thoughts/<id>`.
 
@@ -172,10 +172,10 @@ The reference implementation demonstrates that RCAN compliance is achievable on 
 | **Access control** | ✅ §2 RBAC (protocol-native, 5 tiers) | ✅ Clause 5.4 (system-level) | ✅ Art. 26 (organizational) | ✅ SL2: authentication & authorization |
 | **Audit logging** | ✅ §6 (mandatory, per-message) | ✅ Clause 5.4 (system-level) | ✅ Art. 12 (AI system operation logs) | ✅ SL2: security event logging |
 | **Software/firmware integrity** | ✅ §6 prompt injection defense | ✅ Clause 5.4 | ❌ Not specifically addressed | ✅ SL3: advanced integrity controls |
-| **AI model identity** | ✅ §16.1 (mandatory in audit) | ❌ No provision | ✅ Art. 12 (implicitly required) | ❌ No provision |
-| **Confidence-based gating** | ✅ §16.2 (configurable thresholds) | ❌ No provision | ✅ Art. 9 (risk measures) | ❌ No provision |
-| **Human-in-the-loop authorization** | ✅ §16.3 (structural protocol gate) | ❌ No provision | ✅ Art. 14 (human oversight) | ❌ No provision |
-| **AI reasoning transparency** | ✅ §16.4 (thought log, scope-gated) | ❌ No provision | ✅ Art. 13 (transparency) | ❌ No provision |
+| **AI model identity** | ✅ §16.2 (mandatory in audit) | ❌ No provision | ✅ Art. 12 (implicitly required) | ❌ No provision |
+| **Confidence-based gating** | ✅ §16.3 (configurable thresholds) | ❌ No provision | ✅ Art. 9 (risk measures) | ❌ No provision |
+| **Human-in-the-loop authorization** | ✅ §16.4 (structural protocol gate) | ❌ No provision | ✅ Art. 14 (human oversight) | ❌ No provision |
+| **AI reasoning transparency** | ✅ §16.5 (thought log, scope-gated) | ❌ No provision | ✅ Art. 13 (transparency) | ❌ No provision |
 | **Protective stop / emergency stop** | ✅ §6 (local safety wins; SAFETY priority) | ✅ Clause 5.x (hardware requirement) | ❌ Not addressed at hardware level | ✅ SL2: functional safety integration |
 | **Hardware safety certification** | ❌ Out of RCAN scope | ✅ Full coverage | ✅ Art. 43 (conformity assessment) | ❌ Out of IEC 62443 scope |
 | **Physical safeguarding** | ❌ Out of RCAN scope | ✅ Full coverage | ❌ Out of AI Act scope | ❌ Out of IEC 62443 scope |
@@ -193,7 +193,7 @@ This table illustrates that RCAN, ISO 10218-1:2025, the EU AI Act, and IEC 62443
 
 RCAN is an open specification, not a product. Its provisions are designed to be evaluated, adopted, modified, or incorporated by standards bodies. Adoption does not require use of any specific implementation.
 
-The current specification (v1.1) is a working draft. It has been published openly to invite technical review by the robot safety engineering community, including members of ISO/TC 299 WG3, the A3 standards committee, and CEN/CENELEC JTC 21.
+The specification (see [rcan.dev/spec](https://rcan.dev/spec)) is a working draft. It has been published openly to invite technical review by the robot safety engineering community, including members of ISO/TC 299 WG3, the A3 standards committee, and CEN/CENELEC JTC 21.
 
 **Proposed engagement:**
 
@@ -215,17 +215,17 @@ The following table summarizes the key normative provisions of RCAN §16 for ref
 
 | Provision | Requirement Level | Description | Rationale |
 |---|---|---|---|
-| **§16.1 Model identity** | MUST | Every audit record for an AI-generated command MUST include: model provider, model identifier, inference confidence (0.0–1.0), inference latency (ms), thought_id, escalation flag | Enables forensic investigation of AI-caused incidents; satisfies EU AI Act Art. 12 implicit requirements |
-| **§16.1 Provider fallback logging** | MUST | When a command is generated by a fallback model (lower capability / lower quota), this MUST be recorded in the audit entry with the fallback reason | Distinguishes primary model decisions from degraded-mode decisions in the audit record |
-| **§16.2 Confidence gates** | MUST | Operators MUST declare minimum confidence thresholds per action scope in robot configuration. Commands MUST be rejected before dispatch if model confidence is below the declared threshold for that scope | Prevents execution of AI commands that fall below the operator's acceptable confidence floor |
-| **§16.2 Gate configuration** | MUST | Confidence thresholds MUST be declared in robot configuration (RCAN file) under the `confidence_gates` block, per-scope | Makes the confidence policy explicit, auditable, and reviewable by operators and assessors |
-| **§16.3 HiTL gate declaration** | MUST | Action types requiring human authorization MUST be declared in robot configuration under `hitl_gates`. Undeclared action types are not gated | Makes the human oversight scope explicit and auditable |
-| **§16.3 Authorization enforcement** | MUST | Gated actions MUST NOT be dispatched until an AUTHORIZE message with valid signature from OWNER or higher principal is received | The gate is structural — not advisory. The AI agent cannot proceed without the authorization message. |
-| **§16.3 PENDING_AUTH status** | MUST | When a gated action is queued awaiting authorization, the robot MUST emit PENDING_AUTH status with the action description, requesting principal, and expiry time | Provides the human operator with the information needed to make an informed authorization decision |
-| **§16.3 Authorization expiry** | MUST | Authorizations are single-use and expire. An authorization MUST NOT be reused for a subsequent command. | Prevents replay of authorization decisions |
-| **§16.4 Thought log storage** | MUST | Every AI decision MUST produce a thought record: thought_id, timestamp, prompt (sanitized), reasoning output, action taken, confidence, model identifier | Creates the forensic and transparency record for each AI decision |
-| **§16.4 Thought log access** | MUST | Thought records MUST be accessible via `GET /api/thoughts/<id>`. The `reasoning` field MUST require OWNER or higher scope. The `action` and `confidence` fields MAY be accessible to lower scopes. | Balances transparency with operational data protection |
-| **§16.4 Thought log retention** | SHOULD | Thought records SHOULD be retained for a minimum of 6 months or as required by applicable regulations (EU AI Act Art. 12 specifies minimum 6 months for high-risk AI systems) | Aligns with EU AI Act retention requirements |
+| **§16.2 Model identity** | MUST | Every audit record for an AI-generated command MUST include: model provider, model identifier, inference confidence (0.0–1.0), inference latency (ms), thought_id, escalation flag | Enables forensic investigation of AI-caused incidents; satisfies EU AI Act Art. 12 implicit requirements |
+| **§16.2 Provider fallback logging** | MUST | When a command is generated by a fallback model (lower capability / lower quota), this MUST be recorded in the audit entry with the fallback reason | Distinguishes primary model decisions from degraded-mode decisions in the audit record |
+| **§16.3 Confidence gates** | MUST | Operators MUST declare minimum confidence thresholds per action scope in robot configuration. Commands MUST be rejected before dispatch if model confidence is below the declared threshold for that scope | Prevents execution of AI commands that fall below the operator's acceptable confidence floor |
+| **§16.3 Gate configuration** | MUST | Confidence thresholds MUST be declared in robot configuration (RCAN file) under the `confidence_gates` block, per-scope | Makes the confidence policy explicit, auditable, and reviewable by operators and assessors |
+| **§16.4 HiTL gate declaration** | MUST | Action types requiring human authorization MUST be declared in robot configuration under `hitl_gates`. Undeclared action types are not gated | Makes the human oversight scope explicit and auditable |
+| **§16.4 Authorization enforcement** | MUST | Gated actions MUST NOT be dispatched until an AUTHORIZE message with valid signature from OWNER or higher principal is received | The gate is structural — not advisory. The AI agent cannot proceed without the authorization message. |
+| **§16.4 PENDING_AUTH status** | MUST | When a gated action is queued awaiting authorization, the robot MUST emit PENDING_AUTH status with the action description, requesting principal, and expiry time | Provides the human operator with the information needed to make an informed authorization decision |
+| **§16.4 Authorization expiry** | MUST | Authorizations are single-use and expire. An authorization MUST NOT be reused for a subsequent command. | Prevents replay of authorization decisions |
+| **§16.5 Thought log storage** | MUST | Every AI decision MUST produce a thought record: thought_id, timestamp, prompt (sanitized), reasoning output, action taken, confidence, model identifier | Creates the forensic and transparency record for each AI decision |
+| **§16.5 Thought log access** | MUST | Thought records MUST be accessible via `GET /api/thoughts/<id>`. The `reasoning` field MUST require OWNER or higher scope. The `action` and `confidence` fields MAY be accessible to lower scopes. | Balances transparency with operational data protection |
+| **§16.5 Thought log retention** | SHOULD | Thought records SHOULD be retained for a minimum of 6 months or as required by applicable regulations (EU AI Act Art. 12 specifies minimum 6 months for high-risk AI systems) | Aligns with EU AI Act retention requirements |
 
 ---
 

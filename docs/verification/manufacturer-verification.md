@@ -151,4 +151,4 @@ GET https://rcan.dev/api/v1/verify/{rrn}
 
 ---
 
-*This document is part of the RCAN specification. For questions or to initiate manufacturer verification, open an issue at [github.com/rcan-spec/rcan-spec](https://github.com/rcan-spec/rcan-spec).*
+*This document is part of the RCAN specification. For questions or to initiate manufacturer verification, open an issue at [github.com/RobotRegistryFoundation/rcan-spec](https://github.com/RobotRegistryFoundation/rcan-spec/issues).*
