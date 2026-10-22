@@ -44,7 +44,7 @@ GET  /api/attest          → manifest metadata + signature prefix
 POST /api/attest/verify   → live ML-DSA-65 signature verification
 GET  /api/sbom            → SBOM metadata (serial, components, ref)
 GET  /api/sbom/download   → full CycloneDX JSON
-GET  /api/conformance     → v2.1/v2.2 L5 compliance report`;
+GET  /api/conformance     → self-run conformance report (v2.1/v2.2 checks)`;
 ---
 
 <DocsLayout
@@ -55,7 +55,7 @@ GET  /api/conformance     → v2.1/v2.2 L5 compliance report`;
   <p class="lead">
     The <a href="https://docs.rcan.dev/spec/">RCAN protocol</a> requires all robots to publish a signed firmware manifest and CycloneDX SBOM
     to the Robot Registry Foundation (RRF). Signatures use <strong>ML-DSA-65 (NIST FIPS 204)</strong> —
-    Ed25519 is deprecated and removed. See the <a href="/compatibility">live compatibility matrix</a> for the
+    Ed25519 is deprecated and removed. See the <a href="/compatibility/">live compatibility matrix</a> for the
     protocol revision currently in force.
   </p>
 
@@ -92,15 +92,16 @@ GET  /api/conformance     → v2.1/v2.2 L5 compliance report`;
 
   <h2>5. Conformance</h2>
   <p>
-    Run <code>castor conformance</code> to see your full <a href="https://docs.rcan.dev/spec/">RCAN protocol</a> L5 compliance report inline.
-    A robot must pass all 7 checks to be <strong>compliant</strong>:
+    Run <code>castor conformance</code> to see a self-run <a href="https://docs.rcan.dev/spec/">RCAN protocol</a> conformance report inline.
+    The report passes when all 7 checks below pass. It is a conformance check you run on your own robot, not legal compliance
+    and not a certification:
   </p>
   <ul>
     <li><code>rcan_v21.firmware_manifest</code> — signed manifest present</li>
     <li><code>rcan_v21.sbom_attestation</code> — SBOM published to RRF</li>
     <li><code>rcan_v21.authority_handler</code> — EU AI Act Art. 16(j)</li>
     <li><code>rcan_v21.audit_chain_retention</code> — ≥ 3650 days</li>
-    <li><code>rcan_v21.rcan_version</code> — RCAN protocol version required (see the <a href="/compatibility" class="text-accent hover:underline">live compatibility matrix</a>)</li>
+    <li><code>rcan_v21.rcan_version</code> — RCAN protocol version required (see the <a href="/compatibility/" class="text-accent hover:underline">live compatibility matrix</a>)</li>
     <li><code>rcan_v22.pq_signing_key</code> — ML-DSA-65 key present</li>
     <li><code>rcan_v22.firmware_pq_sig</code> — manifest has ML-DSA-65 signature</li>
   </ul>

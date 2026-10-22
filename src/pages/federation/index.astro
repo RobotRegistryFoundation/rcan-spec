@@ -47,7 +47,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           Because there are zero delegations, that endpoint answers <code>501</code> with <code>{`{ "error": "federation is not enabled on this node", "delegations": 0 }`}</code>. It is not a list you are missing from; the feature is off.
         </li>
         <li>
-          The node manifest at <a href="/.well-known/rcan-node.json"><code>/.well-known/rcan-node.json</code></a> advertises only the capabilities its configured key material supports, and self-signs when a signing key is configured. A self-signature proves control of that key and nothing about the operator's independence.
+          The node manifest at <a href="/.well-known/rcan-node.json"><code>/.well-known/rcan-node.json</code></a> advertises only the capabilities its configured key material supports, and self-signs when a signing key is configured. Since 16 October 2026 it publishes the root node's Ed25519 public key in <code>public_key</code> (as <code>ed25519:&lt;base64url&gt;</code>) and <code>ed25519_public_key</code> (raw base64url), and signs itself under kid <code>ed25519-d626701596f726df</code>. This is the key the SDK <code>NodeClient</code> checks for. A self-signature proves control of that key and nothing about the operator's independence. <code>pqc_public_key</code> stays null until an ML-DSA-65 half exists.
         </li>
         <li>
           The manifest is the only thing this node signs today. Resolve responses from <code>GET /api/v1/resolve/&lt;RRN&gt;</code> carry no signature over the record, and the <code>verify=true</code> parameter is reserved and does nothing. The Federation Proof shape described below is the protocol; it is not what this deployment returns.
@@ -202,14 +202,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <div class="text-[.7rem] font-bold text-text-muted uppercase tracking-[.08em] mb-1.5">Root Registry</div>
         <div class="text-base font-bold text-white mb-2"><code>rcan.dev</code></div>
         <div class="text-[.85rem] text-text-muted leading-relaxed mb-3">
-          Operated by the RCAN Working Group. Acts as registry of last resort and bootstrap anchor for federation. Governed by an <a href="/governance" class="text-inherit">independent body</a>.
+          Operated by RCAN's single maintainer. Acts as registry of last resort and bootstrap anchor for federation. There is no independent governing body yet; see <a href="/governance" class="text-inherit">governance</a>.
         </div>
         <div class="font-mono text-[.78rem] text-lime-400 bg-lime-400/[.06] border border-lime-400/[.15] rounded-[.35rem] px-2.5 py-1.5 break-all">
           rcan://rcan.dev/boston-dynamics/spot/bd001a2b3c
         </div>
         <div class="mt-3 flex flex-wrap gap-1.5">
           <span class="text-[.7rem] px-2 py-[.15rem] bg-blue-400/[.12] border border-blue-400/25 rounded-[.25rem] text-blue-300">Public internet</span>
-          <span class="text-[.7rem] px-2 py-[.15rem] bg-blue-400/[.12] border border-blue-400/25 rounded-[.25rem] text-blue-300">Governed</span>
+          <span class="text-[.7rem] px-2 py-[.15rem] bg-blue-400/[.12] border border-blue-400/25 rounded-[.25rem] text-blue-300">One maintainer</span>
         </div>
       </div>
 
@@ -339,13 +339,13 @@ Content-Type: application/json
   <section>
     <h2>Governance</h2>
     <p>
-      The root registry <code>rcan.dev</code> is governed by an <strong>independent body</strong> — not by any single manufacturer, cloud provider, or government. This ensures no single actor can capture the global robot identity namespace.
+      The root registry <code>rcan.dev</code> is run by RCAN's single maintainer. The aim is to hand it to an independent steward, so that no single manufacturer, cloud provider, government or person controls the robot identity namespace. That has not happened yet.
     </p>
     <p>
       Governance responsibilities include: setting the RCAN specification, operating the root registry, maintaining the federation index, and publishing all governance decisions publicly.
     </p>
     <p>
-      <a href="/governance">→ Read the full Governance Charter</a>
+      <a href="/governance">→ Governance status</a>
     </p>
   </section>
 

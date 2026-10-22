@@ -3,6 +3,7 @@ const specLinks = [
   { href: '/spec/', label: 'Spec' },
   { href: '/conformance/', label: 'Conformance' },
   { href: '/schemas/', label: 'Schemas' },
+  { href: 'https://docs.rcan.dev/spec/appendix-c/', label: 'Appendix C: Bounded Embodiment' },
   { href: '/spec/v1.1/', label: 'Archived v1.1' },
   { href: '/spec/v1.0/', label: 'Archived v1.0' },
 ];
@@ -30,12 +31,13 @@ const mobileLinks = [
   { href: '/about/', label: 'About' },
   { href: '/docs/', label: 'Docs' },
   { href: '/changelog/', label: 'Changelog' },
-  { href: '/safety', label: 'Safety' },
-  { href: '/compliance/frameworks', label: 'Compliance' },
+  { href: '/safety/', label: 'Safety' },
+  { href: '/compliance/frameworks/', label: 'Compliance' },
   { href: '/policy/', label: 'Policy' },
   { href: '/spec/', label: 'Spec' },
   { href: '/conformance/', label: '— Conformance' },
   { href: '/schemas/', label: '— Schemas' },
+  { href: 'https://docs.rcan.dev/spec/appendix-c/', label: '— Appendix C: Bounded Embodiment' },
   { href: '/federation/', label: 'Federation' },
   { href: '/implementations/', label: 'Implementations' },
   { href: '/api/', label: 'API' },
@@ -80,7 +82,7 @@ function isActive(href: string) {
     </a>
 
     <!-- Desktop Nav -->
-    <nav class="hidden md:flex items-center gap-1">
+    <nav class="hidden xl:flex items-center gap-1" aria-label="Main">
 
       <!-- Quickstart pill -->
       <a href="/quickstart/"
@@ -126,7 +128,7 @@ function isActive(href: string) {
       </a>
 
       <!-- Safety -->
-      <a href="/safety"
+      <a href="/safety/"
         class:list={[
           "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors",
           isActive('/safety') ? "text-accent bg-accent/10" : "text-text-muted hover:text-accent hover:bg-white/5"
@@ -136,7 +138,7 @@ function isActive(href: string) {
       </a>
 
       <!-- Compliance -->
-      <a href="/compliance/frameworks"
+      <a href="/compliance/frameworks/"
         class:list={[
           "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors",
           isActive('/compliance/') ? "text-accent bg-accent/10" : "text-text-muted hover:text-accent hover:bg-white/5"
@@ -165,13 +167,15 @@ function isActive(href: string) {
               : "text-text-muted hover:text-accent hover:bg-white/5"
           ]}
           data-dropdown-trigger
+          aria-haspopup="true"
+          aria-expanded="false"
         >
           Spec
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200" data-dropdown-arrow>
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </button>
-        <div class="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-52 hidden" data-dropdown-menu>
+        <div class="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-60 hidden" data-dropdown-menu>
           <div class="bg-bg-alt border border-white/10 rounded-xl shadow-xl overflow-hidden">
             <div class="p-1">
               {specLinks.map((link, i) => (
@@ -179,8 +183,8 @@ function isActive(href: string) {
                   href={link.href}
                   class:list={[
                     "block px-3 py-2 text-sm rounded-lg hover:bg-white/5 hover:text-accent transition-colors",
-                    i === 2 ? 'border-b border-white/5 mb-1 pb-3' : '',
-                    link.label.startsWith('Archived') ? 'text-text-muted/60 text-xs' : 'text-text-muted',
+                    i === 3 ? 'border-b border-white/5 mb-1 pb-3' : '',
+                    link.label.startsWith('Archived') ? 'text-text-muted text-xs' : 'text-text-muted',
                     isActive(link.href) ? 'text-accent bg-accent/10' : ''
                   ]}
                 >
@@ -202,6 +206,8 @@ function isActive(href: string) {
               : "text-text-muted hover:text-accent hover:bg-white/5"
           ]}
           data-dropdown-trigger
+          aria-haspopup="true"
+          aria-expanded="false"
         >
           Protocol
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200" data-dropdown-arrow>
@@ -236,6 +242,8 @@ function isActive(href: string) {
               : "text-text-muted hover:text-accent hover:bg-white/5"
           ]}
           data-dropdown-trigger
+          aria-haspopup="true"
+          aria-expanded="false"
         >
           Use Cases
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200" data-dropdown-arrow>
@@ -266,6 +274,8 @@ function isActive(href: string) {
             "text-text-muted hover:text-accent hover:bg-white/5"
           ]}
           data-dropdown-trigger
+          aria-haspopup="true"
+          aria-expanded="false"
         >
           Registry
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200" data-dropdown-arrow>
@@ -300,7 +310,7 @@ function isActive(href: string) {
     </nav>
 
     <!-- Mobile Menu Button -->
-    <button id="nav-toggle" class="md:hidden p-2 text-text-muted hover:text-accent transition-colors" aria-label="Toggle menu">
+    <button id="nav-toggle" class="xl:hidden p-2 text-text-muted hover:text-accent transition-colors" aria-label="Toggle menu" aria-controls="mobile-menu" aria-expanded="false">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="icon-open">
         <line x1="3" y1="12" x2="21" y2="12"></line>
         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -328,7 +338,7 @@ function isActive(href: string) {
       rel={link.external ? "noopener noreferrer" : undefined}
       class:list={[
         "text-base font-medium transition-colors py-3 border-b border-white/5 block",
-        link.label.startsWith('—') ? 'pl-5 text-sm text-text-muted/70' : 'text-text-muted',
+        link.label.startsWith('—') ? 'pl-5 text-sm text-text-muted' : 'text-text-muted',
         isActive(link.href) && !link.external ? 'text-accent' : 'hover:text-accent',
         link.label === 'Quickstart' ? 'text-emerald-400' : ''
       ]}
@@ -357,6 +367,7 @@ function isActive(href: string) {
       menu?.classList.remove('flex');
     }
     document.body.style.overflow = isOpen ? 'hidden' : '';
+    toggle?.setAttribute('aria-expanded', String(isOpen));
     iconOpen?.classList.toggle('hidden', isOpen);
     iconClose?.classList.toggle('hidden', !isOpen);
   });
@@ -367,17 +378,30 @@ function isActive(href: string) {
     const arrow = dropdown.querySelector('[data-dropdown-arrow]') as HTMLElement | null;
     let closeTimer: ReturnType<typeof setTimeout> | null = null;
 
+    const trigger = dropdown.querySelector('[data-dropdown-trigger]') as HTMLElement | null;
+
     function open() {
       if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
       menuEl?.classList.remove('hidden');
       arrow?.classList.add('rotate-180');
+      trigger?.setAttribute('aria-expanded', 'true');
     }
     function close() {
       closeTimer = setTimeout(() => {
         menuEl?.classList.add('hidden');
         arrow?.classList.remove('rotate-180');
+        trigger?.setAttribute('aria-expanded', 'false');
       }, 150);
     }
+
+    // Keyboard and touch: the trigger button toggles the menu.
+    trigger?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (menuEl?.classList.contains('hidden')) open(); else close();
+    });
+    dropdown.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Escape') { close(); trigger?.focus(); }
+    });
 
     dropdown.addEventListener('mouseenter', open);
     dropdown.addEventListener('mouseleave', close);
@@ -390,6 +414,7 @@ function isActive(href: string) {
       if (!dropdown.contains(e.target as Node)) {
         dropdown.querySelector('[data-dropdown-menu]')?.classList.add('hidden');
         dropdown.querySelector('[data-dropdown-arrow]')?.classList.remove('rotate-180');
+        dropdown.querySelector('[data-dropdown-trigger]')?.setAttribute('aria-expanded', 'false');
       }
     });
   });

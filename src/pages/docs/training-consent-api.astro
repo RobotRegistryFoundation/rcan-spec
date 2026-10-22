@@ -63,12 +63,13 @@ const auditExample = `# Audit log entry — deletion event
   "record_count_deleted": 3,
   "audit_ref": "del_20260329_001"
 }
-# Audit logs MUST be retained for minimum 7 years (EU AI Act Art. 12)`;
+# Retain for as long as the deployment's obligations require. The EU AI Act sets a
+# six-month minimum for automatically generated logs (Art. 19(1), Art. 26(6)).`;
 ---
 
 <DocsLayout
   title="Training Data Governance API"
-  description="Programmatic access to training consent records. Implements RCAN training scope and EU AI Act Article 10 data governance."
+  description="Programmatic access to training consent records. Implements the RCAN training scope and supports EU AI Act Article 10 data governance."
   section="docs"
 >
   <div class="prose max-w-none">
@@ -76,10 +77,10 @@ const auditExample = `# Audit log entry — deletion event
 
     <p>
       The Training Data Governance API provides programmatic access to training consent
-      records collected by RCAN-compliant robots. It implements the <strong>training
-      scope</strong> from the R2RAM hierarchy and fulfills the data governance requirements
-      of <strong>EU AI Act Article 10</strong> and <strong>GDPR Article 17</strong>
-      (right to erasure).
+      records collected by RCAN robots. It implements the <strong>training
+      scope</strong> from the R2RAM hierarchy. It supports the data governance practices
+      that <strong>EU AI Act Article 10</strong> requires for training data, and erasure
+      requests under <strong>GDPR Article 17</strong>; it does not by itself meet either.
     </p>
 
     <!-- BEGIN: ecosystem certification disclaimer (canonical, derived from spec §10) -->
@@ -143,23 +144,25 @@ const auditExample = `# Audit log entry — deletion event
     </ul>
     <CodeWindow code={auditExample} lang="json" />
     <p>
-      Audit logs MUST be retained for a minimum of <strong>7 years</strong> in accordance
-      with EU AI Act Article 12 (record-keeping obligations for high-risk AI systems).
-      Audit records themselves are exempt from the right-to-erasure cascade.
+      Audit logs MUST be retained for at least as long as the deployment's obligations
+      require. For automatically generated logs of high-risk AI systems, the EU AI Act sets
+      a minimum of <strong>six months</strong> (Art. 19(1) for providers, Art. 26(6) for
+      deployers); sector or national law may require longer. Audit records themselves are
+      exempt from the right-to-erasure cascade.
     </p>
 
-    <h2>6. EU AI Act Art. 10 Compliance</h2>
+    <h2>6. EU AI Act Art. 10 Support</h2>
     <p>
-      OpenCastor's Training Data Governance API implements the data governance requirements
-      of <strong>EU AI Act Article 10</strong>, which mandates appropriate data governance
-      and management practices for training, validation, and testing data used by high-risk
-      AI systems. The API ensures that:
+      OpenCastor's Training Data Governance API supports the data governance practices
+      that <strong>EU AI Act Article 10</strong> requires for training, validation, and
+      testing data used by high-risk AI systems. Most of Article 10 (data quality, bias
+      examination, relevance) is outside what an API can do. The API ensures that:
     </p>
     <ul>
       <li>Subjects can exercise their GDPR rights (access, erasure) for training data collected by robots.</li>
       <li>Every consent grant and revocation is traceable to a specific robot RRN and timestamp.</li>
       <li>Deletion cascades prevent orphaned training records from persisting after a consent withdrawal.</li>
-      <li>Audit trails satisfy the Art. 12 record-keeping obligation for the full retention period.</li>
+      <li>Audit trails support Art. 12 record-keeping for the full retention period.</li>
     </ul>
     <p>
       Implementors deploying OpenCastor in EU jurisdictions MUST enable audit logging and

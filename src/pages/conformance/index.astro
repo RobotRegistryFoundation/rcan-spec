@@ -2,10 +2,15 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Conformance Tests" description="RCAN Protocol Conformance Test Suite v1.10 — L1 Core, L2 Safety, L3 AI Accountability, L4 Registry Integration.">
+<BaseLayout title="Conformance Tests" description="RCAN protocol conformance test suite v1.10: L1 Core, L2 Safety, L3 AI Accountability, L4 Registry Integration. Self-asserted; conformance is not certification.">
 
   <h1>Conformance Test Suite <span class="text-[0.55em] text-text-muted font-normal">v1.10</span></h1>
   <p>A conforming RCAN implementation <strong>MUST</strong> pass all tests at the level it claims. Levels are cumulative — an <strong>L3</strong> implementation must also pass <strong>L1</strong> and <strong>L2</strong>.</p>
+
+  <div class="mb-6 px-4 py-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-sm text-text-muted">
+    <p class="mb-2"><strong class="text-text">Conformance is not certification.</strong> Levels are self-asserted, and only L1 has an executable live checker today. There is no certification program; certification requires audit by a qualified third-party body.</p>
+    <p class="m-0">L1 to L4 are protocol conformance levels. They do not test physical limits. The physical assurance levels BE-1 to BE-3 in <a href="https://docs.rcan.dev/spec/appendix-c/">Appendix C</a> (informative, mapped from <a href="https://github.com/RobotRegistryFoundation/bounded-embodiment">Bounded Embodiment</a>) are a separate axis: an L3 robot can be BE-1.</p>
+  </div>
 
   <div class="flex flex-wrap items-center gap-4 mb-6 px-4 py-3 bg-white/[.04] border border-white/10 rounded-lg text-sm">
     <span class="text-text-faint uppercase text-[0.7rem] tracking-widest font-semibold self-center flex-shrink-0">Legend</span>
@@ -22,12 +27,17 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <div style="background:var(--color-bg-alt,#111);border:1px solid rgba(255,255,255,.1);border-radius:.75rem;padding:1.25rem;">
       <div style="font-size:.75rem;font-weight:700;color:var(--color-text-muted,#888);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.35rem;">Level 2</div>
       <div style="font-size:1.1rem;font-weight:700;color:#fff;">L2 Safety</div>
-      <div style="font-size:.85rem;color:var(--color-text-muted,#888);margin-top:.4rem;">Safe-stop · Injection defense · HMAC audit chain · §16.2 Confidence gates</div>
+      <div style="font-size:.85rem;color:var(--color-text-muted,#888);margin-top:.4rem;">Safe-stop · Injection defense · HMAC audit chain · §16.3 Confidence gates</div>
     </div>
     <div style="background:var(--color-bg-alt,#111);border:1px solid rgba(255,255,255,.1);border-radius:.75rem;padding:1.25rem;">
       <div style="font-size:.75rem;font-weight:700;color:var(--color-text-muted,#888);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.35rem;">Level 3</div>
       <div style="font-size:1.1rem;font-weight:700;color:#fff;">L3 AI Accountability</div>
-      <div style="font-size:.85rem;color:var(--color-text-muted,#888);margin-top:.4rem;">§16.1 Model identity · §16.3 HiTL gates · §16.4 Thought log · Offline chain</div>
+      <div style="font-size:.85rem;color:var(--color-text-muted,#888);margin-top:.4rem;">§16.2 Model identity · §16.4 HiTL gates · §16.5 Thought log · Offline chain</div>
+    </div>
+    <div style="background:var(--color-bg-alt,#111);border:1px solid rgba(255,255,255,.1);border-radius:.75rem;padding:1.25rem;">
+      <div style="font-size:.75rem;font-weight:700;color:var(--color-text-muted,#888);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.35rem;">Level 4</div>
+      <div style="font-size:1.1rem;font-weight:700;color:#fff;">L4 Registry Integration</div>
+      <div style="font-size:.85rem;color:var(--color-text-muted,#888);margin-top:.4rem;">REGISTRY_REGISTER + REGISTRY_RESOLVE roundtrip · RRN validation (both formats)</div>
     </div>
   </div>
 
@@ -140,7 +150,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   <!-- ─── L2 SAFETY ─────────────────────────────────────────────── -->
   <section>
     <h2>L2 — Safety</h2>
-    <p>Builds on L1. Covers safety-critical behaviours from §14–§16.2 of the spec.</p>
+    <p>Builds on L1. Covers safety-critical behaviours from §14–§16.3 of the spec.</p>
 
     <table>
       <thead>
@@ -174,13 +184,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <tr>
           <td><code>L2-CONF-001</code></td>
           <td>Confidence=0.3 blocked when gate <code>min_confidence=0.5 on_fail=block</code></td>
-          <td>§16.2 Confidence gate</td>
+          <td>§16.3 Confidence gate</td>
           <td>❌ REJECTED · <code>COMMAND_REJECTED / confidence_below_gate</code></td>
         </tr>
         <tr>
           <td><code>L2-CONF-002</code></td>
           <td>Confidence=0.3 escalates when gate <code>on_fail=escalate</code></td>
-          <td>§16.2 Confidence gate</td>
+          <td>§16.3 Confidence gate</td>
           <td>Not dispatched → placed in HiTL queue</td>
         </tr>
       </tbody>
@@ -202,31 +212,31 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <tr>
           <td><code>L3-AI-001</code></td>
           <td>AI COMMAND audit must include <code>ai.provider</code> <code>ai.model</code> <code>ai.confidence</code></td>
-          <td>§16.1 Model identity</td>
+          <td>§16.2 Model identity</td>
           <td>All three fields present in audit entry</td>
         </tr>
         <tr>
           <td><code>L3-AI-002</code></td>
           <td>Audit missing <code>ai.model</code> is a conformance failure</td>
-          <td>§16.1 Model identity</td>
+          <td>§16.2 Model identity</td>
           <td>❌ Non-conformant · <code>AUDIT_INCOMPLETE_AI_IDENTITY</code></td>
         </tr>
         <tr>
           <td><code>L3-HITL-001</code></td>
           <td>HiTL gate: gated <code>action_type</code> must not dispatch immediately</td>
-          <td>§16.3 HiTL gates</td>
+          <td>§16.4 HiTL gates</td>
           <td>Not dispatched → <code>queued_for_hitl=true</code></td>
         </tr>
         <tr>
           <td><code>L3-HITL-002</code></td>
           <td>AUTHORIZE from OWNER allows dispatch; from GUEST is rejected</td>
-          <td>§16.3 HiTL authorization</td>
+          <td>§16.4 HiTL authorization</td>
           <td>OWNER → dispatch ✅ · GUEST → HTTP 403 ❌</td>
         </tr>
         <tr>
           <td><code>L3-THOUGHT-001</code></td>
           <td>Thought log: <code>reasoning</code> absent without <code>config</code> scope</td>
-          <td>§16.4 Thought log</td>
+          <td>§16.5 Thought log</td>
           <td>Response contains <code>confidence</code>, excludes <code>reasoning</code></td>
         </tr>
         <tr>
@@ -357,7 +367,7 @@ L4 REGISTRY   ✅ RCAN Registry-Integrated v1.10</code></pre>
   <hr />
 
   <p>
-    <a href="/implementations/">→ Reference Implementations</a> &nbsp;·&nbsp;
+    <a href="/implementations/">→ Known Implementations</a> &nbsp;·&nbsp;
     <a href="https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/scripts/conformance/">View test files on GitHub</a>
   </p>
 

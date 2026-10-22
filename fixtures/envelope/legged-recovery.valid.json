@@ -1,0 +1,20 @@
+{
+  "envelope_version": "0.1",
+  "machine": { "id": "legged-bench-01", "class": "legged", "mass_kg": 3.2 },
+  "level": "BE-1",
+  "workspace": { "frame": "map", "keep_in": [[0, 0], [3, 0], [3, 2], [0, 2]], "keep_out": [] },
+  "motion": { "max_speed_mps": 0.3, "max_turn_radps": 1.0 },
+  "proximity": [
+    { "when": { "human_within_m": 0.8 }, "max_speed_mps": 0.1 },
+    { "when": { "human_within_m": 0.3 }, "action": "stop" }
+  ],
+  "sensing": { "max_state_age_ms": 100 },
+  "stop": { "category": 1, "max_time_ms": 800, "max_distance_m": 0.1, "safe_state": "controlled_crouch_then_power_off" },
+  "recovery": {
+    "on_reject": "slow_down",
+    "repeated_stops": { "escalate_after_count": 3, "count_window_s": 60, "escalate_after_s": 120 },
+    "estop_reset": "manual"
+  },
+  "heartbeat": { "model_timeout_ms": 200, "gate_timeout_ms": 50, "on_loss": "stop" },
+  "authority": { "required_for": ["motion"], "resolver": "external" }
+}

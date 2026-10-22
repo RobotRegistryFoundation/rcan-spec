@@ -73,3 +73,22 @@
 /spec/firmware/               https://docs.rcan.dev/spec/firmware/         301
 /spec/sbom                    https://docs.rcan.dev/spec/sbom/             301
 /spec/sbom/                   https://docs.rcan.dev/spec/sbom/             301
+/spec/appendix-c              https://docs.rcan.dev/spec/appendix-c/       301
+/spec/appendix-c/             https://docs.rcan.dev/spec/appendix-c/       301
+
+# Old links that used to fall through to the home page
+/spec/versioning              https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/VERSIONING.md  301
+/spec/versioning/             https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/VERSIONING.md  301
+/security                     https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/SECURITY.md    301
+/security/                    https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/SECURITY.md    301
+/compliance/eu-ai-act         https://docs.rcan.dev/compliance/eu-ai-act/  301
+/compliance/eu-ai-act/        https://docs.rcan.dev/compliance/eu-ai-act/  301
+/registry/submit              https://robotregistryfoundation.org/registry/submit/  301
+/registry/submit/             https://robotregistryfoundation.org/registry/submit/  301
+/registry/register            https://robotregistryfoundation.org/registry/submit/  301
+/registry/register/           https://robotregistryfoundation.org/registry/submit/  301
+/sitemap.xml                  /sitemap-index.xml                           301
+
+# Short link for people arriving from the Bounded Embodiment talk
+/bounded-embodiment           /#bounded-embodiment                         302
+/bounded-embodiment/          /#bounded-embodiment                         302

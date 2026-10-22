@@ -18,7 +18,7 @@ const tiers = [
       'QR code per robot',
     ],
     cta: 'Register for Free',
-    ctaHref: '/registry/submit/',
+    ctaHref: 'https://robotregistryfoundation.org/registry/submit/',
   },
   {
     name: 'Maker',
@@ -68,7 +68,7 @@ const tiers = [
       'Manufacturer-verified tier (✅)',
       'Signed attestation review',
       'Live RURI endpoint monitoring',
-      'EU AI Act Art. 49 registration support',
+      'Help preparing EU database entries (Art. 49); registering is the provider\'s step',
       'SLA + custom API limits',
     ],
     cta: 'Coming Soon',
@@ -87,7 +87,7 @@ const faqs = [
   },
   {
     q: 'What is manufacturer verification?',
-    a: 'Verification tiers (⬜ community → 🟡 verified → 🔵 manufacturer-claimed → ✅ manufacturer-verified) indicate how strongly a robot\'s origin has been validated. All registered robots start at Community tier (⬜). Manufacturer-claimed (🔵) uses DNS TXT records to prove domain ownership. Manufacturer-verified (✅) involves a signed attestation review by the Registry Foundation — the gold standard for commercial and regulated deployments.'
+    a: 'Verification tiers record who vouched for a robot\'s record and with what evidence; none of them is a safety certification. All registered robots start at Community (⬜). Today the only upgrade is Community to Verified (🟡), requested by the owner with an evidence URL; the registry does not review the evidence. Certified and accredited are not available by self-service. The DNS TXT ownership check (🔵) and the signed attestation review (✅) listed for the paid tiers are planned, not built.'
   },
 ];
 ---
@@ -130,12 +130,12 @@ const faqs = [
             <div class="mb-6">
               <div class="flex items-center gap-2 mb-2">
                 <span class="text-2xl">{tier.badge}</span>
-                <h3 class={`text-xl font-bold ${tier.comingSoon ? 'text-text-muted' : 'text-text'}`}>{tier.name}</h3>
+                <h2 class={`text-xl font-bold ${tier.comingSoon ? 'text-text-muted' : 'text-text'}`}>{tier.name}</h2>
               </div>
               {tier.subtitle && <p class="text-xs text-text-muted mb-3">{tier.subtitle}</p>}
               <div class="flex items-baseline gap-1">
                 {tier.comingSoon
-                  ? <span class="text-sm text-text-muted italic">Pricing TBD</span>
+                  ? <span class="text-sm text-text-muted italic">Not yet priced</span>
                   : <><span class="text-4xl font-bold text-accent">{tier.price}</span><span class="text-text-muted text-sm">{tier.period}</span></>
                 }
               </div>
@@ -161,7 +161,7 @@ const faqs = [
       </div>
 
       <!-- Provisional pricing note -->
-      <p class="mt-10 text-center text-sm text-text-muted/60 max-w-2xl mx-auto">
+      <p class="mt-10 text-center text-sm text-text-muted max-w-2xl mx-auto">
         The Robot Registry Foundation (proposed governance body) will set final pricing when formally established. Current pricing is provisional.
       </p>
     </div>
@@ -170,13 +170,16 @@ const faqs = [
   <!-- Comparison table summary -->
   <div class="py-10 border-t border-white/5">
     <div class="max-w-4xl mx-auto px-6">
-      <h2 class="text-2xl font-bold text-center mb-8">Verification Tiers Explained</h2>
+      <h2 class="text-2xl font-bold text-center mb-4">Verification Tiers Explained</h2>
+      <p class="text-sm text-text-muted text-center max-w-2xl mx-auto mb-8">
+        Tiers record who vouched for a record and with what evidence. None of them is a safety certification.
+      </p>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { badge: '⬜', label: 'Community', desc: 'Self-reported via public registry form. All robots start here.' },
-          { badge: '🟡', label: 'Verified', desc: 'Identity confirmed via registry verification process. Maker plan and above.' },
-          { badge: '🔵', label: 'Mfr-Claimed', desc: 'DNS TXT record proves domain ownership. Manufacturer plan.' },
-          { badge: '✅', label: 'Mfr-Verified', desc: 'Signed attestation review by Registry Foundation. Enterprise.' },
+          { badge: '🟡', label: 'Verified', desc: 'Today: requested by the owner with an evidence URL; the registry does not review it. Maker plan and above.' },
+          { badge: '🔵', label: 'Mfr-Claimed', desc: 'Planned, not built: a DNS TXT record check of domain ownership. Manufacturer plan.' },
+          { badge: '✅', label: 'Mfr-Verified', desc: 'Planned, not built: a signed attestation review. Enterprise.' },
         ].map(t => (
           <div class="bg-bg-alt/30 border border-white/5 rounded-xl p-4 text-center">
             <div class="text-3xl mb-2">{t.badge}</div>
@@ -208,7 +211,7 @@ const faqs = [
     <h2 class="text-2xl font-bold mb-4">Ready to register your robot?</h2>
     <p class="text-text-muted mb-8 max-w-xl mx-auto">Start with the Free tier — no credit card required. Upgrade when you need manufacturer verification or higher API limits.</p>
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-      <a href="/registry/submit/" class="px-8 py-4 bg-accent text-bg font-bold text-lg rounded-full hover:bg-accent-hover transform hover:scale-105 transition-all duration-200 shadow-[0_0_30px_-5px_var(--color-accent)]">
+      <a href="https://robotregistryfoundation.org/registry/submit/" class="px-8 py-4 bg-accent text-bg font-bold text-lg rounded-full hover:bg-accent-hover transform hover:scale-105 transition-all duration-200 shadow-[0_0_30px_-5px_var(--color-accent)]">
         Register for Free
       </a>
       <a href="/registry/" class="px-8 py-4 bg-white/5 border border-white/10 text-text font-semibold text-lg rounded-full hover:bg-white/10 hover:border-white/20 transition-all duration-200">

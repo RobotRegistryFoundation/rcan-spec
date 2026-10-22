@@ -51,17 +51,25 @@ jobs:
         with:
           node-version: '20'
 
+      # Install into an empty directory: run inside this repo, npm resolves against the
+      # repo's own package.json and lockfile and crashes, which reported a false failure.
       - name: Install rcan-ts
-        run: npm install rcan-ts
+        run: |
+          mkdir -p "$RUNNER_TEMP/smoke-ts"
+          cd "$RUNNER_TEMP/smoke-ts"
+          npm init -y > /dev/null
+          npm install rcan-ts
 
       - name: Get version
         id: info
+        working-directory: ${{ runner.temp }}/smoke-ts
         run: |
           VERSION=$(npm list rcan-ts --depth=0 2>/dev/null | grep rcan-ts | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Validate SDK exports (ESM)
         id: test
+        working-directory: ${{ runner.temp }}/smoke-ts
         run: |
           node --input-type=module << 'ESEOF'
           import * as rcan from 'rcan-ts';
@@ -89,7 +97,7 @@ jobs:
           cat > public/sdk-status.json << JSONEOF
           {
             "updated": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "spec_version": "3.0",
+            "spec_version": "3.2",
             "sdks": {
               "rcan-py": {
                 "version": "${{ needs.smoke-py.outputs.version }}",

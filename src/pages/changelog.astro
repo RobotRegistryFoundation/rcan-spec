@@ -8,10 +8,13 @@ const versions = [
     tag: 'Draft',
     tagColor: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
     changes: [
-      { type: 'added', text: 'Appendix C Physical Assurance Profile (informative): the model proposes, a bounded layer disposes. Prior art: Simplex architecture (Sha, 2001) and run-time assurance (ASTM F3269); the contribution is a vendor-neutral test method. Requirements R1–R5 mapped onto existing sections; assurance levels A1–A3, independent of conformance levels L1–L4 (an L3 robot can be A1). Conformance is not certification.' },
+      { type: 'added', text: 'Appendix C Physical Assurance Profile (informative): the model proposes, a bounded layer disposes. Prior art: Simplex architecture (Sha, 2001) and run-time assurance (ASTM F3269); the requirements and test method are defined vendor-neutrally in Bounded Embodiment, and this appendix maps them onto RCAN. Requirements R1–R5 mapped onto existing sections; assurance levels BE-1 to BE-3, independent of conformance levels L1–L4 (an L3 robot can be BE-1). Conformance is not certification.' },
       { type: 'added', text: 'Optional envelope block in rcan-config and schemas/envelope.json (workspace, motion, force, proximity, sensing, stop, heartbeat; heartbeat loss always stops).' },
+      { type: 'updated', text: 'Physical assurance levels renamed A1–A3 → BE-1, BE-2, BE-3 (Bounded Embodiment): "A3" is the Association for Advancing Automation, which publishes ANSI/A3 R15.06 and runs the US delegation to ISO/TC 299.' },
       { type: 'added', text: 'AUTHORIZE (§16.4) is MessageType 45 in the canonical table. Its schema previously carried 9, which is DISCOVER.' },
-      { type: 'added', text: 'Optional gate_decision audit record (allow, clamp, reject, stop), hash-chained, with a reference verifier and EV-01..EV-09 test cases. Tests that need an implementation or physical instruments are placeholders, not results.' },
+      { type: 'added', text: 'Optional gate_decision audit record (allow, clamp, reject, stop), hash-chained, with a reference verifier and EV-01..EV-10 test cases. Tests that need an implementation or physical instruments are placeholders, not results.' },
+      { type: 'updated', text: 'Appendix C aligned with the Bounded Embodiment talk of 16 October 2026: requirement names and verification wording, the standards it complements (ISO 10218:2025, ISO 13482, ISO/CD 25785-1, ISO 13849-1, IEC 61508, IEC 60204-1, ISO/IEC TR 5469, IEEE 7009, ITU-T F.748.44), architecture, recovery after the gate says no, declared safe state per machine, what passing proves and does not, and the EV-10 liveness test. Informative; no new conformance obligation.' },
+      { type: 'added', text: 'Optional, additive schema fields: envelope stop.safe_state and recovery (on_reject, repeated_stops, estop_reset); gate_decision stop_kind and reason_returned. Existing envelopes and records still validate.' },
     ],
   },
   {
@@ -171,7 +174,7 @@ const versions = [
     version: 'v1.0',
     date: '2025-01-20',
     tag: 'Initial',
-    tagColor: 'bg-white/5 text-text-muted/60 border-white/5',
+    tagColor: 'bg-white/5 text-text-muted border-white/5',
     changes: [
       { type: 'feat', text: 'RobotURI — hierarchical robot addressing (rcan://<registry>/<org>/<model>/<version>/<unit>)' },
       { type: 'feat', text: 'RCANMessage — structured command envelope with params + target URI' },
@@ -190,7 +193,7 @@ const typeStyle: Record<string, string> = {
   fix:      'bg-amber-500/10 text-amber-400 border-amber-500/20',
   breaking: 'bg-red-500/10 text-red-400 border-red-500/20',
   updated:  'bg-blue-500/10 text-blue-400 border-blue-500/20',
-  chore:    'bg-white/5 text-text-muted/60 border-white/10',
+  chore:    'bg-white/5 text-text-muted border-white/10',
 };
 ---
 
@@ -205,7 +208,7 @@ const typeStyle: Record<string, string> = {
       </div>
       <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Changelog</h1>
       <p class="text-xl text-text-muted">
-        Every meaningful change to the RCAN specification and official SDKs.
+        Every meaningful change to the RCAN specification and the reference SDKs.
       </p>
     </div>
 
@@ -227,7 +230,7 @@ const typeStyle: Record<string, string> = {
               <div class="flex flex-wrap items-center gap-3 mb-4">
                 <h2 class="text-2xl font-bold font-mono text-text">{v.version}</h2>
                 <span class={`text-xs px-2.5 py-0.5 rounded-full border font-medium ${v.tagColor}`}>{v.tag}</span>
-                <span class="text-sm text-text-muted/50 ml-auto font-mono">{v.date}</span>
+                <span class="text-sm text-text-muted ml-auto font-mono">{v.date}</span>
               </div>
 
               <ul class="space-y-2.5">
@@ -257,7 +260,7 @@ const typeStyle: Record<string, string> = {
 
     <!-- Footer note -->
     <div class="mt-16 text-center">
-      <p class="text-sm text-text-muted/50">
+      <p class="text-sm text-text-muted">
         The RCAN spec is versioned independently of the SDKs.<br />
         SDK-specific changelogs live in their respective GitHub repositories.
       </p>
@@ -266,7 +269,7 @@ const typeStyle: Record<string, string> = {
         <a href="https://github.com/RobotRegistryFoundation/rcan-ts/releases" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">rcan-ts releases →</a>
       </div>
       <div class="flex items-center justify-center gap-6 mt-6 pt-6 border-t border-white/5 text-sm">
-        <span class="text-text-muted/40 text-xs uppercase tracking-wider font-mono">Ecosystem</span>
+        <span class="text-text-muted text-xs uppercase tracking-wider font-mono">Ecosystem</span>
         <a href="https://opencastor.com" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">OpenCastor →</a>
         <a href="https://robotregistryfoundation.org" target="_blank" rel="noopener noreferrer" class="text-text-muted hover:text-accent transition-colors">Robot Registry Foundation →</a>
       </div>

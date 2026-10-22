@@ -4,35 +4,81 @@ import HeroSection from '../components/HeroSection.astro';
 import FeatureGrid from '../components/FeatureGrid.astro';
 import CodeWindow from '../components/CodeWindow.astro';
 import { getCollection } from 'astro:content';
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { join } from 'node:path';
+import sdkStatusData from '../../public/sdk-status.json';
 
 const robots = await getCollection('robots');
 const robotCount = robots.length;
 
-// Load SDK status badges
-let sdkStatus: Record<string, { status: string; updated: string }> = {};
-try {
-  const statusPath = join(fileURLToPath(import.meta.url), '../../../../public/sdk-status.json');
-  sdkStatus = JSON.parse(readFileSync(statusPath, 'utf-8'));
-} catch {
-  // file missing — show neutral status
-}
+// The counter shows this site's own listing (src/content/robots/). Say what is in it.
+const MAINTAINER_HANDLE = 'craigm26';
+const robotNoun = robotCount === 1 ? 'robot' : 'robots';
+const onlyMaintainerRobots = robotCount > 0 && robots.every((r) => r.data.submitted_by === MAINTAINER_HANDLE);
+const robotLabel = onlyMaintainerRobots
+  ? `${robotNoun} listed here: the maintainer's own test ${robotNoun}`
+  : `${robotNoun} listed here`;
 
-function sdkBadge(sdk: string): { label: string; color: string; bg: string; border: string } {
-  const entry = sdkStatus[sdk];
-  if (!entry) return { label: 'status unknown', color: 'text-text-muted/60', bg: 'bg-white/5', border: 'border-white/10' };
-  if (entry.status === 'passing') return { label: '✓ passing', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' };
-  return { label: '✗ failing', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' };
+// SDK status is written by .github/workflows/sdk-smoke.yml, which installs each
+// published SDK and checks that it loads. The file nests entries under `sdks`
+// and uses "pass"/"fail". An SDK with no entry gets no badge.
+type SdkEntry = { version?: string; status?: string };
+const sdkStatus = sdkStatusData as { updated?: string; sdks?: Record<string, SdkEntry> };
+const sdks: Record<string, SdkEntry> = sdkStatus.sdks ?? {};
+const sdkUpdated = sdkStatus.updated ? sdkStatus.updated.slice(0, 10) : null;
+
+function sdkBadge(sdk: string): { label: string; color: string; bg: string; border: string } | null {
+  const status = sdks[sdk]?.status;
+  if (status === 'pass' || status === 'success') return { label: '✓ smoke test passing', color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' };
+  if (status === 'fail' || status === 'failure') return { label: '✗ smoke test failing', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20' };
+  return null;
 }
 
 const pyBadge = sdkBadge('rcan-py');
 const tsBadge = sdkBadge('rcan-ts');
+const pyVersion = sdks['rcan-py']?.version || null;
+const tsVersion = sdks['rcan-ts']?.version || null;
 ---
 
-<BaseLayout title="RCAN Protocol" description="RCAN - Robot Communication and Addressing Network. An open protocol for addressing, discovering, and authenticating robotic agents.">
+<BaseLayout title="RCAN: Robot Communication and Addressing Network" description="RCAN (Robot Communication and Addressing Network) is an open protocol for robot identity, signed commands and audit records, and one open implementation of Bounded Embodiment.">
   <HeroSection />
+
+  <!-- Bounded Embodiment: what RCAN is relative to the vendor-neutral method -->
+  <section id="bounded-embodiment" aria-labelledby="be-heading" class="max-w-5xl mx-auto py-16 border-b border-white/5 px-6">
+    <div class="bg-bg-alt/60 border border-accent/20 rounded-2xl p-6 md:p-8">
+      <p class="text-sm font-mono uppercase tracking-widest text-accent mb-3">Bounded Embodiment</p>
+      <h2 id="be-heading" class="text-2xl md:text-3xl font-bold mb-4">RCAN is one open implementation of Bounded Embodiment</h2>
+      <p class="text-text-muted leading-relaxed mb-4">
+        Bounded Embodiment is one testable property: a learned model's commands cannot push the machine outside its declared limits.
+        The model proposes. A bounded layer disposes. Its five requirements (R1 to R5), test plan (EV-01 to EV-10) and assurance
+        levels (BE-1 to BE-3) are defined vendor-neutrally, not by RCAN. RCAN is one open implementation of these ideas; the
+        property does not depend on it, and any implementation can be tested the same way.
+      </p>
+      <p class="text-text-muted leading-relaxed mb-4">
+        BE-1 to BE-3 measure physical assurance. RCAN's L1 to L4 measure protocol conformance. They are separate axes: an L3 robot can be BE-1.
+        RCAN has one maintainer and no third-party verification. Conformance is not certification.
+      </p>
+      <p class="text-sm text-text-muted leading-relaxed mb-6">
+        Bounded Embodiment is the subject of a remote talk on 16 October 2026 in Session 1 (“Core Technologies for Embodied AI”) of the
+        ITU Workshop on “Embodied AI for Multimedia Technologies”, Hangzhou, China, held with ITU-T FG-EAI. A presentation, not an endorsement.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href="https://github.com/RobotRegistryFoundation/bounded-embodiment" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-accent/10 border border-accent/20 text-accent text-sm font-medium rounded-lg hover:bg-accent/20 transition-colors">The vendor-neutral method ↗</a>
+        <a href="https://craigmerry.com/bounded-embodiment/" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-white/5 border border-white/10 text-text text-sm font-medium rounded-lg hover:bg-white/10 transition-colors">The talk ↗</a>
+        <a href="https://docs.rcan.dev/spec/appendix-c/" class="px-4 py-2 bg-white/5 border border-white/10 text-text text-sm font-medium rounded-lg hover:bg-white/10 transition-colors">RCAN's mapping: Appendix C</a>
+        <a href="/governance/" class="px-4 py-2 bg-white/5 border border-white/10 text-text text-sm font-medium rounded-lg hover:bg-white/10 transition-colors">Governance and status</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Start here: for people who want to use RCAN -->
+  <section aria-labelledby="start-heading" class="max-w-5xl mx-auto py-16 border-b border-white/5 px-6">
+    <h2 id="start-heading" class="text-2xl md:text-3xl font-bold mb-6">Using RCAN</h2>
+    <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <li><a href="/quickstart/" class="block h-full bg-bg-alt/60 border border-white/10 rounded-xl p-5 hover:border-accent/40 transition-colors"><span class="block font-semibold text-text mb-1">Quickstart</span><span class="block text-sm text-text-muted">Install an SDK, build a robot URI, send a first message.</span></a></li>
+      <li><a href="https://docs.rcan.dev/spec/" class="block h-full bg-bg-alt/60 border border-white/10 rounded-xl p-5 hover:border-accent/40 transition-colors"><span class="block font-semibold text-text mb-1">Specification</span><span class="block text-sm text-text-muted">The normative text, section by section, on docs.rcan.dev.</span></a></li>
+      <li><a href="/compatibility/" class="block h-full bg-bg-alt/60 border border-white/10 rounded-xl p-5 hover:border-accent/40 transition-colors"><span class="block font-semibold text-text mb-1">SDKs</span><span class="block text-sm text-text-muted">rcan-py and rcan-ts, and which spec version each implements.</span></a></li>
+      <li><a href="/conformance/" class="block h-full bg-bg-alt/60 border border-white/10 rounded-xl p-5 hover:border-accent/40 transition-colors"><span class="block font-semibold text-text mb-1">Conformance</span><span class="block text-sm text-text-muted">L1 to L4 test tables. Self-asserted; not certification.</span></a></li>
+    </ul>
+  </section>
   
   <!-- Two Things Explainer -->
   <section class="max-w-5xl mx-auto py-24 border-b border-white/5 px-6">
@@ -40,8 +86,8 @@ const tsBadge = sdkBadge('rcan-ts');
       <p class="text-sm font-mono uppercase tracking-widest text-accent mb-4">Two distinct things</p>
       <h2 class="text-3xl md:text-4xl font-bold mb-4">The Protocol and the Registry</h2>
       <p class="text-xl text-text-muted max-w-2xl mx-auto">
-        The internet has DNS and ICANN. IoT has Matter. <strong class="text-accent">Robotics has nothing.</strong><br/>
-        RCAN proposes both — and they are separate.
+        The internet has DNS and ICANN. IoT has Matter. Robotics has no shared equivalent yet.<br/>
+        RCAN proposes both, and keeps them separate.
       </p>
     </div>
 
@@ -56,7 +102,7 @@ const tsBadge = sdkBadge('rcan-ts');
           </div>
         </div>
         <p class="text-text-muted text-sm leading-relaxed mb-4">
-          A set of open standards — like TCP/IP, but for robots — that define how robots identify themselves, sign actions, authenticate users, and guarantee safe behavior even when networks fail.
+          A set of open specifications for how robots identify themselves, sign actions and authenticate users, and for how a robot must make a safe stop, within its configured time budget, when it loses its network.
         </p>
         <ul class="space-y-2 text-sm text-text-muted mb-6">
           <li class="flex gap-2"><span class="text-accent">→</span> Message format + signing (Ed25519)</li>
@@ -65,7 +111,7 @@ const tsBadge = sdkBadge('rcan-ts');
           <li class="flex gap-2"><span class="text-accent">→</span> Swarm safety + peer verification</li>
           <li class="flex gap-2"><span class="text-accent">→</span> Offline-resilient: local safety always wins</li>
         </ul>
-        <p class="text-xs text-text-muted/70 mb-4">CC BY 4.0 — implement it in anything. No registry required.</p>
+        <p class="text-xs text-text-muted mb-4">CC BY 4.0 — implement it in anything. No registry required.</p>
         <a href="https://docs.rcan.dev/spec/" class="inline-flex items-center gap-1 text-accent text-sm font-medium hover:underline">Read the spec →</a>
       </div>
 
@@ -79,16 +125,16 @@ const tsBadge = sdkBadge('rcan-ts');
           </div>
         </div>
         <p class="text-text-muted text-sm leading-relaxed mb-4">
-          A global public directory of robots — like a domain registrar, but for physical machines. Any robot, from any manufacturer, using any runtime, can register and get a globally unique Robot Registration Number (RRN).
+          A public directory of robots, like a domain registrar for physical machines. Any robot, from any manufacturer, using any runtime, can register and get a globally unique Robot Registration Number (RRN).
         </p>
         <ul class="space-y-2 text-sm text-text-muted mb-6">
-          <li class="flex gap-2"><span class="text-white/40">→</span> Assigns globally unique RRNs</li>
-          <li class="flex gap-2"><span class="text-white/40">→</span> Tracks provenance, ownership, manufacturer</li>
-          <li class="flex gap-2"><span class="text-white/40">→</span> Machine-readable records via REST API</li>
-          <li class="flex gap-2"><span class="text-white/40">→</span> Verification tiers: community → manufacturer → certified</li>
-          <li class="flex gap-2"><span class="text-white/40">→</span> Federated — multiple registries can cross-verify</li>
+          <li class="flex gap-2"><span class="text-white/60">→</span> Assigns globally unique RRNs</li>
+          <li class="flex gap-2"><span class="text-white/60">→</span> Tracks provenance, ownership, manufacturer</li>
+          <li class="flex gap-2"><span class="text-white/60">→</span> Machine-readable records via REST API</li>
+          <li class="flex gap-2"><span class="text-white/60">→</span> Verification tiers record who vouched for a record and with what evidence; none is a safety certification</li>
+          <li class="flex gap-2"><span class="text-white/60">→</span> Federated — multiple registries can cross-verify</li>
         </ul>
-        <p class="text-xs text-text-muted/70 mb-4">Free to register. No RCAN implementation required to list a robot.</p>
+        <p class="text-xs text-text-muted mb-4">Free to register. No RCAN implementation required to list a robot.</p>
         <a href="https://robotregistryfoundation.org" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-text-muted text-sm font-medium hover:text-white hover:underline">Visit robotregistryfoundation.org →</a>
       </div>
     </div>
@@ -96,7 +142,7 @@ const tsBadge = sdkBadge('rcan-ts');
     <!-- Relationship explainer -->
     <div class="mt-8 bg-white/3 border border-white/8 rounded-2xl p-6 text-center">
       <p class="text-text-muted text-sm leading-relaxed max-w-2xl mx-auto">
-        <strong class="text-white">How they connect:</strong> The protocol defines the RRN format and how robots reference their registry record in signed messages. The registry assigns and stores those records. You can run RCAN on a private network without registering publicly. You can register a robot without implementing RCAN. Both together give you a globally identifiable, auditable, standards-compliant robot.
+        <strong class="text-white">How they connect:</strong> The protocol defines the RRN format and how robots reference their registry record in signed messages. The registry assigns and stores those records. You can run RCAN on a private network without registering publicly. You can register a robot without implementing RCAN. Both together give you a robot with a global identity and an auditable record.
       </p>
     </div>
   </section>
@@ -112,7 +158,7 @@ const tsBadge = sdkBadge('rcan-ts');
     <ol class="space-y-3 text-sm text-text-muted max-w-3xl mx-auto">
       <li><strong class="text-white">Layer 1 — Declaration.</strong> ROBOT.md, robot-md CLI, robot-md-mcp (Advisory).</li>
       <li><strong class="text-white">Layer 2 — Agent runtime.</strong> Claude Code, Codex, Gemini, any MCP host.</li>
-      <li><strong class="text-white">Layer 3 — Gateway / Enforcement.</strong> robot-md-gateway. Mandatory exclusive path.</li>
+      <li><strong class="text-white">Layer 3 — Gateway / Enforcement.</strong> robot-md-gateway, designed to be the only path from an agent to the actuators. That holds only when the deployment enforces it (the gateway's service account owns the device); by default another local process can still reach the servos.</li>
       <li><strong class="text-white">Layer 4 — Robot-facing runtime.</strong> OpenCastor and other RCAN runtimes.</li>
       <li><strong class="text-white">Layer 5 — Protocol.</strong> RCAN spec + SDKs. <em>This site.</em></li>
       <li><strong class="text-white">Layer 6 — Registry.</strong> Robot Registry Foundation.</li>
@@ -132,20 +178,21 @@ const tsBadge = sdkBadge('rcan-ts');
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center mb-12">
         <p class="text-sm font-mono uppercase tracking-widest text-text-muted mb-3">The Registry</p>
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">Every robot deserves a permanent address.</h2>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">A permanent address for each robot</h2>
         <p class="text-xl text-text-muted max-w-3xl mx-auto">
-          The Robot Registry is a global public directory — open to any robot, any manufacturer, any runtime. Register once. Get a permanent RRN. Your robot is globally addressable and verifiable forever.
+          The Robot Registry is a public directory, open to any robot, manufacturer or runtime. Register once and get a permanent RRN that anyone can resolve.
         </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6 text-center hover:border-accent/30 transition-all">
           <div class="text-4xl font-bold text-accent mb-2">{robotCount > 0 ? robotCount : 'Open'}</div>
-          <div class="text-sm text-text-muted">{robotCount > 0 ? 'Robots registered' : 'Registration now open'}</div>
+          <div class="text-sm text-text-muted">{robotCount > 0 ? robotLabel : 'Registration now open'}</div>
+          <div class="text-xs text-text-muted mt-2">The registry is in early testing.</div>
         </div>
         <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6 text-center hover:border-accent/30 transition-all">
           <div class="text-4xl font-bold text-accent mb-2">4</div>
-          <div class="text-sm text-text-muted">Verification tiers — community to certified</div>
+          <div class="text-sm text-text-muted">Verification tiers, recording who vouched for a record and with what evidence. None is a safety certification.</div>
         </div>
         <div class="bg-bg-alt/50 border border-white/5 rounded-2xl p-6 text-center hover:border-accent/30 transition-all">
           <div class="text-4xl font-bold text-accent mb-2">Federated</div>
@@ -172,7 +219,7 @@ const tsBadge = sdkBadge('rcan-ts');
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center mb-12">
         <h2 class="text-3xl md:text-4xl font-bold mb-4">Who Is This For?</h2>
-        <p class="text-xl text-text-muted">RCAN serves everyone in the robotics ecosystem.</p>
+        <p class="text-xl text-text-muted">Three groups it is written for.</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -180,7 +227,7 @@ const tsBadge = sdkBadge('rcan-ts');
           <div class="w-12 h-12 mb-6 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-2xl">🏭</div>
           <h3 class="text-xl font-bold mb-3 group-hover:text-accent transition-colors">Robot Manufacturers</h3>
           <p class="text-text-muted text-sm leading-relaxed">
-            Get globally unique RRNs for every unit. Earn manufacturer verification badges, satisfy EU AI Act Art. 49 registration requirements, and give your customers confidence through a public, auditable record.
+            Get globally unique RRNs for every unit, display a registry badge, and give your customers a public, auditable record.
           </p>
         </div>
 
@@ -188,7 +235,7 @@ const tsBadge = sdkBadge('rcan-ts');
           <div class="w-12 h-12 mb-6 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-2xl">🔒</div>
           <h3 class="text-xl font-bold mb-3 group-hover:text-accent transition-colors">Safety Engineers</h3>
           <p class="text-text-muted text-sm leading-relaxed">
-            Use the L1/L2/L3 conformance test suite to validate implementations. Leverage NIST AI RMF and ISO 10218-1:2025 alignment docs to meet industry and regulatory standards.
+            Use the L1–L4 conformance test tables to check implementations; only L1 has an executable checker today. The NIST AI RMF and ISO 10218-1:2025 alignment docs map RCAN features to those frameworks; they do not show that a system meets them.
           </p>
         </div>
 
@@ -196,7 +243,7 @@ const tsBadge = sdkBadge('rcan-ts');
           <div class="w-12 h-12 mb-6 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-2xl">🏛️</div>
           <h3 class="text-xl font-bold mb-3 group-hover:text-accent transition-colors">Governments & Regulators</h3>
           <p class="text-text-muted text-sm leading-relaxed">
-            Audit an open specification under independent governance, with a built-in AI accountability layer and signed audit chain. Productized runtimes (e.g., OpenCastor, robot-md) ship as Layer 4 with SBOM and conformance reports — useful inputs for regulatory and procurement review.
+            Review an open specification with a built-in AI accountability layer and signed audit chain. It has one maintainer and no independent governance yet. Productized runtimes (e.g., OpenCastor, robot-md) ship as Layer 4 with SBOM and conformance reports — useful inputs for regulatory and procurement review.
           </p>
         </div>
       </div>
@@ -212,18 +259,18 @@ const tsBadge = sdkBadge('rcan-ts');
       </div>
       <div class="space-y-6 text-text-muted leading-relaxed">
         <p>
-          A safety layer that wraps a model's output sits outside the execution boundary — it observes what the model generates but cannot constrain what it attempts or when dispatch occurs. For text applications, this trade-off is acceptable. For physical robots, the failure mode is different: a command that clears a post-generation safety filter but targets the wrong actuator causes physical harm before any check can intervene. Protocol-level enforcement closes this gap. RCAN's confidence thresholds and HiTL gates are structural constraints on the message transport — not filters — enforced before any command reaches an actuator.
+          A safety layer that wraps a model's output sits outside the execution boundary — it observes what the model generates but cannot constrain what it attempts or when dispatch occurs. For text applications, this trade-off is acceptable. For physical robots, the failure mode is different: a command that clears a post-generation safety filter but targets the wrong actuator causes physical harm before any check can intervene. The way to close this gap is enforcement below the model, in the runtime. RCAN's confidence thresholds and HiTL gates are written as constraints the runtime enforces before a command it dispatches reaches an actuator, not as filters the model can reason around. They bound what the runtime sends; physical limits such as workspace and speed are a separate layer (Appendix C).
         </p>
         <p>
-          Auditability is similarly structural in RCAN. The ML-DSA-65 signed audit chain records every command with principal identity, model confidence, thought provenance, and delegation path at dispatch time — not reconstructed afterward. Each record is cryptographically chained to the previous; any modification breaks chain verification. This is the record-keeping architecture EU AI Act Article 12 requires, built into the protocol layer rather than added as a compliance reporting feature.
+          Auditability is similarly structural in RCAN. The audit chain records every command with principal identity, model confidence, thought provenance, and delegation path at dispatch time — not reconstructed afterward. Each record carries the hash of the one before it, so an edit to an earlier record shows up when the chain is verified. It supports the automatic event recording that EU AI Act Article 12 requires of high-risk systems, and it is built into the protocol layer rather than added as a reporting feature.
         </p>
         <p>
-          RCAN is an open specification under CC BY 4.0. Every claim in this documentation can be verified against the <a href="https://docs.rcan.dev/spec/" class="text-accent hover:underline">spec</a>, the <a href="https://github.com/craigm26/opencastor-ops/blob/master/PEER_RUNTIMES.md" rel="noopener noreferrer" target="_blank" class="text-accent hover:underline">peer runtimes</a> (OpenCastor and robot-md — first-class implementations of a shared <code>ROBOT.md</code>), and the <a href="/conformance/" class="text-accent hover:underline">conformance test suite</a>. Conformance levels L1–L4 define what "compliant" means concretely — not as a self-certification, but as a pass/fail test suite any implementation can run.
+          RCAN's specification text is licensed CC BY 4.0, and the reference SDKs (rcan-py, rcan-ts) are MIT. RCAN has one maintainer and has not been independently reviewed. See the <a href="https://docs.rcan.dev/spec/" class="text-accent hover:underline">spec</a>, the <a href="/implementations/" class="text-accent hover:underline">implementations</a> (OpenCastor and robot-md are both by the same maintainer and share one <code>ROBOT.md</code>), and the <a href="/conformance/" class="text-accent hover:underline">conformance test suite</a>. Conformance levels L1–L4 are self-asserted, only L1 has an executable checker today, and conformance is not certification.
         </p>
       </div>
       <div class="flex flex-wrap gap-4 mt-10">
-        <a href="/safety" class="px-5 py-2.5 bg-accent/10 border border-accent/20 text-accent text-sm font-medium rounded-lg hover:bg-accent/20 transition-colors">Safety architecture →</a>
-        <a href="/compliance/frameworks" class="px-5 py-2.5 bg-white/5 border border-white/10 text-text-muted text-sm font-medium rounded-lg hover:bg-white/10 transition-colors">Regulatory coverage →</a>
+        <a href="/safety/" class="px-5 py-2.5 bg-accent/10 border border-accent/20 text-accent text-sm font-medium rounded-lg hover:bg-accent/20 transition-colors">Safety architecture →</a>
+        <a href="/compliance/frameworks/" class="px-5 py-2.5 bg-white/5 border border-white/10 text-text-muted text-sm font-medium rounded-lg hover:bg-white/10 transition-colors">Regulatory coverage →</a>
       </div>
     </div>
   </section>
@@ -232,7 +279,7 @@ const tsBadge = sdkBadge('rcan-ts');
   <section class="py-24 border-b border-white/5">
     <div class="max-w-7xl mx-auto px-6">
       <div class="text-center mb-12">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">Official SDKs</h2>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Reference SDKs</h2>
         <p class="text-xl text-text-muted">One command to get started.</p>
       </div>
 
@@ -255,7 +302,7 @@ const tsBadge = sdkBadge('rcan-ts');
           </div>
           <code class="block text-sm font-mono text-emerald-300 bg-black/30 border border-white/5 rounded-lg px-4 py-2.5">pip install rcan</code>
           <div class="flex items-center gap-2 mt-2">
-            <span class="text-[10px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-mono">v0.6.0</span>
+            {pyVersion && <span class="text-[10px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-mono">v{pyVersion}</span>}
             <a href="https://pypi.org/project/rcan/" target="_blank" rel="noopener noreferrer" class="text-[10px] text-text-muted hover:text-accent">PyPI →</a>
           </div>
           <div class="flex flex-wrap gap-1.5 mt-3">
@@ -283,7 +330,7 @@ const tsBadge = sdkBadge('rcan-ts');
           </div>
           <code class="block text-sm font-mono text-emerald-300 bg-black/30 border border-white/5 rounded-lg px-4 py-2.5">npm install rcan-ts</code>
           <div class="flex items-center gap-2 mt-2">
-            <span class="text-[10px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-mono">v0.6.0</span>
+            {tsVersion && <span class="text-[10px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-mono">v{tsVersion}</span>}
             <a href="https://www.npmjs.com/package/rcan-ts" target="_blank" rel="noopener noreferrer" class="text-[10px] text-text-muted hover:text-accent">npm →</a>
             <span class="text-[10px] text-text-muted">·</span>
             <a href="https://unpkg.com/rcan-ts/dist/rcan.iife.js" target="_blank" rel="noopener noreferrer" class="text-[10px] text-text-muted hover:text-accent">CDN →</a>
@@ -347,11 +394,10 @@ if gate.allows(confidence):
   <section class="py-24 border-b border-white/5">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
       <div>
-        <span class="text-xs font-mono text-accent/60 uppercase tracking-widest">For Developers</span>
-        <h2 class="text-3xl md:text-4xl font-bold mb-6 mt-2">Ship your first message in 5 minutes</h2>
+        <span class="text-xs font-mono text-accent/80 uppercase tracking-widest">For Developers</span>
+        <h2 class="text-3xl md:text-4xl font-bold mb-6 mt-2">Send a first message</h2>
         <p class="text-lg text-text-muted mb-6 leading-relaxed">
-          Install the SDK, build a Robot URI, gate on AI confidence, seal an audit record.
-          That's it.
+          Install the SDK, build a Robot URI, gate on AI confidence, append an audit record.
         </p>
         <div class="space-y-3 mb-8">
           {[
@@ -361,8 +407,8 @@ if gate.allows(confidence):
             { n: '04', label: 'AuditChain.append(action)  →  tamper-evident log' },
           ].map(step => (
             <div class="flex items-center gap-3">
-              <span class="text-xs font-mono text-accent/50 w-6 flex-shrink-0">{step.n}</span>
-              <code class="text-xs font-mono text-text-muted/80 bg-white/3 border border-white/5 px-2.5 py-1.5 rounded-lg flex-1 truncate">{step.label}</code>
+              <span class="text-xs font-mono text-accent/80 w-6 flex-shrink-0">{step.n}</span>
+              <code class="text-xs font-mono text-text-muted bg-white/3 border border-white/5 px-2.5 py-1.5 rounded-lg flex-1 truncate">{step.label}</code>
             </div>
           ))}
         </div>
@@ -374,21 +420,21 @@ if gate.allows(confidence):
 
       <div class="space-y-4">
         <div class="bg-bg-alt/50 border border-white/5 rounded-xl p-5">
-          <div class="text-xs font-mono text-text-muted/50 mb-2 uppercase tracking-widest">Validate your config</div>
+          <div class="text-xs font-mono text-text-muted mb-2 uppercase tracking-widest">Validate your config (example output)</div>
           <code class="block text-sm font-mono text-emerald-300">$ rcan-validate config myrobot.rcan.yaml</code>
-          <div class="mt-3 space-y-1 text-xs font-mono text-text-muted/70">
-            <div>✅ L1 — Addressing + message format: <span class="text-emerald-400">passed</span></div>
-            <div>✅ L2 — Auth + confidence gates: <span class="text-emerald-400">passed</span></div>
-            <div>⚠️  L3 — hitl_gates not configured</div>
-            <div class="pt-1 text-text-muted/50">Result: <span class="text-accent">L2</span> (1 warning)</div>
+          <div class="mt-3 space-y-1 text-xs font-mono text-text-muted">
+            <div>✅ L1 Core: <span class="text-emerald-400">passed</span></div>
+            <div>✅ L2 Safety: <span class="text-emerald-400">passed</span></div>
+            <div>⚠️  L3 AI Accountability: hitl_gates not configured</div>
+            <div class="pt-1 text-text-muted">Result: <span class="text-accent">L2</span> (1 warning)</div>
           </div>
         </div>
         <div class="bg-bg-alt/50 border border-white/5 rounded-xl p-5">
-          <div class="text-xs font-mono text-text-muted/50 mb-2 uppercase tracking-widest">Inspect any robot</div>
+          <div class="text-xs font-mono text-text-muted mb-2 uppercase tracking-widest">Inspect a robot (example output)</div>
           <code class="block text-sm font-mono text-emerald-300">$ castor inspect RRN-000000000042</code>
-          <div class="mt-3 space-y-1 text-xs font-mono text-text-muted/70">
+          <div class="mt-3 space-y-1 text-xs font-mono text-text-muted">
             <div>🤖 RRN-000000000042</div>
-            <div>  Registry: <span class="text-accent">rcan.dev</span></div>
+            <div>  Registry: <span class="text-accent">robotregistryfoundation.org</span></div>
             <div>  Compliance: <span class="text-accent">L2</span></div>
             <div>  Chain: <span class="text-emerald-400">✅ 147 records</span></div>
           </div>
@@ -401,17 +447,23 @@ if gate.allows(confidence):
   <section class="py-16 border-b border-white/5">
     <div class="max-w-3xl mx-auto px-6 text-center">
       <h2 class="text-2xl font-bold mb-2">SDK Status</h2>
-      <p class="text-text-muted text-sm mb-8">Official SDKs for the RCAN protocol</p>
+      <p class="text-text-muted text-sm mb-8">
+        Reference SDKs for the RCAN protocol, MIT-licensed. Status comes from this repository's SDK smoke test, which installs each published package and checks that it loads{sdkUpdated && <> (last run {sdkUpdated})</>}. It is not a conformance test.
+      </p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="https://github.com/RobotRegistryFoundation/rcan-py" target="_blank" rel="noopener noreferrer"
-          class={`flex items-center gap-3 px-5 py-3 rounded-xl border ${pyBadge.bg} ${pyBadge.border} hover:opacity-80 transition-opacity`}>
+          class={`flex items-center gap-3 px-5 py-3 rounded-xl border ${pyBadge ? `${pyBadge.bg} ${pyBadge.border}` : 'bg-white/5 border-white/10'} hover:opacity-80 transition-opacity`}>
           <span class="text-sm font-mono font-semibold text-text">rcan-py</span>
-          <span class={`text-sm font-mono font-bold ${pyBadge.color}`}>{pyBadge.label}</span>
+          {pyBadge
+            ? <span class={`text-sm font-mono font-bold ${pyBadge.color}`}>{pyBadge.label}</span>
+            : <span class="text-sm font-mono text-text-muted">status not reported</span>}
         </a>
         <a href="https://github.com/RobotRegistryFoundation/rcan-ts" target="_blank" rel="noopener noreferrer"
-          class={`flex items-center gap-3 px-5 py-3 rounded-xl border ${tsBadge.bg} ${tsBadge.border} hover:opacity-80 transition-opacity`}>
+          class={`flex items-center gap-3 px-5 py-3 rounded-xl border ${tsBadge ? `${tsBadge.bg} ${tsBadge.border}` : 'bg-white/5 border-white/10'} hover:opacity-80 transition-opacity`}>
           <span class="text-sm font-mono font-semibold text-text">rcan-ts</span>
-          <span class={`text-sm font-mono font-bold ${tsBadge.color}`}>{tsBadge.label}</span>
+          {tsBadge
+            ? <span class={`text-sm font-mono font-bold ${tsBadge.color}`}>{tsBadge.label}</span>
+            : <span class="text-sm font-mono text-text-muted">status not reported</span>}
         </a>
       </div>
     </div>
@@ -438,25 +490,25 @@ if gate.allows(confidence):
       </div>
 
       <h2 class="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-        The infrastructure for<br />
-        <span class="bg-clip-text text-transparent bg-gradient-to-r from-accent via-cyan-400 to-purple-400">trusted robotics</span>
+        Identity and audit records<br />
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-accent via-cyan-400 to-purple-400">for robots</span>
       </h2>
       <p class="text-xl text-text-muted mb-10 leading-relaxed max-w-xl mx-auto">
-        Register your robot for free. Build with the open SDK. Ship safer AI-powered systems with a provable audit trail.
+        Register a robot for free, build with the open SDKs, and keep a tamper-evident record of what your AI-driven machine was told to do.
       </p>
 
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="/quickstart/" class="px-8 py-4 bg-accent text-bg font-bold text-lg rounded-full hover:bg-accent-hover transform hover:scale-105 transition-all duration-200 shadow-[0_0_30px_-5px_rgba(34,211,238,0.5)] ring-2 ring-accent/30 ring-offset-2 ring-offset-bg flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-          Get Started Free
+          Get started
         </a>
         <a href="https://robotregistryfoundation.org/registry/submit/" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-white/5 border border-white/10 text-text font-semibold text-lg rounded-full hover:bg-white/10 transition-all duration-200 backdrop-blur-md">
           Register a Robot →
         </a>
       </div>
 
-      <p class="mt-8 text-sm text-text-muted/50">
-        Open specification · CC BY 4.0 · No vendor lock-in · <a href="/changelog/" class="underline hover:text-text-muted/80 transition-colors">Changelog</a>
+      <p class="mt-8 text-sm text-text-muted">
+        Open specification · CC BY 4.0 · <a href="/changelog/" class="underline hover:text-text transition-colors">Changelog</a>
       </p>
     </div>
   </section>

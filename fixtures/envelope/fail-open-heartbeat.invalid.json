@@ -5,7 +5,7 @@
     "class": "mobile_ground",
     "mass_kg": 2.1
   },
-  "level": "A2",
+  "level": "BE-2",
   "workspace": {
     "frame": "map",
     "keep_in": [

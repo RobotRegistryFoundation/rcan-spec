@@ -1,5 +1,5 @@
 /**
- * EV-01..EV-09 (Appendix C). The case file lives with the other conformance
+ * EV-01..EV-10 (Appendix C). The case file lives with the other conformance
  * cases in scripts/conformance/rcan-assurance-v0.1.json.
  *
  * Only the parts that can run offline in this repo are executed here (EV-07 log
@@ -34,8 +34,8 @@ describe("rcan-assurance-v0.1.json case file", () => {
     expect(SUITE.thresholds_are_illustrative).toBe(true);
   });
 
-  it("defines EV-01..EV-09 exactly once each, in order", () => {
-    expect(CASES.map((c) => c.id)).toEqual(Array.from({ length: 9 }, (_, i) => `EV-0${i + 1}`));
+  it("defines EV-01..EV-10 exactly once each, in order", () => {
+    expect(CASES.map((c) => c.id)).toEqual(Array.from({ length: 10 }, (_, i) => `EV-${String(i + 1).padStart(2, "0")}`));
   });
 
   it("every case has the conformance case shape plus requirement/runnable_in/needs", () => {
@@ -43,9 +43,16 @@ describe("rcan-assurance-v0.1.json case file", () => {
       for (const k of ["id", "name", "description", "test_type", "input", "expect", "requirement", "runnable_in", "needs"]) {
         expect(c, `${c.id}.${k}`).toHaveProperty(k);
       }
-      expect(["R1", "R2", "R3", "R4", "R5"]).toContain(c.requirement);
+      // EV-10 (liveness) checks the whole property, so its requirement is "all".
+      expect(["R1", "R2", "R3", "R4", "R5", "all"]).toContain(c.requirement);
       expect(["software", "physical"]).toContain(c.runnable_in);
     }
+  });
+
+  it("EV-10 is the liveness test and checks every requirement", () => {
+    const ev10 = CASES.find((c) => c.id === "EV-10")!;
+    expect(ev10.name).toBe("Liveness");
+    expect(ev10.requirement).toBe("all");
   });
 
   it("EV-05, EV-06, EV-07 and EV-08 are runnable in software", () => {

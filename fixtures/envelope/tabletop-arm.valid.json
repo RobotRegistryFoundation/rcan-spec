@@ -1,7 +1,7 @@
 {
   "envelope_version": "0.1",
   "machine": { "id": "arm-bench-01", "class": "tabletop_arm", "mass_kg": 1.4 },
-  "level": "A1",
+  "level": "BE-1",
   "workspace": {
     "frame": "base_link",
     "keep_in": [[0.05, -0.25], [0.35, -0.25], [0.35, 0.25], [0.05, 0.25]],
