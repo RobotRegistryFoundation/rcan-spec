@@ -121,10 +121,11 @@ first, this becomes v3.4.0.
   constraint relaxed.
 - README stack table: the registry row drops its comparison with the domain-name
   authority, and the wire-protocol row names the §22–§26 document formats (FRIA, safety
-  benchmark, instructions for use, post-market incident report, EU register submission)
+  benchmark, instructions for use, post-market monitoring, EU register submission)
   instead of calling them EU AI Act compliance artifacts. The forbidden-phrase lint
-  workflow now also checks the patterns in `.github/forbidden-phrases-local.txt`, which
-  hold both old phrases, so they can't come back.
+  workflow now also checks every tracked file against the patterns in
+  `.github/forbidden-phrases-local.txt`: a tripwire for those two exact phrases (with
+  case, spacing and dash variants), not for paraphrases.
 
 ### Added
 - `/.well-known/rcan-node.json` self-signs: `manifest_signature` is

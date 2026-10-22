@@ -11,6 +11,10 @@ on:
       - 'docs/**'
       - '.github/workflows/forbidden-phrase-lint.yml'
       - '.github/forbidden-phrases-local.txt'
+      - 'spec/**'
+      - 'schemas/**'
+      - 'scripts/**'
+      - 'profiles/**'
   push:
     branches: [master]
 
@@ -29,7 +33,7 @@ jobs:
           set -euo pipefail
           list=.github/forbidden-phrases-local.txt
           found=0
-          while IFS= read -r pattern; do
+          while IFS= read -r pattern || [ -n "$pattern" ]; do
             case "$pattern" in ''|'#'*) continue ;; esac
             rc=0
             git grep -n -I -i -E -e "$pattern" -- . || rc=$?
