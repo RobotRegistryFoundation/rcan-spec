@@ -10,6 +10,7 @@ on:
       - 'src/**'
       - 'docs/**'
       - '.github/workflows/forbidden-phrase-lint.yml'
+      - '.github/forbidden-phrases-local.txt'
   push:
     branches: [master]
 
@@ -21,6 +22,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - name: Check repo-local phrases
+        # Patterns this repo bans on top of the shared dictionary, one extended
+        # regex per line in .github/forbidden-phrases-local.txt.
+        run: |
+          set -euo pipefail
+          list=.github/forbidden-phrases-local.txt
+          found=0
+          while IFS= read -r pattern; do
+            case "$pattern" in ''|'#'*) continue ;; esac
+            rc=0
+            git grep -n -I -i -E -e "$pattern" -- . || rc=$?
+            case "$rc" in
+              0) found=1 ;;
+              1) ;;
+              *) echo "::error::git grep could not run pattern: $pattern"; exit 2 ;;
+            esac
+          done < "$list"
+          if [ "$found" -ne 0 ]; then
+            echo "::error::Text above matches a pattern in $list."
+            exit 1
+          fi
+          echo "No matches for the patterns in $list."
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
           python-version: "3.12"

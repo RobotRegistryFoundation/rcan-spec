@@ -119,6 +119,12 @@ first, this becomes v3.4.0.
   rcan.dev serves until the key is provisioned. The `ed25519:` pattern still applies
   to any string value, so a malformed key is still rejected. This is the only
   constraint relaxed.
+- README stack table: the registry row drops its comparison with the domain-name
+  authority, and the wire-protocol row names the §22–§26 document formats (FRIA, safety
+  benchmark, instructions for use, post-market incident report, EU register submission)
+  instead of calling them EU AI Act compliance artifacts. The forbidden-phrase lint
+  workflow now also checks the patterns in `.github/forbidden-phrases-local.txt`, which
+  hold both old phrases, so they can't come back.
 
 ### Added
 - `/.well-known/rcan-node.json` self-signs: `manifest_signature` is
