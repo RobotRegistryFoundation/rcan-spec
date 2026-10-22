@@ -7,12 +7,26 @@ pages_build_output_dir = "dist"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "rcan-registry"
-database_id = "ef718040-dc35-4ace-9959-dc6a57eb71b9"   # wrangler d1 create rcan-registry
+# Registry reset on 2026-10-13. The previous database, rcan-registry
+# (ef718040-dc35-4ace-9959-dc6a57eb71b9), is kept unchanged as the archive;
+# pointing these two lines back at it undoes the reset.
+database_name = "rcan-registry-2026-10-13"
+database_id = "a8e8933f-5d82-4783-8ac4-9d664615a656"
+
+# Root node public key, published in /.well-known/rcan-node.json.
+# Public values: safe to commit. The private half is the Pages secret
+# RCAN_NODE_ED25519_PRIVKEY (base64 PKCS#8), set with
+# `wrangler pages secret put RCAN_NODE_ED25519_PRIVKEY --project-name=rcan-spec`.
+# Minted 2026-10-16, kid ed25519-d626701596f726df. Changing these rotates the
+# key and the published kid; set the matching secret in the same change.
+[vars]
+RCAN_NODE_ED25519_PUBKEY = "FnSNpTCyKH-1mJrBWgIhsmqPuyfRBKTOkeB71pT6bRA"
+RCAN_NODE_PUBKEY = "ed25519:FnSNpTCyKH-1mJrBWgIhsmqPuyfRBKTOkeB71pT6bRA"
 
 # Secrets (set via `wrangler pages secret put --project-name=rcan-spec`):
 #   RCAN_API_KEY_SALT — salt for API key hashing (already set)
 #   RCAN_ADMIN_TOKEN  — optional admin override token
+#   RCAN_NODE_ED25519_PRIVKEY — root node manifest signing key (see [vars] above)
 
 # Deploy:
 #   1. Create D1 database:   wrangler d1 create rcan-registry

@@ -1,0 +1,10 @@
+{
+  "envelope_version": "0.1",
+  "machine": { "id": "rover-01", "class": "mobile_ground" },
+  "level": "BE-1",
+  "workspace": { "frame": "map", "keep_in": [[0, 0], [6, 0], [6, 4], [0, 4]] },
+  "motion": { "max_speed_mps": 0.5 },
+  "stop": { "category": 1, "max_time_ms": 300, "max_distance_m": 0.15, "safe_state": "stop_in_place" },
+  "recovery": { "on_reject": "hold", "estop_reset": "automatic" },
+  "heartbeat": { "model_timeout_ms": 200, "gate_timeout_ms": 50, "on_loss": "stop" }
+}

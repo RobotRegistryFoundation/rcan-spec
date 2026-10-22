@@ -1,0 +1,190 @@
+[
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:7d1aee0e35392853eb6f0c6d127e379583bfa9aaa55f2c48bcc392758f1976fc",
+    "t": 1792108800000,
+    "principal": "user:operator-01",
+    "authority": "jwt:jti-0101",
+    "cmd": {
+      "kind": "motion",
+      "linear_mps": 0.2,
+      "angular_radps": 0,
+      "target": [
+        2,
+        1
+      ]
+    },
+    "decision": "allow",
+    "applied": {
+      "kind": "motion",
+      "linear_mps": 0.2,
+      "angular_radps": 0,
+      "target": [
+        2,
+        1
+      ]
+    },
+    "state_digest": "sha256:854cd66febbd97b337e7e173c4747ca4b79712839e3237afcfb79bece6f24b31",
+    "seq": 0,
+    "prev": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "hash": "sha256:8cbd6b4458fa20fcad9f160943925f9d0f389fa0ad4e98f83edd49fe89897eac"
+  },
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:7d1aee0e35392853eb6f0c6d127e379583bfa9aaa55f2c48bcc392758f1976fc",
+    "t": 1792108800020,
+    "principal": "agent:planner",
+    "authority": "jwt:jti-0101",
+    "cmd": {
+      "kind": "motion",
+      "linear_mps": 0.2,
+      "angular_radps": 0,
+      "target": [
+        3.5,
+        1
+      ]
+    },
+    "decision": "reject",
+    "applied": null,
+    "reason": "workspace.keep_in: target outside",
+    "reason_returned": true,
+    "state_digest": "sha256:4256ea37d160a2e2606574c2fc2933bb9494493d51491d50fc7448724ddd5ed9",
+    "seq": 1,
+    "prev": "sha256:8cbd6b4458fa20fcad9f160943925f9d0f389fa0ad4e98f83edd49fe89897eac",
+    "hash": "sha256:13c43145f1cfaa071801ea6072002ff640ad03c9a34f348715a8c8a15013b86e"
+  },
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:7d1aee0e35392853eb6f0c6d127e379583bfa9aaa55f2c48bcc392758f1976fc",
+    "t": 1792108800040,
+    "principal": "agent:planner",
+    "authority": "jwt:jti-0101",
+    "cmd": {
+      "kind": "motion",
+      "linear_mps": 0.6,
+      "angular_radps": 0,
+      "target": [
+        2.5,
+        1
+      ]
+    },
+    "decision": "clamp",
+    "applied": {
+      "kind": "motion",
+      "linear_mps": 0.3,
+      "angular_radps": 0,
+      "target": [
+        2.5,
+        1
+      ]
+    },
+    "reason": "motion.max_speed_mps",
+    "reason_returned": true,
+    "state_digest": "sha256:a0958ce549cf44a88a2be3779a88d1651942ee9c1751e48ce3c581fbc90fda56",
+    "seq": 2,
+    "prev": "sha256:13c43145f1cfaa071801ea6072002ff640ad03c9a34f348715a8c8a15013b86e",
+    "hash": "sha256:807737301283d5afcf1656d83273257b153dc9a3ebd5870e351a7c4cb9c7f51d"
+  },
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:7d1aee0e35392853eb6f0c6d127e379583bfa9aaa55f2c48bcc392758f1976fc",
+    "t": 1792108801000,
+    "principal": "gate:proximity",
+    "authority": null,
+    "cmd": null,
+    "decision": "stop",
+    "applied": {
+      "kind": "stop",
+      "linear_mps": 0,
+      "angular_radps": 0
+    },
+    "reason": "proximity: human_within_m 0.3",
+    "stop_kind": "protective",
+    "state_digest": "sha256:3ab3da47388cd79b2bcb1ddc7802d6757a2c716001449739a68c5a2ab2ed588e",
+    "seq": 3,
+    "prev": "sha256:807737301283d5afcf1656d83273257b153dc9a3ebd5870e351a7c4cb9c7f51d",
+    "hash": "sha256:b36eb55deb90395557f670e1f19bd6d77748da3164e8446d35f7e8107e75f13e"
+  },
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:7d1aee0e35392853eb6f0c6d127e379583bfa9aaa55f2c48bcc392758f1976fc",
+    "t": 1792108805000,
+    "principal": "gate:proximity",
+    "authority": null,
+    "cmd": null,
+    "decision": "stop",
+    "applied": {
+      "kind": "stop",
+      "linear_mps": 0,
+      "angular_radps": 0
+    },
+    "reason": "proximity: human_within_m 0.3",
+    "stop_kind": "protective",
+    "state_digest": "sha256:c8bd57cc9d866576f90b0385140f0d91d15fc17578a6c85cba2f157c571526bf",
+    "seq": 4,
+    "prev": "sha256:b36eb55deb90395557f670e1f19bd6d77748da3164e8446d35f7e8107e75f13e",
+    "hash": "sha256:fc05a9577453c14df7e42732f6002204044ee653c7d0b32f632e4f1348d1e251"
+  },
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:7d1aee0e35392853eb6f0c6d127e379583bfa9aaa55f2c48bcc392758f1976fc",
+    "t": 1792108809000,
+    "principal": "gate:proximity",
+    "authority": null,
+    "cmd": null,
+    "decision": "stop",
+    "applied": {
+      "kind": "stop",
+      "linear_mps": 0,
+      "angular_radps": 0
+    },
+    "reason": "proximity: human_within_m 0.3",
+    "stop_kind": "protective",
+    "state_digest": "sha256:e59c1f5b664717ed12a87d172c2a1749749e7deaafd36872e12bfbe9630c4b3b",
+    "seq": 5,
+    "prev": "sha256:fc05a9577453c14df7e42732f6002204044ee653c7d0b32f632e4f1348d1e251",
+    "hash": "sha256:17b087b59e7a2bb752ac8a315851c657aca446b3108f34e80011f14cf3f39899"
+  },
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:7d1aee0e35392853eb6f0c6d127e379583bfa9aaa55f2c48bcc392758f1976fc",
+    "t": 1792108809001,
+    "principal": "gate:recovery",
+    "authority": null,
+    "cmd": null,
+    "decision": "stop",
+    "applied": {
+      "kind": "stop",
+      "linear_mps": 0,
+      "angular_radps": 0
+    },
+    "reason": "recovery.repeated_stops: 3 stops in 60 s",
+    "stop_kind": "repeated",
+    "state_digest": "sha256:97c06e8eb99785b7a12ad42b05eeace914e1e5760270210071bbd50029f120ff",
+    "seq": 6,
+    "prev": "sha256:17b087b59e7a2bb752ac8a315851c657aca446b3108f34e80011f14cf3f39899",
+    "hash": "sha256:fd1570a70a2714c6d024d14e33640188a558e2848f0759500d04519e43ef0590"
+  },
+  {
+    "type": "gate_decision",
+    "envelope": "sha256:7d1aee0e35392853eb6f0c6d127e379583bfa9aaa55f2c48bcc392758f1976fc",
+    "t": 1792108820000,
+    "principal": "user:operator-01",
+    "authority": "jwt:jti-0102",
+    "cmd": {
+      "kind": "estop"
+    },
+    "decision": "stop",
+    "applied": {
+      "kind": "stop",
+      "linear_mps": 0,
+      "angular_radps": 0
+    },
+    "reason": "estop: operator",
+    "stop_kind": "emergency",
+    "state_digest": "sha256:ca9fef5cffef0854b442a14da57725997796930bd9abeea8872122b57d2b0943",
+    "seq": 7,
+    "prev": "sha256:fd1570a70a2714c6d024d14e33640188a558e2848f0759500d04519e43ef0590",
+    "hash": "sha256:ecfc2b2e03e8be2d1c8a42b87194d3bcd9407dca1a79d428590619c346ce360a"
+  }
+]

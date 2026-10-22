@@ -29,6 +29,15 @@
       "description": "What was actually sent to the actuators. Equal to cmd for allow; the modified command for clamp; null for reject; the stop action for stop."
     },
     "reason": { "type": "string", "minLength": 1, "description": "Why the gate clamped, rejected or stopped. Required for those three decisions." },
+    "stop_kind": {
+      "type": "string",
+      "enum": ["protective", "repeated", "emergency"],
+      "description": "Optional, only with decision stop (Appendix C.1.3). protective: resumes once the condition clears and sensor state is fresh, no intervention. repeated: escalation after the envelope's declared count or time of repeated stops, needs a person. emergency: manual reset, and reset alone never restarts motion."
+    },
+    "reason_returned": {
+      "type": "boolean",
+      "description": "Optional, not with decision allow. True when the reason was returned to the proposing model so it can re-plan (Appendix C.1.3)."
+    },
     "envelope": { "$ref": "#/$defs/sha256", "description": "Hash of the envelope in force (canonical JSON with signature removed)." },
     "state_digest": { "$ref": "#/$defs/sha256", "description": "Digest of the state snapshot the decision was made on." },
     "prev": { "$ref": "#/$defs/sha256" },
@@ -46,6 +55,14 @@
     {
       "if": { "properties": { "decision": { "enum": ["allow", "clamp", "stop"] } } },
       "then": { "properties": { "applied": { "type": "object" } } }
+    },
+    {
+      "if": { "properties": { "stop_kind": true }, "required": ["stop_kind"] },
+      "then": { "properties": { "decision": { "const": "stop" } } }
+    },
+    {
+      "if": { "properties": { "reason_returned": true }, "required": ["reason_returned"] },
+      "then": { "properties": { "decision": { "enum": ["clamp", "reject", "stop"] } } }
     }
   ],
   "$defs": {

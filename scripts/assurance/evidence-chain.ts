@@ -29,6 +29,10 @@ export interface GateDecision {
   decision: Decision;
   applied: Record<string, unknown> | null;
   reason?: string;
+  /** Optional, only with stop (Appendix C.1.3). */
+  stop_kind?: "protective" | "repeated" | "emergency";
+  /** Optional: the reason went back to the proposing model so it can re-plan. */
+  reason_returned?: boolean;
   envelope: string;
   state_digest: string;
   prev: string;

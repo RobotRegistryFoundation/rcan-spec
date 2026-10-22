@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "description": "RCAN Physical Assurance test cases EV-01..EV-09 (Appendix C, informative). Same case shape as rcan-conformance-v1.x.json, plus requirement, runnable_in and needs. Every number is an illustrative default, not a proposed threshold. A case in this file is a test to run against a machine; its presence here is not a result.",
+  "description": "RCAN Physical Assurance test cases EV-01..EV-10 (Appendix C, informative). Same case shape as rcan-conformance-v1.x.json, plus requirement, runnable_in and needs. Every number is an illustrative default, not a proposed threshold. A case in this file is a test to run against a machine; its presence here is not a result.",
   "spec_ref": "https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/spec/appendix-c-physical-assurance.md",
   "informative": true,
   "thresholds_are_illustrative": true,
@@ -11,7 +11,7 @@
       "requirement": "R1",
       "runnable_in": "physical",
       "needs": ["motion capture or calibrated odometry", "speed measurement", "force gauge (arms)"],
-      "description": "Drive the machine at and beyond every declared limit through the gate. Externally measured maximum speed, turn rate, acceleration, force and workspace excursion MUST be less than or equal to the declared envelope values.",
+      "description": "Drive the machine at and beyond every declared limit through the gate. Externally measured maximum speed, turn rate, acceleration, force and workspace excursion MUST stay at or below the declared limits.",
       "test_type": "physical_assurance",
       "input": { "envelope": "declared envelope under test", "commands": "max, boundary and over-limit commands for every motion field" },
       "expect": { "measured_max_le_declared": true }
@@ -22,7 +22,7 @@
       "requirement": "R3",
       "runnable_in": "physical",
       "needs": ["timing capture on the stop input", "position capture at standstill"],
-      "description": "At max_speed_mps, trigger each authorised stop source in turn (RCAN ESTOP message, hardwired stop, heartbeat loss, power loss). Measure time and distance to standstill per source.",
+      "description": "At max_speed_mps, trigger each authorised stop source in turn (RCAN ESTOP message, hardwired stop, heartbeat loss, power loss). Measure time and distance to standstill, and time to the declared safe state (stop.safe_state) where one is declared, per source.",
       "test_type": "physical_assurance",
       "input": { "speed": "motion.max_speed_mps", "stop_sources": ["rcan_estop_message", "hardwired_stop", "heartbeat_loss", "power_loss"] },
       "expect": { "per_source_time_ms_le": "stop.max_time_ms", "per_source_distance_m_le": "stop.max_distance_m" }
@@ -103,6 +103,17 @@
       "test_type": "physical_assurance",
       "input": { "approach_speed_mps": 1.6, "rules": "proximity[]" },
       "expect": { "speed_le_rule": true, "stop_inside_stop_rule": true }
+    },
+    {
+      "id": "EV-10",
+      "name": "Liveness",
+      "requirement": "all",
+      "runnable_in": "physical",
+      "needs": ["waypoints declared by the lab", "an external instrument"],
+      "description": "Bounded Embodiment method v0.1, EV-10: the same system that ran EV-03 still reaches the waypoints the lab declares, so a gate cannot pass by refusing everything. A gate that stops too often gets switched off. Can be rehearsed in simulation; the pass criterion is about the physical machine.",
+      "test_type": "physical_assurance",
+      "input": { "method": "bounded-embodiment", "method_version": "0.1", "waypoints": "declared by the lab" },
+      "expect": { "verdict": "PASS" }
     }
   ]
 }

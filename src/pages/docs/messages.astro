@@ -9,7 +9,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   <article class="doc-article">
     <h1>Message Type Reference</h1>
-    <p class="lead">The <a href="https://docs.rcan.dev/spec/">RCAN protocol</a> defines a canonical set of message types covering discovery, control, safety, invocation, registry operations, consent, fleet, and EU AI Act compliance. All messages share a common envelope; the <code>type</code> field selects semantics and routing behaviour. See the <a href="/compatibility">live compatibility matrix</a> for the canonical message-type table for each revision.</p>
+    <p class="lead">The <a href="https://docs.rcan.dev/spec/">RCAN protocol</a> defines a canonical set of message types covering discovery, control, safety, invocation, registry operations, consent, fleet, and EU AI Act compliance. All messages share a common envelope; the <code>type</code> field selects semantics and routing behaviour. See the <a href="/compatibility/">live compatibility matrix</a> for the canonical message-type table for each revision.</p>
 
     <section id="v15-changes">
       <div class="callout callout-info">
@@ -22,8 +22,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <strong>v1.6 Message Changes</strong> — No new MessageType integers are added in v1.6. Three existing types gain extended payload schemas:
         <ul style="margin: 0.5rem 0 0 1.25rem;">
           <li><strong>Type 9 (DISCOVER):</strong> Response payload gains <code>supported_transports</code> field (§19 constrained transport negotiation). See <a href="/docs/constrained-transport/">§19</a>.</li>
-          <li><strong>Type 10 (TRAINING_DATA):</strong> JSON-only binary in <code>payload</code> deprecated. Image/video/audio MUST use <code>media_chunks[]</code>. See <a href="/docs/multimodal/">§5.4</a>.</li>
-          <li><strong>Type 12 (FEDERATION_SYNC):</strong> Full payload spec defined — <code>&#123;source_registry, target_registry, sync_type, payload, signature&#125;</code>. See <a href="/docs/federation/">§18</a>.</li>
+          <li><strong>TRAINING_DATA (type 36 in the current table):</strong> JSON-only binary in <code>payload</code> deprecated. Image/video/audio MUST use <code>media_chunks[]</code>. See <a href="/docs/multimodal/">§5.4</a>.</li>
+          <li><strong>FEDERATION_SYNC:</strong> Full payload spec defined — <code>&#123;source_registry, target_registry, sync_type, payload, signature&#125;</code>. See <a href="/docs/federation/">§18</a>.</li>
         </ul>
       </div>
     </section>
@@ -85,231 +85,59 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     </section>
 
     <section id="type-reference">
-      <h2>§4 — Canonical MessageType Table (v1.5+)</h2>
-      <p>This table is authoritative for v1.5 and v1.6. All SDKs MUST use these integer values. Integer values are listed for interop reference only — implementations MUST use named enum constants in code.</p>
+      <h2>Canonical MessageType table</h2>
+      <p>These are the integer values rcan-py and rcan-ts use today (types 1 to 45). The normative list is in the spec; if this page and the spec disagree, the spec wins. Values are listed for interop reference: use the named enum constants in code, not the integers.</p>
 
       <table class="msg-table">
         <thead>
-          <tr><th>Type</th><th>Name</th><th>Description</th><th>Priority</th><th>Min QoS</th></tr>
+          <tr><th>Type</th><th>Name</th><th>Section</th><th>Direction</th><th>Description</th></tr>
         </thead>
         <tbody>
-          <tr>
-            <td><code>1</code></td>
-            <td><strong>COMMAND</strong></td>
-            <td>Motor, action, or behavior command. Requires <code>control</code> scope.</td>
-            <td>NORMAL/HIGH</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>2</code></td>
-            <td><strong>RESPONSE</strong></td>
-            <td>Generic response to a prior message. <code>reply_to</code> links to original.</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>3</code></td>
-            <td><strong>STATUS</strong></td>
-            <td>Telemetry / state snapshot — position, battery, mode, health.</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>4</code></td>
-            <td><strong>HEARTBEAT</strong></td>
-            <td>Periodic liveness ping. No payload required.</td>
-            <td>LOW</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>5</code></td>
-            <td><strong>CONFIG</strong></td>
-            <td>Configuration update. See <a href="#config-update">§9.2 CONFIG_UPDATE</a> for required payload schema and authorization rules.</td>
-            <td>NORMAL</td>
-            <td>1</td>
-          </tr>
-          <tr class="safety-row">
-            <td><code>6</code></td>
-            <td><strong>SAFETY</strong></td>
-            <td>STOP / ESTOP / RESUME — safety-critical. Bypasses all queues. Cannot be overridden by AI. ESTOP MUST use QoS 2.</td>
-            <td><strong>SAFETY</strong></td>
-            <td>1 (ESTOP=2)</td>
-          </tr>
-          <tr>
-            <td><code>7</code></td>
-            <td><strong>SENSOR_DATA</strong></td>
-            <td>Sensor readings (proximity, IMU, temperature, etc.).</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>8</code></td>
-            <td><strong>AUDIT</strong></td>
-            <td>Audit trail event — commitment record, chain hash, tamper evidence.</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>9</code></td>
-            <td><strong>DISCOVER</strong></td>
-            <td>mDNS / peer discovery probe. Responders reply with RURI, capabilities, <code>rcan_version</code>, and (v1.6) <code>supported_transports</code>. See <a href="/docs/constrained-transport/#transport-negotiation">§19 Transport Negotiation</a>.</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>10</code></td>
-            <td><strong>TRAINING_DATA</strong></td>
-            <td>Training data submission. MUST carry <code>consent_token</code> for biometric/audio/visual data. <strong>v1.6:</strong> JSON-only binary in <code>payload</code> is deprecated — use <code>media_chunks[]</code> for image/video/audio. See <a href="/docs/training-consent/">Training Consent</a>, <a href="/docs/multimodal/">§5.4 Multi-Modal Payloads</a>.</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr class="transparency-row">
-            <td><code>11</code></td>
-            <td><strong>TRANSPARENCY</strong></td>
-            <td>EU AI Act Art. 13 disclosure — robot announces AI nature, capabilities, operator identity to humans. Required for EU deployment from August 2026.</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>12</code></td>
-            <td><strong>FEDERATION_SYNC</strong></td>
-            <td>Cross-registry federation synchronization. <a href="/docs/federation/">§18 full protocol defined in v1.6</a>. Payload: <code>&#123;source_registry, target_registry, sync_type: "consent"|"revocation"|"key", payload, signature&#125;</code>.</td>
-            <td>NORMAL</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td><code>13</code></td>
-            <td><strong>ALERT</strong></td>
-            <td>Asynchronous alert to operator — battery critical, geofence breach, etc.</td>
-            <td>HIGH</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td><code>14</code></td>
-            <td><strong>TELEOP</strong></td>
-            <td>Real-time teleoperation stream frames. MUST use QoS 0 (fire-and-forget); stale frames are discarded.</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>15</code></td>
-            <td><strong>CHAT</strong></td>
-            <td>Natural language conversation turn. Requires <code>chat</code> scope.</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>16</code></td>
-            <td><strong>ERROR</strong></td>
-            <td>Error response. Payload: <code>&#123;"code": "...", "detail": "..."&#125;</code>. See <a href="/docs/error-codes/">Error Codes</a>.</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>17</code></td>
-            <td><strong>COMMAND_ACK</strong></td>
-            <td>Acknowledgement for QoS ≥ 1. Must be sent within 500ms. Links via <code>reply_to</code>.</td>
-            <td>HIGH</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>18</code></td>
-            <td><strong>COMMAND_COMMIT</strong></td>
-            <td>Second phase of QoS 2 exactly-once delivery. Receiver sends after processing. See <a href="/docs/qos/">QoS</a>.</td>
-            <td>HIGH</td>
-            <td>0</td>
-          </tr>
-          <tr class="security-row">
-            <td><code>19</code></td>
-            <td><strong>ROBOT_REVOCATION</strong></td>
-            <td>Registry broadcast: robot identity revoked. Peers MUST invalidate cached keys and consent. See <a href="/docs/revocation/">Revocation</a>.</td>
-            <td>HIGH</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td><code>20</code></td>
-            <td><strong>CONSENT_REQUEST</strong></td>
-            <td>Request cross-robot access from target robot's owner. See <a href="/docs/consent/">Consent</a>.</td>
-            <td>NORMAL</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td><code>21</code></td>
-            <td><strong>CONSENT_GRANT</strong></td>
-            <td>Owner grants requested cross-robot access. Signed by owner JWT.</td>
-            <td>NORMAL</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td><code>22</code></td>
-            <td><strong>CONSENT_DENY</strong></td>
-            <td>Owner denies access request. Signed by owner JWT.</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>23</code></td>
-            <td><strong>FLEET_COMMAND</strong></td>
-            <td>Broadcast command to a robot group. See <a href="#fleet-broadcast">§15</a>. Fleet ESTOP MUST reach ≤100 robots in 500ms.</td>
-            <td>HIGH</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td><code>24</code></td>
-            <td><strong>SUBSCRIBE</strong></td>
-            <td>Subscribe to a telemetry stream (observer scope). See <a href="#observer">Observer Mode</a>.</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>25</code></td>
-            <td><strong>UNSUBSCRIBE</strong></td>
-            <td>Cancel an active telemetry subscription.</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>26</code></td>
-            <td><strong>FAULT_REPORT</strong></td>
-            <td>Structured robot fault report. Safety-affecting faults update Protocol 66 manifest. See <a href="#fault-report">§16</a>.</td>
-            <td>HIGH</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td><code>27</code></td>
-            <td><strong>KEY_ROTATION</strong></td>
-            <td>Announce new signing key and JWKS update. See <a href="/docs/key-rotation/">Key Rotation</a>.</td>
-            <td>NORMAL</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td><code>28</code></td>
-            <td><strong>TRAINING_CONSENT_REQUEST</strong></td>
-            <td>Request consent for training data collection from a subject. See <a href="/docs/training-consent/">Training Consent</a>.</td>
-            <td>NORMAL</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td><code>29</code></td>
-            <td><strong>TRAINING_CONSENT_GRANT</strong></td>
-            <td>Subject grants training data consent. Signed by subject JWT.</td>
-            <td>NORMAL</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td><code>30</code></td>
-            <td><strong>TRAINING_CONSENT_DENY</strong></td>
-            <td>Subject denies training data consent.</td>
-            <td>NORMAL</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td><code>31</code></td>
-            <td><strong>COMMAND_NACK</strong></td>
-            <td>Negative acknowledgement — command received but rejected (reason in payload). See <a href="/docs/qos/">QoS</a>.</td>
-            <td>HIGH</td>
-            <td>0</td>
-          </tr>
+          <tr><td><code>1</code></td><td><strong>COMMAND</strong></td><td>§3</td><td>operator → robot</td><td>Motor, action, or behavior command. Requires <code>control</code> scope.</td></tr>
+          <tr><td><code>2</code></td><td><strong>RESPONSE</strong></td><td>§3</td><td>robot → operator</td><td>Generic response to a prior message. <code>reply_to</code> links to original.</td></tr>
+          <tr><td><code>3</code></td><td><strong>STATUS</strong></td><td>§3</td><td>robot → operator</td><td>Telemetry / state snapshot — position, battery, mode, health.</td></tr>
+          <tr><td><code>4</code></td><td><strong>HEARTBEAT</strong></td><td>§3</td><td>bidirectional</td><td>Periodic liveness ping. No payload required.</td></tr>
+          <tr><td><code>5</code></td><td><strong>CONFIG</strong></td><td>§8</td><td>operator → robot</td><td>Configuration update. See <a href="#config-update">§9.2 CONFIG_UPDATE</a> for required payload schema and authorization rules.</td></tr>
+          <tr class="safety-row"><td><code>6</code></td><td><strong>SAFETY</strong></td><td>§6</td><td>bidirectional</td><td>STOP / ESTOP / RESUME — safety-critical. Bypasses all queues. Cannot be overridden by AI. ESTOP MUST use QoS 2.</td></tr>
+          <tr><td><code>7</code></td><td><strong>AUTH</strong></td><td>§5</td><td>bidirectional</td><td>Authentication: session token and expiry. See <a href="/docs/auth/">Authentication</a>.</td></tr>
+          <tr><td><code>8</code></td><td><strong>ERROR</strong></td><td>§3</td><td>bidirectional</td><td>Error response. Payload: <code>&#123;"code": "...", "detail": "..."&#125;</code>. See <a href="/docs/error-codes/">Error Codes</a>.</td></tr>
+          <tr><td><code>9</code></td><td><strong>DISCOVER</strong></td><td>§4</td><td>broadcast</td><td>mDNS / peer discovery probe. Responders reply with RURI, capabilities, <code>rcan_version</code>, and (v1.6) <code>supported_transports</code>. See <a href="/docs/constrained-transport/#transport-negotiation">§19 Transport Negotiation</a>.</td></tr>
+          <tr><td><code>10</code></td><td><strong>PENDING_AUTH</strong></td><td>§5</td><td>robot → operator</td><td>An AI-proposed command waiting for human authorization (§16.4 HiTL gate).</td></tr>
+          <tr><td><code>11</code></td><td><strong>INVOKE</strong></td><td>§19.2</td><td>operator → robot</td><td>Skill or behavior invocation request.</td></tr>
+          <tr><td><code>12</code></td><td><strong>INVOKE_RESULT</strong></td><td>§19.3</td><td>robot → operator</td><td>Result of an INVOKE.</td></tr>
+          <tr><td><code>13</code></td><td><strong>INVOKE_CANCEL</strong></td><td>§19.4</td><td>operator → robot</td><td>Best-effort cancellation of an in-flight INVOKE.</td></tr>
+          <tr><td><code>14</code></td><td><strong>REGISTRY_REGISTER</strong></td><td>§21.4</td><td>robot → registry</td><td>Register a robot with a registry.</td></tr>
+          <tr><td><code>15</code></td><td><strong>REGISTRY_RESOLVE</strong></td><td>§21.5</td><td>any → registry</td><td>Resolve an RRN to its registry record.</td></tr>
+          <tr><td><code>16</code></td><td><strong>TRANSPARENCY</strong></td><td>§16</td><td>robot → audit log</td><td>EU AI Act Art. 13 disclosure — robot announces AI nature, capabilities, operator identity to humans. Required for EU deployment from August 2026.</td></tr>
+          <tr><td><code>17</code></td><td><strong>COMMAND_ACK</strong></td><td>§3</td><td>robot → operator</td><td>Acknowledgement for QoS ≥ 1. Must be sent within 500ms. Links via <code>reply_to</code>.</td></tr>
+          <tr><td><code>18</code></td><td><strong>COMMAND_NACK</strong></td><td>§3</td><td>robot → operator</td><td>Negative acknowledgement — command received but rejected (reason in payload). See <a href="/docs/qos/">QoS</a>.</td></tr>
+          <tr><td><code>19</code></td><td><strong>ROBOT_REVOCATION</strong></td><td>§13</td><td>broadcast</td><td>Registry broadcast: robot identity revoked. Peers MUST invalidate cached keys and consent. See <a href="/docs/revocation/">Revocation</a>.</td></tr>
+          <tr><td><code>20</code></td><td><strong>CONSENT_REQUEST</strong></td><td>§11.2</td><td>robot → robot</td><td>Request cross-robot access from target robot's owner. See <a href="/docs/consent/">Consent</a>.</td></tr>
+          <tr><td><code>21</code></td><td><strong>CONSENT_GRANT</strong></td><td>§11.2</td><td>owner → requester</td><td>Owner grants requested cross-robot access. Signed by owner JWT.</td></tr>
+          <tr><td><code>22</code></td><td><strong>CONSENT_DENY</strong></td><td>§11.2</td><td>owner → requester</td><td>Owner denies access request. Signed by owner JWT.</td></tr>
+          <tr><td><code>23</code></td><td><strong>FLEET_COMMAND</strong></td><td>§15</td><td>operator → fleet</td><td>Broadcast command to a robot group. See <a href="#fleet-broadcast">§15</a>. Fleet ESTOP MUST reach ≤100 robots in 500ms.</td></tr>
+          <tr><td><code>24</code></td><td><strong>SUBSCRIBE</strong></td><td>§20</td><td>any → robot</td><td>Subscribe to a telemetry stream (observer scope). See <a href="#observer">Observer Mode</a>.</td></tr>
+          <tr><td><code>25</code></td><td><strong>UNSUBSCRIBE</strong></td><td>§20</td><td>any → robot</td><td>Cancel an active telemetry subscription.</td></tr>
+          <tr><td><code>26</code></td><td><strong>FAULT_REPORT</strong></td><td>§16</td><td>robot → operator</td><td>Structured robot fault report. Safety-affecting faults update Protocol 66 manifest. See <a href="#fault-report">§16</a>.</td></tr>
+          <tr><td><code>27</code></td><td><strong>KEY_ROTATION</strong></td><td>§8.6</td><td>broadcast</td><td>Announce new signing key and JWKS update. See <a href="/docs/key-rotation/">Key Rotation</a>.</td></tr>
+          <tr><td><code>28</code></td><td><strong>COMMAND_COMMIT</strong></td><td>§5.3</td><td>bidirectional</td><td>Second phase of QoS 2 exactly-once delivery. Receiver sends after processing. See <a href="/docs/qos/">QoS</a>.</td></tr>
+          <tr><td><code>29</code></td><td><strong>SENSOR_DATA</strong></td><td>§20</td><td>robot → subscriber</td><td>Sensor readings (proximity, IMU, temperature, etc.).</td></tr>
+          <tr><td><code>30</code></td><td><strong>TRAINING_CONSENT_REQUEST</strong></td><td>§17</td><td>operator → owner</td><td>Request consent for training data collection from a subject. See <a href="/docs/training-consent/">Training Consent</a>.</td></tr>
+          <tr><td><code>31</code></td><td><strong>TRAINING_CONSENT_GRANT</strong></td><td>§17</td><td>owner → requester</td><td>Subject grants training data consent. Signed by subject JWT.</td></tr>
+          <tr><td><code>32</code></td><td><strong>TRAINING_CONSENT_DENY</strong></td><td>§17</td><td>owner → requester</td><td>Subject denies training data consent.</td></tr>
+          <tr><td><code>33</code></td><td><strong>CONTRIBUTE_REQUEST</strong></td><td>§credits</td><td>coordinator → robot</td><td>Idle-compute work unit offered to a robot.</td></tr>
+          <tr><td><code>34</code></td><td><strong>CONTRIBUTE_RESULT</strong></td><td>§credits</td><td>robot → coordinator</td><td>Result of a contributed work unit.</td></tr>
+          <tr><td><code>35</code></td><td><strong>CONTRIBUTE_CANCEL</strong></td><td>§credits</td><td>robot → coordinator</td><td>Robot withdraws from a work unit.</td></tr>
+          <tr><td><code>36</code></td><td><strong>TRAINING_DATA</strong></td><td>§3</td><td>robot → data pipeline</td><td>Training data submission. MUST carry <code>consent_token</code> for biometric/audio/visual data. <strong>v1.6:</strong> JSON-only binary in <code>payload</code> is deprecated — use <code>media_chunks[]</code> for image/video/audio. See <a href="/docs/training-consent/">Training Consent</a>, <a href="/docs/multimodal/">§5.4 Multi-Modal Payloads</a>.</td></tr>
+          <tr><td><code>37</code></td><td><strong>COMPETITION_ENTER</strong></td><td>§competitions</td><td>robot → fleet</td><td>Competition entry.</td></tr>
+          <tr><td><code>38</code></td><td><strong>COMPETITION_SCORE</strong></td><td>§competitions</td><td>robot → fleet</td><td>Competition score.</td></tr>
+          <tr><td><code>39</code></td><td><strong>SEASON_STANDING</strong></td><td>§competitions</td><td>cloud → robot</td><td>Season standings.</td></tr>
+          <tr><td><code>40</code></td><td><strong>PERSONAL_RESEARCH_RESULT</strong></td><td>§competitions</td><td>robot → local gateway</td><td>Personal research result.</td></tr>
+          <tr><td><code>41</code></td><td><strong>AUTHORITY_ACCESS</strong></td><td>§authority</td><td>authority → robot</td><td>Audit request from an authority (EU AI Act Art. 16(j)).</td></tr>
+          <tr><td><code>42</code></td><td><strong>AUTHORITY_RESPONSE</strong></td><td>§authority</td><td>robot → authority</td><td>Audit data returned to the authority.</td></tr>
+          <tr><td><code>43</code></td><td><strong>FIRMWARE_ATTESTATION</strong></td><td>§firmware</td><td>robot → registry</td><td>Signed firmware manifest. See <a href="/docs/attest/">Firmware Attestation</a>.</td></tr>
+          <tr><td><code>44</code></td><td><strong>SBOM_UPDATE</strong></td><td>§sbom</td><td>robot → registry</td><td>Updated CycloneDX SBOM. See <a href="/docs/sbom/">SBOM</a>.</td></tr>
+          <tr><td><code>45</code></td><td><strong>AUTHORIZE</strong></td><td>§16.4</td><td>authorising principal → robot</td><td>Approves or denies a PENDING_AUTH. Owner role or higher.</td></tr>
         </tbody>
       </table>
     </section>
@@ -477,10 +305,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <li>DISCOVER: was <code>1</code> → now <code>9</code></li>
         <li>STATUS: was <code>2</code> → now <code>3</code></li>
         <li>COMMAND: was <code>3</code> → now <code>1</code></li>
-        <li>TRANSPARENCY: was <code>18</code> → now <code>11</code></li>
+        <li>TRANSPARENCY: was <code>18</code> → now <code>16</code></li>
         <li>HANDOFF: was <code>19</code> (reserved) → removed (deferred to v1.6)</li>
       </ul>
-      <p>rcan-py's internal enum (COMMAND=1, STATUS=3) was already closer to the v1.5 canonical table; only minor renaming is needed there (AUTH→SENSOR_DATA, AUTHORIZE→AUDIT). See <code>docs/v1.5-tracking.md</code> for SDK migration checklist.</p>
+      <p>AUTHORIZE, which approves or denies a PENDING_AUTH (§16.4), is type 45. Older schemas carried 9, which is DISCOVER.</p>
     </section>
 
     <section>

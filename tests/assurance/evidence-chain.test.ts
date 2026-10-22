@@ -129,6 +129,38 @@ describe("EV-07 log half: accountable commands", () => {
   });
 });
 
+describe("recovery chain (Appendix C.1.3)", () => {
+  const LEGGED = read("fixtures/envelope/legged-recovery.valid.json");
+  const RC: GateDecision[] = read("fixtures/gate-decision/legged-recovery-chain.valid.json");
+
+  it("verifies, audits and replays clean against its envelope", () => {
+    expect(verifyChain(RC)).toEqual([]);
+    expect(auditAuthority(RC, LEGGED)).toEqual([]);
+    expect(replayAgainstEnvelope(RC, LEGGED)).toEqual([]);
+  });
+
+  it("escalates to a repeated stop after the envelope's declared count, not before", () => {
+    const n = LEGGED.recovery.repeated_stops.escalate_after_count as number;
+    const i = RC.findIndex((r) => r.stop_kind === "repeated");
+    const protectiveBefore = RC.slice(0, i).filter((r) => r.stop_kind === "protective");
+    expect(protectiveBefore).toHaveLength(n);
+    const windowMs = (LEGGED.recovery.repeated_stops.count_window_s as number) * 1000;
+    expect(protectiveBefore[n - 1].t - protectiveBefore[0].t).toBeLessThanOrEqual(windowMs);
+  });
+
+  it("the optional fields are covered by the record hash", () => {
+    const c = clone(RC);
+    c[3].stop_kind = "emergency";
+    expect(codes(verifyChain(c))).toContain("HASH_MISMATCH");
+  });
+
+  it("a stop that applied motion is still flagged when it carries a stop_kind", () => {
+    const c = clone(RC);
+    (c[3].applied as Record<string, number>).linear_mps = 0.1;
+    expect(codes(replayAgainstEnvelope(c, LEGGED))).toContain("STOP_WITH_MOTION");
+  });
+});
+
 describe("replay against the envelope", () => {
   it("the fixture chain replays clean", () => {
     expect(replayAgainstEnvelope(CHAIN, ENVELOPE)).toEqual([]);

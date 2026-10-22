@@ -10,13 +10,13 @@ const features = [
   {
     iconPath: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z',
     title: 'Role-Based Access',
-    description: 'Five-level hierarchy: Guest → User → Leasee → Owner → Creator. Explicit, auditable permissions at every layer.',
+    description: 'Seven roles since v2.1, from GUEST to M2M_TRUSTED. Roles travel in signed tokens and are checked before a command reaches the driver.',
     badge: null,
   },
   {
     iconPath: 'M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0',
     title: 'Local Discovery',
-    description: 'mDNS/DNS-SD via _rcan._tcp.local. Works when the cloud goes dark — your robot never loses you.',
+    description: 'mDNS/DNS-SD via _rcan._tcp.local. Works on a local network without the cloud.',
     badge: null,
   },
   {
@@ -28,7 +28,7 @@ const features = [
   {
     iconPath: 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9',
     title: 'Federated Registries',
-    description: 'Like email — anyone can run an RCAN registry. No single point of control. Decentralized by design.',
+    description: 'Like email, anyone can run an RCAN registry, and registries can cross-verify each other.',
     badge: null,
   },
   {

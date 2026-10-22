@@ -3,7 +3,7 @@
 > **Status: DRAFT** · Last revised: 2026-03-04
 > Seeking co-founders, stakeholder input, and review and collaboration from standards bodies and testing labs.
 >
-> **Status, 2026-09-29.** Draft charter for a proposed foundation. RCAN and the registry currently have one maintainer and no board, co-founders, endorsing organizations or partners. Nothing here has had third-party verification. RCAN, with the registry, has been proposed to the AAIF (Linux Foundation) as a Sandbox project ([aaif/project-proposals#43](https://github.com/aaif/project-proposals/issues/43)); the proposal has not been accepted. Conformance is not certification.
+> **Status, 2026-10-16.** Draft charter for a proposed foundation. RCAN and the registry currently have one maintainer and no board, co-founders, endorsing organizations or partners. Nothing here has had third-party verification. RCAN, with the registry, was proposed to the AAIF (Linux Foundation) as a Sandbox project; the proposal was declined as too early on 2 October 2026 ([aaif/project-proposals#43](https://github.com/aaif/project-proposals/issues/43)), and the maintainer intends to resubmit once its requirements are met. Conformance is not certification.
 > → Discuss in [RobotRegistryFoundation/rcan-spec issues](https://github.com/RobotRegistryFoundation/rcan-spec/issues) (the original thread, [#13](https://github.com/RobotRegistryFoundation/rcan-spec/issues/13), is closed)
 
 ---
@@ -58,7 +58,7 @@ The founding board shall consist of **10 voting seats** plus non-voting observer
 | Seat(s) | Constituency | Selection |
 |---------|-------------|-----------|
 | 2 seats | Robot manufacturers | Elected by manufacturer member organizations; rotating 2-year terms; no single manufacturer may hold both seats simultaneously |
-| 2 seats | Safety standards bodies | Designated by ISO/TC 299 (1 seat) and A3 — Association for Advancing Automation (1 seat) |
+| 2 seats | Safety standards bodies | Proposed: designated by ISO/TC 299 (1 seat) and A3, the Association for Advancing Automation (1 seat), if they agree. Neither has been approached. |
 | 2 seats | Academic / research institutions | Elected by academic member organizations |
 | 1 seat | Civil society | Elected by contributor-tier members |
 | 3 seats | Foundation general | Elected at large by all member classes combined |
@@ -229,7 +229,7 @@ P66 conformance is a prerequisite for robots deployed in environments with direc
 | RCAN specification | Semver (`MAJOR.MINOR`) | `1.4`, `2.0` | MAJOR bump = breaking wire changes; MINOR = additive |
 | RCAN SDKs | Semver (`MAJOR.MINOR.PATCH`) | `1.4.2` | Tracks spec MAJOR.MINOR; PATCH for bug fixes |
 | RCAN runtimes (rcan-pi, rcan-ros2) | CalVer (`YYYY.MM.PATCH`) | `2026.03.1` | Decoupled from spec; release when ready |
-| rcan-spec repository | Git tags + GitHub releases | `v1.4.0` | Tag on merge of normative changes |
+| rcan-spec repository | Git tags + GitHub releases | `v3.2.0` | Tag on merge of normative changes |
 
 **Deprecation policy:** A message type or field marked `deprecated` in spec version N is removed no earlier than version N+2. Implementations MUST support deprecated fields for at least one major version cycle.
 
@@ -243,7 +243,7 @@ P66 conformance is a prerequisite for robots deployed in environments with direc
 | Reference implementations, SDKs, tools | [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
 | Conformance test suites | Apache 2.0 |
 | Registry software | Apache 2.0 |
-| Logos and visual identity | All rights reserved (contact maintainers for use) |
+| Logos and visual identity | All rights reserved (contact the maintainer for use) |
 
 Contributors agree that their contributions to the specification text are licensed under CC BY 4.0, and their code contributions are licensed under Apache 2.0, by the act of submitting a pull request to the rcan-spec repository.
 
@@ -259,11 +259,11 @@ The RCAN specification is designed to align with and complement existing interna
 |---|---|---|
 | **ISO 10218-1/2** (Robot safety) | Physical safety requirements for industrial robots; informs P66 conformance and ESTOP timing requirements | Aligned in v1.4 |
 | **ISO/TS 15066** (Collaborative robots) | Power and force limiting, speed/separation monitoring; informs hardware_safety field schema | Aligned in v1.4 |
-| **EU AI Act (Regulation 2024/1689)** | Art. 13 transparency obligations; Art. 49 high-risk AI registration; informs transparency manifest spec | Tracked in #159; target v1.5 |
-| **IEC 62443** (Industrial cybersecurity) | Security levels for industrial control systems; informs RCAN auth and registry security requirements | Partially aligned; full alignment target v1.6 |
-| **NIST AI RMF** (AI Risk Management) | AI risk categorisation and documentation; informs P66 manifest and transparency disclosure fields | Tracked; target v1.5 |
-| **ISO/TC 299** (Robotics terminology) | Common vocabulary for robot types and capabilities; informs RCAN robot type taxonomy | Ongoing alignment |
-| **IEC 61508** (Functional safety) | SIL (Safety Integrity Level) classification; informs hardware_safety SIL attestation fields | Target v1.5 |
+| **EU AI Act (Regulation 2024/1689)** | Art. 13 transparency obligations; Art. 49 high-risk AI registration; informs transparency manifest spec | Tracked in #159; ongoing alignment |
+| **IEC 62443** (Industrial cybersecurity) | Security levels for industrial control systems; informs RCAN auth and registry security requirements | Partially aligned; ongoing alignment |
+| **NIST AI RMF** (AI Risk Management) | AI risk categorisation and documentation; informs P66 manifest and transparency disclosure fields | Tracked; ongoing alignment |
+| **ISO/TC 299** (Robotics terminology) | Common vocabulary for robot types and capabilities; informs RCAN robot type taxonomy | Planned; not contacted yet |
+| **IEC 61508** (Functional safety) | SIL (Safety Integrity Level) classification; informs hardware_safety SIL attestation fields | Tracked; ongoing alignment |
 
 The RRF seeks formal liaison status with ISO/TC 299 and will apply for W3C liaison once formally incorporated.
 
@@ -322,4 +322,4 @@ We are particularly seeking input from:
 
 ---
 
-*This charter was drafted by the RCAN specification maintainers as a starting point for community discussion. It does not represent a final legal document. Nothing herein creates any binding obligation on any party.*
+*This charter was drafted by the RCAN specification maintainer as a starting point for community discussion. It does not represent a final legal document. Nothing herein creates any binding obligation on any party.*

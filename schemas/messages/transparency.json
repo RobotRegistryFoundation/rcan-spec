@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://rcan.dev/schemas/messages/transparency.json",
   "title": "TRANSPARENCY Message",
-  "description": "RCAN message type 18. EU AI Act Article 13 transparency disclosure. Sent by robots to disclose their AI nature, capabilities, operator identity, and contact information to humans they interact with. Must be sent on first human interaction, on request, or periodically in human-occupied spaces.",
+  "description": "RCAN message type 16. EU AI Act Article 13 transparency disclosure. Sent by robots to disclose their AI nature, capabilities, operator identity, and contact information to humans they interact with. Must be sent on first human interaction, on request, or periodically in human-occupied spaces.",
   "type": "object",
   "required": [
     "type",
@@ -15,8 +15,8 @@
   "properties": {
     "type": {
       "type": "integer",
-      "const": 18,
-      "description": "Identifies this as a TRANSPARENCY message (MessageType 18)."
+      "const": 16,
+      "description": "Identifies this as a TRANSPARENCY message (MessageType 16)."
     },
     "source": {
       "type": "string",
@@ -86,7 +86,7 @@
   },
   "examples": [
     {
-      "type": 18,
+      "type": 16,
       "source": "rcan://rcan.dev/acme/arm/v1/unit-001",
       "target": "rcan://local/human-display",
       "message_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",

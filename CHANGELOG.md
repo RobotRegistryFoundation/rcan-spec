@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+### Fixed: the rcan.dev root node now publishes its public key
+- `/.well-known/rcan-node.json` served `public_key: null`, so SDK `NodeClient`
+  discovery against rcan.dev failed with `missing_pubkey`. The manifest code was
+  already in place; the deployment had no key configured. The root node now has an
+  Ed25519 key (kid `ed25519-d626701596f726df`, minted 2026-10-16): the public half is
+  committed in `wrangler.toml` `[vars]`, the private half is the Pages secret
+  `RCAN_NODE_ED25519_PRIVKEY`, and the manifest is self-signed. No wire or schema
+  change. `pqc_public_key` stays null.
+- Tests check that the committed vars hold a consistent 32-byte key and that the
+  manifest built from them carries a key and validates against
+  `rcan-node.schema.json`.
+
 Proposed as **v3.3.0** (MINOR: additive and optional, no breaking change, per
 VERSIONING.md). v3.3 was earlier pencilled in for the §8.7 voice block; if voice ships
 first, this becomes v3.4.0.
@@ -31,6 +43,35 @@ first, this becomes v3.4.0.
   the method, not any robot.
 - `docs/alignment/bounded-embodiment-audit.md`: audit of existing coverage, gaps, and
   naming, section-number and claim issues left open for the maintainer.
+
+### Changed: Appendix C aligned with the Bounded Embodiment talk (16 October 2026)
+- Appendix C text now matches the slides and written version of the talk: the gap, the
+  one testable property, "The model proposes. A bounded layer disposes.", "not a new
+  safety layer: a test for the ones that exist" (Simplex, ASTM F3269, ISO/IEC TR 5469
+  non-AI safety functions, safety-rated monitoring), the requirement names and "verified
+  by" wording (R2 is now "a safety function below the model"), the disclosure that the
+  property does not depend on RCAN, and the standards list (ISO 10218:2025, ISO 13482,
+  ISO/CD 25785-1, ISO 13849-1, IEC 61508, IEC 60204-1, ISO/IEC TR 5469, IEEE 7009,
+  ITU-T F.748.44). The requirement-to-RCAN columns stay, labelled as RCAN's mapping.
+- New informative subsections: C.1.2 architecture (every path to motion passes the
+  gate) and C.1.3 recovery (clamp, reject, protective stop, repeated stops, emergency
+  stop; declared safe state per machine). C.3 adds typical machines per BE level and
+  what passing proves and doesn't. C.7 adds EV-10 (liveness) and a plain summary of EV-03.
+  No new conformance obligation.
+- `schemas/envelope.json` (both copies): optional `stop.safe_state` and optional
+  `recovery` block (`on_reject`: `hold` | `slow_down`; `repeated_stops` with
+  `escalate_after_count`, `count_window_s`, `escalate_after_s`; `estop_reset`: `manual`
+  only). Additive: existing envelopes still validate.
+- `schemas/gate-decision.json` (both copies): optional `stop_kind`
+  (`protective` | `repeated` | `emergency`, only with `stop`) and optional
+  `reason_returned` (not with `allow`). Additive: existing records still validate, and
+  no field or enum value was renamed or removed.
+- Fixtures: `fixtures/envelope/legged-recovery.valid.json`,
+  `fixtures/envelope/estop-auto-restart.invalid.json`,
+  `fixtures/gate-decision/legged-recovery-chain.valid.json`.
+- `scripts/conformance/rcan-assurance-v0.1.json`: EV-10 liveness case (requirement
+  `all`). Tests in `tests/assurance/`: 71 passing and 10 skipped placeholders (was 54
+  and 9).
 
 ### Fixed: ecosystem consistency (see audit §7)
 - RCAN is expanded as "Robot Communication and Addressing Network" everywhere in this repo.

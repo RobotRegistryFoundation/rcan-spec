@@ -1,4 +1,4 @@
-<div id="hero-network-canvas" class="absolute inset-0 z-0 pointer-events-none opacity-40"></div>
+<div id="hero-network-canvas" aria-hidden="true" class="absolute inset-0 z-0 pointer-events-none opacity-40"></div>
 
 <script>
   import * as THREE from 'three';
@@ -23,8 +23,16 @@
       this.mouse = new THREE.Vector2(0, 0);
 
       if (!this.container) return;
+      // Decorative only: skip it for reduced-motion users and browsers without WebGL.
+      if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+      const probe = document.createElement('canvas');
+      if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) return;
 
-      this.init();
+      try {
+        this.init();
+      } catch {
+        return;
+      }
       this.animate();
       this.handleResize();
       this.handleMouseMove();

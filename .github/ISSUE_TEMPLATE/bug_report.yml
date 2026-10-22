@@ -7,8 +7,8 @@ body:
     attributes:
       value: |
         Thanks for reporting a bug! Before filing, check if this is the right repo — see the
-        [ecosystem CONTRIBUTING doc](https://github.com/craigm26/opencastor-ops/blob/master/CONTRIBUTING.md)
-        for a decision tree.
+        [CONTRIBUTING doc](https://github.com/RobotRegistryFoundation/rcan-spec/blob/master/CONTRIBUTING.md)
+        for where each kind of issue goes.
   - type: input
     id: version
     attributes:
