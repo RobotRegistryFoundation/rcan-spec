@@ -13,6 +13,8 @@ separately.
      spec/             specification text
      schemas/          JSON Schema and OpenAPI files
      public/schemas/   the published copies of those schemas
+     src/pages/spec/   the specification snapshots published on
+                       rcan.dev
 
    The full legal code is in LICENSES/CC-BY-4.0.txt and at
    https://creativecommons.org/licenses/by/4.0/legalcode
@@ -67,8 +69,6 @@ separately.
    (SPDX: CC-BY-4.0). This covers:
 
      docs/             documentation, governance and design notes
-     src/pages/spec/   the specification snapshots published on
-                       rcan.dev
 
    It also covers the documents at the top of the repository:
    README.md, CHANGELOG.md, CONTRIBUTING.md, SECURITY.md,
