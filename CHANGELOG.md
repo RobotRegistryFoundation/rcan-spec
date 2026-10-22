@@ -147,6 +147,86 @@ first, this becomes v3.4.0.
   request body. The endpoint never read it. Push sync is authenticated by the admin
   bearer token plus the `namespace_delegations` allowlist, and by nothing else.
 
+## [3.2.3] - 2026-05-03
+
+_Reconstructed on 2026-10-22 from the `v3.2.3` tag (dated 2026-05-03 UTC), its GitHub
+release and the titles of the pull requests merged after `v3.2.2`._
+
+Tag message: "rcan-spec v3.2.3 — emit-version-tuple action: pass --repo to gh release upload".
+
+### Merged pull requests
+- docs: Plan 2 Phase 2 — rcan-spec/rcan.dev wording pass (#204)
+- site: Plan 2 Phase 2.5 — retire hardcoded versions from marketing surfaces (#205)
+- ci: Plan 2 Phase 2.5 — wire forbidden-phrase-lint workflow (#206)
+- feat: redirect RCAN spec prose to docs.rcan.dev (#207)
+- spec: audit-bundle v1.0 schema (#208)
+- fix(emit-version-tuple): pass --repo to gh release upload (#209)
+
+Commits pushed to `master` without a pull request are not described here:
+[v3.2.2...v3.2.3](https://github.com/RobotRegistryFoundation/rcan-spec/compare/v3.2.2...v3.2.3).
+
+## [3.2.2] - 2026-05-03
+
+_Reconstructed on 2026-10-22 from the `v3.2.2` tag (dated 2026-05-03 UTC) and its GitHub
+release._
+
+Tag message: "v3.2.2 — schema: loosen pq_kid/kid pattern".
+
+No pull request was merged after `v3.2.1`, and the release notes list no changes. Beyond
+the tag message, the contents of this release can't be established from tags, releases
+or pull requests:
+[v3.2.1...v3.2.2](https://github.com/RobotRegistryFoundation/rcan-spec/compare/v3.2.1...v3.2.2).
+
+## [3.2.1] - 2026-05-02
+
+_Reconstructed on 2026-10-22 from the `v3.2.1` tag (dated 2026-05-02 UTC), its GitHub
+release and the title of the pull request merged after `v3.2.0`._
+
+Tag message: "rcan-spec v3.2.1 — emit-version-tuple filename namespacing fix".
+
+### Merged pull requests
+- fix(emit-version-tuple): namespace output filename by field (#203)
+
+Commits pushed to `master` without a pull request are not described here:
+[v3.2.0...v3.2.1](https://github.com/RobotRegistryFoundation/rcan-spec/compare/v3.2.0...v3.2.1).
+
+## [3.2.0] - 2026-05-02
+
+_Reconstructed on 2026-10-22 from the `v3.2.0` tag (dated 2026-05-02 UTC) and the titles
+of the pull requests merged after `v2.3.1`. No GitHub release was published for this
+tag._
+
+Tag message: "RCAN spec v3.2 — profile freeze (decisions in
+spec/decisions/2026-05-04-profile-freeze.md)".
+
+### Merged pull requests
+- spec(§8.7): add optional voice: block — wake aliases, language, TTS voice (#198)
+- spec: profile freeze v3.2 (Plan 1 Task 3) (#200)
+- schemas: add version-tuple payload + hybrid envelope (Plan 1 Task 4) (#201)
+- actions(emit-version-tuple): hybrid-signing composite action (Plan 1 Task 5) (#202)
+
+Most changes between `v2.3.1` and `v3.2.0` were committed directly to `master`, without a
+pull request, so this entry can't list them:
+[v2.3.1...v3.2.0](https://github.com/RobotRegistryFoundation/rcan-spec/compare/v2.3.1...v3.2.0).
+No tag or GitHub release exists for any version between 2.3.1 and 3.2.0, including 3.0
+and 3.1, so this file has no entries for them.
+
+## [2.3.1] - 2026-04-02
+
+_Reconstructed on 2026-10-22 from the `v2.3.1` tag (dated 2026-04-02 UTC), its GitHub
+release ("RCAN Spec v2.3.1 — Robot Memory Schema") and the titles of the pull requests
+merged after `v2.3.0`._
+
+### Merged pull requests
+- fix: delete stale package-lock.json (project uses pnpm; causes false Dependabot alerts) (#192)
+- docs: robot-memory.md schema spec v1.0.0-draft (closes #191) (#193)
+
+The release notes describe `docs/robot-memory-schema.md`, which is in the tagged tree.
+They also name `governance/CHARTER.md` and `governance/STAKEHOLDER-MAP.md` as merged
+earlier; neither file is in the `v2.3.0` or `v2.3.1` tree. Commits pushed to `master`
+without a pull request are not described here:
+[v2.3.0...v2.3.1](https://github.com/RobotRegistryFoundation/rcan-spec/compare/v2.3.0...v2.3.1).
+
 ## [2.3.0] - 2026-03-31
 
 ### Added
