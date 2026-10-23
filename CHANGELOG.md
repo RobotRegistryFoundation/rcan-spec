@@ -147,6 +147,111 @@ first, this becomes v3.4.0.
   request body. The endpoint never read it. Push sync is authenticated by the admin
   bearer token plus the `namespace_delegations` allowlist, and by nothing else.
 
+## [3.2.3] - 2026-05-03
+
+_Reconstructed on 2026-10-22 from the `v3.2.3` tag (dated 2026-05-03 UTC), its GitHub
+release and the titles of the pull requests merged between `v3.2.2` and `v3.2.3`._
+
+Tag message: "rcan-spec v3.2.3 — emit-version-tuple action: pass --repo to gh release upload".
+
+### Merged pull requests
+- docs: Plan 2 Phase 2 — rcan-spec/rcan.dev wording pass (#204)
+- site: Plan 2 Phase 2.5 — retire hardcoded versions from marketing surfaces (#205)
+- ci: Plan 2 Phase 2.5 — wire forbidden-phrase-lint workflow (#206)
+- feat: redirect RCAN spec prose to docs.rcan.dev (#207)
+- spec: audit-bundle v1.0 schema (#208)
+- fix(emit-version-tuple): pass --repo to gh release upload (#209)
+
+The only other commits in this range are 10 of the CI bot's
+`ci: update sdk-status.json [skip ci]` commits:
+[v3.2.2...v3.2.3](https://github.com/RobotRegistryFoundation/rcan-spec/compare/v3.2.2...v3.2.3).
+
+## [3.2.2] - 2026-05-03
+
+_Reconstructed on 2026-10-22 from the annotated `v3.2.2` tag (dated 2026-05-03 UTC) and
+its GitHub release, whose notes are only a compare link. No pull request was merged
+between `v3.2.1` and `v3.2.2`._
+
+Tag message: "v3.2.2 — schema: loosen pq_kid/kid pattern". The tag's annotation says:
+- The `pq_kid`/`kid` pattern in the `version-tuple-envelope.json` schema is loosened from
+  `^[0-9a-f]{8,}$` to `^[A-Za-z0-9_-]{8,}$`, so it accepts both aggregator-style sha256
+  hex kids and release-signing namespaced kids.
+- `release-notify.yml` gains the emit-version-tuple step and an ensure-release-exists
+  guard, so release-notify runs from v3.2.2 on emit a signed envelope on the rcan-spec
+  release itself.
+- Tests: `tests/version-tuple-schema.test.ts`.
+- "No spec/protocol semantic changes. Patch bump."
+
+Apart from 5 of the CI bot's `ci: update sdk-status.json [skip ci]` commits, the range
+holds the two commits the annotation describes:
+[v3.2.1...v3.2.2](https://github.com/RobotRegistryFoundation/rcan-spec/compare/v3.2.1...v3.2.2).
+
+## [3.2.1] - 2026-05-02
+
+_Reconstructed on 2026-10-22 from the annotated `v3.2.1` tag (dated 2026-05-02 UTC), its
+GitHub release (published 2026-05-03) and the title of the pull request merged between
+`v3.2.0` and `v3.2.1`._
+
+Tag message: "rcan-spec v3.2.1 — emit-version-tuple filename namespacing fix". The
+annotation adds that the composite action now names its output file by its `field` input
+(for example `version-tuple-envelope-cli_version.json`), so a project that calls the
+action twice on the same release no longer overwrites the first envelope.
+
+### Merged pull requests
+- fix(emit-version-tuple): namespace output filename by field (#203)
+
+The only other commit in this range is one of the CI bot's
+`ci: update sdk-status.json [skip ci]` commits:
+[v3.2.0...v3.2.1](https://github.com/RobotRegistryFoundation/rcan-spec/compare/v3.2.0...v3.2.1).
+
+## [3.2.0] - 2026-05-02
+
+_Reconstructed on 2026-10-22 from the annotated `v3.2.0` tag and the titles of the pull
+requests merged between `v2.3.1` and `v3.2.0`. No GitHub release was published for this
+tag._
+
+**Date.** This entry is dated by the `v3.2.0` tag, 2026-05-02 (UTC), as the maintainer
+decided on 2026-10-22. The site changelog ([`src/pages/changelog.astro`](src/pages/changelog.astro))
+dates v3.2.0 2026-04-23.
+
+Tag message: "RCAN spec v3.2 — profile freeze (decisions in
+spec/decisions/2026-05-04-profile-freeze.md)". The tag's annotation says the release:
+- adopts `pqc-hybrid-v1` with a PQ-required, classical-optional verifier policy;
+- includes the version-tuple payload and envelope schemas (Plan 1 Task 4);
+- includes the emit-version-tuple composite action (Plan 1 Task 5), referenced as
+  `continuonai/rcan-spec/.github/actions/emit-version-tuple@v3.2.0`. The repository has
+  since moved from `continuonai` to `RobotRegistryFoundation`.
+
+### Merged pull requests
+- spec(§8.7): add optional voice: block — wake aliases, language, TTS voice (#198).
+  Merged before this tag as v3.3 material: the page it adds labels the section
+  "8.7 Voice Block (v3.3, optional)", so §8.7 is not part of v3.2.
+- spec: profile freeze v3.2 (Plan 1 Task 3) (#200)
+- schemas: add version-tuple payload + hybrid envelope (Plan 1 Task 4) (#201)
+- actions(emit-version-tuple): hybrid-signing composite action (Plan 1 Task 5) (#202)
+
+Most changes between `v2.3.1` and `v3.2.0` were committed directly to `master`, without a
+pull request, so this entry doesn't list them:
+[v2.3.1...v3.2.0](https://github.com/RobotRegistryFoundation/rcan-spec/compare/v2.3.1...v3.2.0).
+The site changelog describes v3.0.0 (2026-04-11), v3.1.0 (2026-04-24) and v3.2.0. No tag
+or GitHub release exists for 3.0 or 3.1, and this file has no entries for them.
+
+## [2.3.1] - 2026-04-02
+
+_Reconstructed on 2026-10-22 from the `v2.3.1` tag (dated 2026-04-02 UTC), its GitHub
+release ("RCAN Spec v2.3.1 — Robot Memory Schema") and the titles of the pull requests
+merged between `v2.3.0` and `v2.3.1`._
+
+### Merged pull requests
+- fix: delete stale package-lock.json (project uses pnpm; causes false Dependabot alerts) (#192)
+- docs: robot-memory.md schema spec v1.0.0-draft (closes #191) (#193)
+
+The release notes describe `docs/robot-memory-schema.md`, which is in the tagged tree.
+They also name `governance/CHARTER.md` and `governance/STAKEHOLDER-MAP.md` as merged
+earlier; neither file is in the `v2.3.0` or `v2.3.1` tree. The only other commits in this
+range are 4 of the CI bot's `ci: update sdk-status.json [skip ci]` commits:
+[v2.3.0...v2.3.1](https://github.com/RobotRegistryFoundation/rcan-spec/compare/v2.3.0...v2.3.1).
+
 ## [2.3.0] - 2026-03-31
 
 ### Added
