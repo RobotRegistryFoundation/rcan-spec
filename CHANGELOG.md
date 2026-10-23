@@ -204,15 +204,15 @@ The only other commit in this range is one of the CI bot's
 `ci: update sdk-status.json [skip ci]` commits:
 [v3.2.0...v3.2.1](https://github.com/RobotRegistryFoundation/rcan-spec/compare/v3.2.0...v3.2.1).
 
-## [3.2.0]
+## [3.2.0] - 2026-05-02
 
 _Reconstructed on 2026-10-22 from the annotated `v3.2.0` tag and the titles of the pull
 requests merged between `v2.3.1` and `v3.2.0`. No GitHub release was published for this
 tag._
 
-**Date.** The two sources disagree. The `v3.2.0` tag is dated 2026-05-02 (UTC). The site
-changelog ([`src/pages/changelog.astro`](src/pages/changelog.astro)) dates v3.2.0
-2026-04-23. This heading carries neither until the maintainer decides.
+**Date.** This entry is dated by the `v3.2.0` tag, 2026-05-02 (UTC), as the maintainer
+decided on 2026-10-22. The site changelog ([`src/pages/changelog.astro`](src/pages/changelog.astro))
+dates v3.2.0 2026-04-23.
 
 Tag message: "RCAN spec v3.2 — profile freeze (decisions in
 spec/decisions/2026-05-04-profile-freeze.md)". The tag's annotation says the release:
