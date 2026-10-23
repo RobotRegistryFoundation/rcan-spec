@@ -1,0 +1,14 @@
+# Phrases this repository must not use. The forbidden-phrase-lint workflow
+# checks every tracked file against these patterns, in addition to the shared
+# dictionary it fetches from opencastor-ops.
+#
+# One POSIX extended regular expression per line, matched case-insensitively
+# with `git grep -i -E`. Lines starting with # and blank lines are ignored.
+# Write each pattern so that it doesn't match its own text (the [[:space:]]
+# classes do that), because this file is checked too.
+
+# Don't compare the registry to a domain-name authority.
+Like[[:space:]]+ICANN[[:space:]]+for[[:space:]]+robots
+
+# §22–§26 define document formats; don't present them as EU AI Act compliance.
+EU[[:space:]]+AI[[:space:]]+Act[[:space:]]+§[[:space:]]*22[[:space:]]*(–|-|—)[[:space:]]*(§[[:space:]]*)?26[[:space:]]+compliance
