@@ -1,6 +1,6 @@
 {
   "format": "rcan-canonical-json-v1",
-  "description": "Byte-level invariants for RCAN canonical JSON serialization. Both rcan-py and rcan-ts MUST emit identical UTF-8 bytes for every case.",
+  "description": "Byte-level test vectors for RCAN canonical JSON (RFC 8785; spec/audit-bundle-v1.md). Every implementation MUST emit exactly expected_bytes_base64 for each case's input. error_cases hold JSON texts that have no canonical form: parse input_json with an ordinary JSON reader, then canonicalization MUST fail (expected_error names the reason).",
   "cases": [
     {
       "name": "key_ordering",
@@ -127,13 +127,113 @@
         "d": 0
       },
       "expected_bytes_base64": "eyJhIjp0cnVlLCJiIjpmYWxzZSwiYyI6MSwiZCI6MH0="
+    },
+    {
+      "name": "key_order_utf16_code_units",
+      "description": "Names sort by UTF-16 code units, not code points. U+1F600 is the surrogate pair D83D DE00 and 0xD83D < 0xE000, so it sorts before U+E000; code-point order would put U+E000 first.",
+      "input": {
+        "\ue000": 1,
+        "\ud83d\ude00": 2
+      },
+      "expected_bytes_base64": "eyLwn5iAIjoyLCLugIAiOjF9"
+    },
+    {
+      "name": "key_order_integer_like_names",
+      "description": "Names that look like numbers are compared as strings: \"10\" sorts before \"9\". (A JavaScript object rebuilt from sorted keys lists integer-like names first, in numeric order, so it cannot be used to carry the order.)",
+      "input": {
+        "b": 0,
+        "10": 1,
+        "9": 2,
+        "": 3
+      },
+      "expected_bytes_base64": "eyIiOjMsIjEwIjoxLCI5IjoyLCJiIjowfQ=="
+    },
+    {
+      "name": "numbers_ecmascript_form",
+      "description": "Numbers are written as ECMAScript Number::toString writes them: exponent form below 1e-6 and from 1e21 up, plain decimals between, negative zero as 0.",
+      "input": {
+        "n": [
+          1e+21,
+          1e-07,
+          1e+16,
+          1e-06,
+          0.1,
+          1.5e-10,
+          -0.0,
+          5e-324,
+          1.7976931348623157e+308,
+          123.456
+        ]
+      },
+      "expected_bytes_base64": "eyJuIjpbMWUrMjEsMWUtNywxMDAwMDAwMDAwMDAwMDAwMCwwLjAwMDAwMSwwLjEsMS41ZS0xMCwwLDVlLTMyNCwxLjc5NzY5MzEzNDg2MjMxNTdlKzMwOCwxMjMuNDU2XX0="
+    },
+    {
+      "name": "integers_are_binary64",
+      "description": "An integer is the nearest binary64 value: 2**53 + 1 is written 9007199254740992 and 123456789012345678901 is written 123456789012345680000. Readers that keep integers exact (Python's json module) must convert before writing.",
+      "input": {
+        "n": [
+          9007199254740993,
+          -9007199254740993,
+          123456789012345678901
+        ]
+      },
+      "expected_bytes_base64": "eyJuIjpbOTAwNzE5OTI1NDc0MDk5MiwtOTAwNzE5OTI1NDc0MDk5MiwxMjM0NTY3ODkwMTIzNDU2ODAwMDBdfQ=="
+    },
+    {
+      "name": "string_escapes",
+      "description": "Only \" and \\ and characters below U+0020 are escaped: \\b \\t \\n \\f \\r by name, the rest as \\u00xx with lowercase hex digits. Everything else, including /, U+007F and U+2028, is written raw.",
+      "input": {
+        "s": [
+          "\u001f\u0000",
+          "\b\t\n\f\r",
+          "\"\\",
+          "/\u007f\u2028"
+        ]
+      },
+      "expected_bytes_base64": "eyJzIjpbIlx1MDAxZlx1MDAwMCIsIlxiXHRcblxmXHIiLCJcIlxcIiwiL3/igKgiXX0="
+    }
+  ],
+  "error_cases": [
+    {
+      "name": "non_finite_number",
+      "description": "1e400 overflows binary64 to Infinity when read. Infinity has no canonical form; writing null instead would give two different documents the same bytes.",
+      "input_json": "{\"n\":1e400}",
+      "expected_error": "non_finite_number"
+    },
+    {
+      "name": "non_finite_number_nested_negative",
+      "input_json": "{\"a\":{\"b\":[-1e400]}}",
+      "expected_error": "non_finite_number"
+    },
+    {
+      "name": "unpaired_high_surrogate",
+      "description": "A lone surrogate has no UTF-8 encoding. Writing the escape \\ud800 instead gives bytes no conforming implementation produces.",
+      "input_json": "{\"s\":\"\\ud800\"}",
+      "expected_error": "invalid_string"
+    },
+    {
+      "name": "unpaired_low_surrogate",
+      "input_json": "{\"s\":\"x\\udc00\"}",
+      "expected_error": "invalid_string"
+    },
+    {
+      "name": "reversed_surrogate_pair",
+      "input_json": "{\"s\":\"\\ude00\\ud83d\"}",
+      "expected_error": "invalid_string"
+    },
+    {
+      "name": "unpaired_surrogate_in_name",
+      "input_json": "{\"\\ud800\":1}",
+      "expected_error": "invalid_string"
     }
   ],
   "invariants": [
-    "Keys sorted lexicographically at every nesting level",
+    "Members sorted by name at every nesting level, comparing names as UTF-16 code units (RFC 8785 \u00a7 3.2.3); names that look like numbers are compared as strings",
     "No whitespace (no spaces, tabs, newlines)",
     "Non-ASCII Unicode emitted as UTF-8 bytes, NOT \\uXXXX escapes",
-    "Whole-number floats normalized to integers (50.0 emits as 50, not 50.0) \u2014 JS's JSON.parse loses the int/float distinction, so cross-language parity requires Python emitters to also drop trailing .0 from whole-number floats. Recurses through arrays and nested dicts.",
+    "Numbers are binary64 and written as ECMAScript Number::toString writes them (RFC 8785 \u00a7 3.2.2.3), so whole-number floats emit as integers (50.0 emits as 50), -0 emits as 0, 1e21 as 1e+21 and 1e-7 as 1e-7. Python emitters must convert ints beyond 2**53 to the nearest binary64 value as well.",
+    "Only \" \\ and characters below U+0020 are escaped (\\b \\t \\n \\f \\r by name, others as \\u00xx in lowercase hex)",
+    "NaN, Infinity and unpaired surrogates have no canonical form: canonicalization MUST fail",
     "Empty object rendered as {}, empty array as []",
     "No trailing newline"
   ]

@@ -48,7 +48,7 @@ passing.
 | File | What it tests |
 |---|---|
 | `envelope-schema.test.ts` | `schemas/envelope.json` and `schemas/gate-decision.json` compile as JSON Schema 2020-12; valid fixtures pass; the fail-open heartbeat, L3-as-BE-level and automatic e-stop reset fixtures fail at the expected path; the optional recovery fields (`stop.safe_state`, `recovery`, `stop_kind`, `reason_returned`) validate and are constrained; published copies match; `rcan-config.json` carries `envelope` as optional. |
-| `evidence-chain.test.ts` | Canonical JSON parity with `fixtures/canonical-json-v1.json`; EV-08 mutation, insertion, deletion, reordering; tail truncation undetectable without an anchor and detected with one; EV-07 log audit; replay against the envelope; the recovery chain verifies, replays and escalates at the declared count. |
+| `evidence-chain.test.ts` | Canonical JSON parity with `fixtures/canonical-json-v1.json` (`cases` give exact bytes; `error_cases` must fail); EV-08 mutation, insertion, deletion, reordering; tail truncation undetectable without an anchor and detected with one; EV-07 log audit; replay against the envelope; the recovery chain verifies, replays and escalates at the declared count. |
 | `ev-suite.test.ts` | The EV case file is well formed, lists EV-01 to EV-10 once each, carries no result fields; placeholders for everything that cannot run here. |
 
 ## Running the software tests against an implementation
