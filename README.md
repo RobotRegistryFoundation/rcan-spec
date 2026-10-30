@@ -155,7 +155,10 @@ Current versions for all packages: see the [live compatibility matrix](https://r
 Specification text and schemas: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (full text in [LICENSES/CC-BY-4.0.txt](LICENSES/CC-BY-4.0.txt)).
 Reference SDKs (rcan-py, rcan-ts): MIT.
 Scripts, tests and fixtures (`scripts/`, `tests/`, `fixtures/`): [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) (full text in [LICENSES/Apache-2.0.txt](LICENSES/Apache-2.0.txt)).
-The licence for the site code and the rest of this repository is still to be decided; see [LICENSE](LICENSE).
+Site and registry code, robot profiles, and build and CI configuration: Apache 2.0.
+Documentation: CC BY 4.0.
+Logos and visual identity are not licensed.
+[LICENSE](LICENSE) lists the paths and files each licence covers.
 
 ---
 
