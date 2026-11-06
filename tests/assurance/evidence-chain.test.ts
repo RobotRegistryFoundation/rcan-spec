@@ -9,6 +9,7 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "fs";
 import { resolve } from "path";
 import {
+  CanonicalJsonError,
   GENESIS_PREV,
   appendRecord,
   auditAuthority,
@@ -35,6 +36,22 @@ describe("canonical JSON matches fixtures/canonical-json-v1.json", () => {
       expect(Buffer.from(canonicalJson(c.input), "utf8").toString("base64")).toBe(c.expected_bytes_base64);
     });
   }
+  for (const c of suite.error_cases) {
+    it(`${c.name} has no canonical form (${c.expected_error})`, () => {
+      let error: unknown;
+      try {
+        canonicalJson(JSON.parse(c.input_json));
+      } catch (e) {
+        error = e;
+      }
+      expect(error).toBeInstanceOf(CanonicalJsonError);
+      expect((error as CanonicalJsonError).code).toBe(c.expected_error);
+    });
+  }
+  it("a record holding a non-finite number cannot be hashed", () => {
+    const rec = { ...clone(CHAIN[0]), applied: { linear_mps: Infinity } };
+    expect(() => recordHash(rec)).toThrowError(CanonicalJsonError);
+  });
 });
 
 describe("fixture chain", () => {
