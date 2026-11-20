@@ -13,6 +13,8 @@ separately.
      spec/             specification text
      schemas/          JSON Schema and OpenAPI files
      public/schemas/   the published copies of those schemas
+     src/pages/spec/   the specification snapshots published on
+                       rcan.dev
 
    The full legal code is in LICENSES/CC-BY-4.0.txt and at
    https://creativecommons.org/licenses/by/4.0/legalcode
@@ -37,9 +39,52 @@ separately.
    The full text is in LICENSES/Apache-2.0.txt and at
    https://www.apache.org/licenses/LICENSE-2.0
 
-4. Everything else: licence to be decided by the maintainer
+4. Site and registry code, profiles and configuration: Apache 2.0
 
-   The licence for the rest of this repository has not been decided
-   yet. That includes the rcan.dev site code (src/, functions/,
-   migrations/, schema/, the rest of public/), profiles/ and docs/.
-   This file does not grant a licence for that material.
+   The rcan.dev site and registry code, the robot profiles and this
+   repository's build and CI configuration are licensed under the
+   Apache License, Version 2.0 (SPDX: Apache-2.0). This covers:
+
+     src/              the rcan.dev site, except src/pages/spec/
+     functions/        the rcan.dev API and registry functions
+     migrations/       registry database migrations
+     schema/           the registry database schema
+     public/           everything except public/schemas/ and the
+                       files listed in section 6
+     profiles/         robot configuration profiles
+     .github/          workflows, issue templates and actions
+
+   It also covers the configuration files at the top of the
+   repository: package.json, pnpm-lock.yaml, astro.config.mjs,
+   tailwind.config.mjs, tsconfig.json, vitest.config.ts,
+   wrangler.toml, .gitignore, CNAME and CODEOWNERS.
+
+   The full text is in LICENSES/Apache-2.0.txt and at
+   https://www.apache.org/licenses/LICENSE-2.0
+
+5. Documentation: CC BY 4.0
+
+   The documentation in this repository is licensed under the
+   Creative Commons Attribution 4.0 International License
+   (SPDX: CC-BY-4.0). This covers:
+
+     docs/             documentation, governance and design notes
+
+   It also covers the documents at the top of the repository:
+   README.md, CHANGELOG.md, CONTRIBUTING.md, SECURITY.md,
+   VERSIONING.md and CLAUDE.md.
+
+   The full legal code is in LICENSES/CC-BY-4.0.txt and at
+   https://creativecommons.org/licenses/by/4.0/legalcode
+
+6. Not licensed by this file
+
+   This file grants no licence for:
+
+     public/favicon.svg, public/og.svg, public/badges/
+                       logos and visual identity, which the draft
+                       charter (docs/governance/
+                       robot-registry-foundation.md) keeps as all
+                       rights reserved
+     .wrangler/        local development state
+     anything not listed in sections 1 to 5
