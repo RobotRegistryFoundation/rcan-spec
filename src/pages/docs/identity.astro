@@ -2,13 +2,13 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Identity Verification & LoA" description="RCAN §8.7 — Registry trust anchors, Level of Assurance (LoA 1/2/3), registry tiers, FIDO2/WebAuthn binding, and P66 min_loa_for_control.">
+<BaseLayout title="Identity Verification & LoA" description="RCAN §5.9 (formerly §8.7) — Registry trust anchors, Level of Assurance (LoA 1/2/3), registry tiers, FIDO2/WebAuthn binding, and P66 min_loa_for_control.">
   <nav class="doc-nav">
     <a href="/docs/">← Documentation</a>
   </nav>
 
   <article class="doc-article">
-    <h1>§8.7 — Registry Trust Anchors and Identity Verification <span class="badge-new">v1.6</span></h1>
+    <h1>§5.9 (formerly §8.7) — Registry Trust Anchors and Identity Verification <span class="badge-new">v1.6</span></h1>
     <p class="lead">JWT tokens identify who issued a command, but before v1.6 there was no spec for <em>how well</em> the registry verified that identity. A JWT could be issued by a rogue registry to anyone. v1.6 adds Level of Assurance (LoA), registry tiers, and trust anchor discovery so robots in high-security environments can enforce meaningful identity verification.</p>
 
     <div class="callout callout-safety">
@@ -299,7 +299,7 @@ if claims.loa == 3:
         <li><a href="/docs/federation/">§18 Registry Federation Protocol</a> — registry tiers in cross-registry context</li>
         <li><a href="/docs/auth/">Authentication</a> — JWT structure and role-based access</li>
         <li><a href="/docs/safety/">Safety &amp; P66 Conformance</a> — <code>min_loa_for_control</code> in Protocol 66 manifest</li>
-        <li><a href="/docs/key-rotation/">§8.6 Key Rotation</a> — JWKS format used for registry key distribution</li>
+        <li><a href="/docs/key-rotation/">§5.8 (formerly §8.6) Key Rotation</a> — JWKS format used for registry key distribution</li>
         <li><a href="/docs/offline/">§14 Offline Operation</a> — LoA enforcement during offline mode</li>
       </ul>
     </section>

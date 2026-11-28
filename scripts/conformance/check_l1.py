@@ -231,11 +231,11 @@ class L1Checker:
         url = f"{self.base}/api/discovery"
         try:
             status, body = _request("GET", url, token=self.token)
-        except ConnectionError:
-            # Endpoint not available — fall back to static assertion check.
+        except ConnectionError as e:
             return TestResult(
-                tid, name, True,
-                "Live mDNS endpoint not available — static check passed (implementor must verify _rcan._tcp advertising)"
+                tid, name, False,
+                f"Could not reach {url}: {e} (cannot verify _rcan._tcp advertising)",
+                skipped=True,
             )
         self._log(f"GET {url} → {status} {json.dumps(body)[:200]}")
         if status == 200 and isinstance(body, dict):
@@ -248,7 +248,11 @@ class L1Checker:
             if missing:
                 return TestResult(tid, name, False, f"TXT record missing keys: {sorted(missing)}")
             return TestResult(tid, name, True, "service_type=_rcan._tcp, required TXT keys present")
-        return TestResult(tid, name, True, "Discovery endpoint not present — static assertion applies (implementor must verify)")
+        return TestResult(
+            tid, name, False,
+            f"Discovery endpoint returned HTTP {status} — cannot verify _rcan._tcp advertising",
+            skipped=True,
+        )
 
     # ------------------------------------------------------------------
     # T6: Schema validation endpoint
@@ -296,11 +300,24 @@ class L1Checker:
 # Reporter
 # ---------------------------------------------------------------------------
 
-def _badge(passed: int, total: int) -> str:
-    if passed == total:
+def _badge(passed: int, failed: int, skipped: int, total: int) -> str:
+    if passed == total and failed == 0 and skipped == 0:
         return "✅  L1 CORE CONFORMANT"
-    pct = int(passed / total * 100)
-    return f"❌  NOT CONFORMANT — {passed}/{total} passed ({pct}%)"
+    pct = int(passed / total * 100) if total else 0
+    if failed == 0 and skipped > 0:
+        return f"⚠️  INCOMPLETE — {passed}/{total} passed, {skipped} skipped (endpoint unreachable or unverified)"
+    return f"❌  NOT CONFORMANT — {passed}/{total} passed, {failed} failed, {skipped} skipped ({pct}%)"
+
+
+def evaluate_exit_code(results: List[TestResult]) -> int:
+    """Return 0 if all passed, 1 if any failed, 2 if none failed but any skipped."""
+    failed = sum(1 for r in results if not r.passed and not r.skipped)
+    skipped = sum(1 for r in results if r.skipped)
+    if failed > 0:
+        return 1
+    if skipped > 0:
+        return 2
+    return 0
 
 
 def print_report(results: List[TestResult]) -> bool:
@@ -309,16 +326,22 @@ def print_report(results: List[TestResult]) -> bool:
     print(f"{'TEST ID':<{col_w}}  {'STATUS':<8}  DETAIL")
     print("─" * 70)
     passed = 0
+    failed = 0
+    skipped = 0
     for r in results:
         status = "SKIP  " if r.skipped else ("PASS  " if r.passed else "FAIL  ")
         marker = "⚠️ " if r.skipped else ("✅ " if r.passed else "❌ ")
         print(f"{r.id:<{col_w}}  {marker}{status}  {r.detail}")
-        if r.passed or r.skipped:
+        if r.skipped:
+            skipped += 1
+        elif r.passed:
             passed += 1
+        else:
+            failed += 1
     total = len(results)
     print("─" * 70)
-    print(f"\n{_badge(passed, total)}\n")
-    return passed == total
+    print(f"\n{_badge(passed, failed, skipped, total)}\n")
+    return passed == total and failed == 0 and skipped == 0
 
 
 # ---------------------------------------------------------------------------
@@ -337,8 +360,8 @@ def main() -> None:
 
     checker = L1Checker(args.host, args.port, args.token, args.verbose)
     results = checker.run_all()
-    all_passed = print_report(results)
-    sys.exit(0 if all_passed else 1)
+    print_report(results)
+    sys.exit(evaluate_exit_code(results))
 
 
 if __name__ == "__main__":

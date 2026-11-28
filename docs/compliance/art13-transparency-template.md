@@ -136,7 +136,7 @@ Cybersecurity:
 **RCAN specification:** https://rcan.dev/spec  
 **Conformance check:** Run `castor validate --config your-robot.rcan.yaml` to confirm all Art. 13 fields are populated.
 
-**Relevant RCAN v1.6 conformance checks that verify Art. 13 readiness:**
+**Relevant RCAN conformance checks that verify Art. 13 readiness** (see [rcan.dev/compatibility](https://rcan.dev/compatibility) for current version)**:**
 - `safety.local_safety_wins` — ensures local safety cannot be overridden
 - `rcan_v15.consent_declared` — verifies consent block exists
 - `rcan_v15.loa_enforcement` — verifies LoA scopes are defined

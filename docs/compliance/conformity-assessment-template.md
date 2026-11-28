@@ -81,7 +81,7 @@ Per Article 11 + Annex IV, the technical file must contain:
 
 | Standard / specification | Relevance | Applied? |
 |---|---|---|
-| RCAN v1.6 | Robot communication + AI control protocol | [FILL] |
+| [RCAN protocol](https://rcan.dev/compatibility) | Robot communication + AI control protocol | [FILL] |
 | ISO 12100:2010 | Risk assessment methodology | [FILL] |
 | IEC 62443-4-1 | Secure development lifecycle | [FILL — see iec-62443-alignment.md] |
 | ISO 10218-1/2 | Industrial robot safety | [FILL — see iso-10218-alignment.md] |
@@ -93,7 +93,7 @@ Per Article 11 + Annex IV, the technical file must contain:
 
 ## Section 5 — RCAN Conformance Evidence
 
-RCAN v1.6 conformance is the primary technical evidence of compliance with the harmonised requirements of Articles 9–17.
+RCAN protocol conformance (see [rcan.dev/compatibility](https://rcan.dev/compatibility)) is the primary technical evidence of compliance with the harmonised requirements of Articles 9–17.
 
 **Required minimum score:** 80/100, with 0 `fail`-level findings on safety checks.
 

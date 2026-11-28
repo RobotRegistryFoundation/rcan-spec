@@ -127,7 +127,7 @@
     "safety": {
       "type": "object",
       "description": "Safety envelope parameters. These values are enforced by the RCAN runtime and cannot be overridden by AI-generated commands.",
-      "required": [],
+      "required": ["local_safety_wins"],
       "additionalProperties": true,
       "properties": {
         "max_linear_speed_mps": {
@@ -162,7 +162,8 @@
         },
         "local_safety_wins": {
           "type": "boolean",
-          "description": "If true, local sensor-based safety overrides any network command."
+          "description": "If true, local sensor-based safety overrides any network command.",
+          "default": true
         },
         "max_speed_override": {
           "type": "number",
@@ -304,6 +305,60 @@
         },
         "notes": {
           "type": "string"
+        }
+      }
+    },
+
+    "hardware_safety": {
+      "type": "object",
+      "description": "Declares physical safety hardware present on this robot. Used by the Protocol 66 manifest and Robot Registry Foundation to accurately report safety capabilities.",
+      "additionalProperties": false,
+      "properties": {
+        "physical_estop": {
+          "type": "boolean",
+          "description": "Physical emergency stop button that cuts actuator power independently of software."
+        },
+        "hardware_watchdog_mcu": {
+          "type": "boolean",
+          "description": "Dedicated hardware watchdog MCU (e.g. STM32 safety core) that resets actuators if main CPU hangs."
+        },
+        "force_torque_sensors": {
+          "type": "boolean",
+          "description": "Force/torque sensors enabling contact force limiting (ISO/TS 15066 PFL)."
+        },
+        "human_proximity_sensors": {
+          "type": "string",
+          "enum": ["none", "lidar", "depth_camera", "uwb", "combined"],
+          "description": "Human proximity sensing method for speed and separation monitoring (ISO 10218-1 SSM)."
+        },
+        "sil_level": {
+          "type": "string",
+          "enum": ["none", "SIL1", "SIL2", "SIL3", "PLc", "PLd", "PLe"],
+          "description": "Safety Integrity Level or Performance Level of the robot's safety system (IEC 61508 / ISO 13849)."
+        },
+        "voltage_monitoring": {
+          "type": "boolean",
+          "description": "Hardware voltage monitoring with automatic power cutoff."
+        }
+      }
+    },
+
+    "watchdog": {
+      "type": "object",
+      "description": "Brain watchdog configuration. If the AI brain is unresponsive for timeout_s seconds, the runtime performs a controlled stop.",
+      "additionalProperties": false,
+      "properties": {
+        "timeout_s": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 300,
+          "default": 10,
+          "description": "Seconds before brain watchdog triggers a controlled stop. Default: 10."
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable the brain watchdog. Disabling is not recommended for production."
         }
       }
     },

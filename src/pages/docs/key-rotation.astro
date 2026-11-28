@@ -2,13 +2,13 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Key Rotation" description="RCAN §8.6 — JWKS key lifecycle, KEY_ROTATION message type, grace period overlap, and key_id on signed messages.">
+<BaseLayout title="Key Rotation" description="RCAN §5.8 (formerly §8.6) — JWKS key lifecycle, KEY_ROTATION message type, grace period overlap, and key_id on signed messages.">
   <nav class="doc-nav">
     <a href="/docs/">← Documentation</a>
   </nav>
 
   <article class="doc-article">
-    <h1>§8.6 — Key Lifecycle and Rotation <span class="badge-new">v1.5</span></h1>
+    <h1>§5.8 (formerly §8.6) — Key Lifecycle and Rotation <span class="badge-new">v1.5</span></h1>
     <p class="lead">Earlier <a href="https://docs.rcan.dev/spec/">RCAN protocol</a> drafts used a single, non-expiring signing key per operator. Subsequent revisions add JWKS-based key management with expiry, rotation, and a grace period so production fleets can rotate keys without dropping active sessions.</p>
 
     <section>

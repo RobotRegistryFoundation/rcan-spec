@@ -255,7 +255,7 @@ brain:
 
     <section>
       <h2>EU AI Act Compliance (Article 13)</h2>
-      <p>EU AI Act Article 13 requires AI systems to disclose their AI nature, capabilities, and operator identity to persons they interact with. Robots using RCAN that incorporate foundation models or LLM capabilities must implement <strong>MessageType 18 (TRANSPARENCY)</strong>.</p>
+      <p>EU AI Act Article 13 requires AI systems to disclose their AI nature, capabilities, and operator identity to persons they interact with. Robots using RCAN that incorporate foundation models or LLM capabilities must implement <strong>MessageType 16 (TRANSPARENCY)</strong>.</p>
 
       <p><strong>Deadline: August 2, 2026</strong> (General Purpose AI provisions in force).</p>
 
@@ -268,7 +268,7 @@ brain:
       </blockquote>
       <!-- END: ecosystem certification disclaimer -->
 
-      <h3>MessageType.TRANSPARENCY (type: 18)</h3>
+      <h3>MessageType.TRANSPARENCY (type: 16)</h3>
       <p><strong>Purpose:</strong> Robots disclose AI nature, capabilities, and operator to humans they interact with.</p>
       <p><strong>Trigger:</strong> On first human interaction, on request, or periodically in human-occupied spaces.</p>
 
@@ -318,8 +318,8 @@ msg = make_transparency_message(
     </section>
 
     <section id="time-sync">
-      <h2>§8.4 — Clock Synchronization Requirements <span class="badge new-v15">v1.5</span></h2>
-      <p><strong>Gap:</strong> GAP-04 — Replay attack prevention (§8.3) depends on timestamp comparison. Unsynced clocks cause valid commands to be rejected or create replay windows.</p>
+      <h2>§5.6 (formerly §8.4) — Clock Synchronization Requirements <span class="badge new-v15">v1.5</span></h2>
+      <p><strong>Gap:</strong> GAP-04 — Replay attack prevention (§5.5 / formerly §8.3) depends on timestamp comparison. Unsynced clocks cause valid commands to be rejected or create replay windows.</p>
 
       <h3>Requirements</h3>
       <ul>
@@ -398,7 +398,7 @@ X-Audit-Issuer-Sig: ed25519:...      // Ed25519 signature over root hash</code><
   "protocol":             66,
   "rcan_version":         "3.2",
   ...
-  "min_loa_for_control":  2,             // NEW v1.6 — default 1 (backward compat). See §8.7.
+  "min_loa_for_control":  2,             // NEW v1.6 — default 1 (backward compat). See §5.9 (formerly §8.7).
   "federation_enabled":   false,         // NEW v1.6 — default false. See §18.
   "trusted_registries":   [],            // NEW v1.6 — federation allowlist; [] = trust all authoritative
   "supported_transports": ["http"],      // NEW v1.6 — constrained transport tiers. See §19.
@@ -407,7 +407,7 @@ X-Audit-Issuer-Sig: ed25519:...      // Ed25519 signature over root hash</code><
 
       <h3>min_loa_for_control</h3>
       <ul>
-        <li>Type: <code>integer</code> — values 1, 2, or 3 (Level of Assurance — see <a href="/docs/identity/">§8.7</a>)</li>
+        <li>Type: <code>integer</code> — values 1, 2, or 3 (Level of Assurance — see <a href="/docs/identity/">§5.9 (formerly §8.7)</a>)</li>
         <li>Default: <code>1</code> (backward compatible — existing v1.5 deployments are unaffected)</li>
         <li>Robots MUST reject <code>control</code>-scope commands from JWTs whose <code>loa</code> field is below this value</li>
         <li>Recommended production setting: <code>2</code> (email-verified identity minimum)</li>

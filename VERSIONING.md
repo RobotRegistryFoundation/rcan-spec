@@ -81,7 +81,7 @@ Every MAJOR version is supported with security fixes for a minimum of **3 years*
 ## What Changes Between Versions
 
 ### What will never change without a MAJOR bump
-- Message type integer values (COMMAND=1, CONFIG=2, etc.)
+- Message type integer values (COMMAND=1, CONFIG=5, SAFETY=6, etc.)
 - Role level numbers (GUEST=1 through CREATOR=5)
 - RURI format (`rcan://registry/manufacturer/model/device-id`)
 - Safety invariant semantics (local safety wins, graceful degradation, mandatory audit)
