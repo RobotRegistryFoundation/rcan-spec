@@ -12,7 +12,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <p class="lead">A robot in a factory basement that loses WiFi for 30 minutes should not become uncontrollable. v1.5 specifies how robots authenticate locally without registry connectivity while maintaining security boundaries.</p>
 
     <div class="callout callout-safety">
-      <strong>Protocol 66 Invariant:</strong> Offline ESTOP from same-network owner is ALWAYS accepted, provided the cached key matches. Registry connectivity is never required to halt a robot.
+      <strong>Protocol 66 Invariant:</strong> Offline ESTOP from any source is ALWAYS accepted without registry connectivity or clock synchronization (fail-safe; see <a href="/docs/replay-prevention/">Replay Attack Prevention</a>). Non-ESTOP commands from a same-network owner continue using the cached key, and <code>RESUME</code> / <code>ESTOP_CLEAR</code> always requires valid authentication.
     </div>
 
     <section>

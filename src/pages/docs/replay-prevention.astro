@@ -2,14 +2,14 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Replay Attack Prevention" description="RCAN §8.3 — sliding-window msg_id seen-set, replay window, and anti-DoS ordering for replay checks.">
+<BaseLayout title="Replay Attack Prevention" description="RCAN §5.5 (formerly §8.3) — sliding-window msg_id seen-set, replay window, and anti-DoS ordering for replay checks.">
   <nav class="doc-nav">
     <a href="/docs/">← Documentation</a>
   </nav>
 
   <article class="doc-article">
-    <h1>§8.3 — Replay Attack Prevention <span class="badge-new">v1.5</span></h1>
-    <p class="lead">Without replay prevention, a captured signed command is valid forever. v1.5 adds a mandatory timestamp freshness bound and a sliding-window msg_id seen-set to block replayed messages.</p>
+    <h1>§5.5 — Replay Attack Prevention <span class="badge-new">v1.5</span></h1>
+    <p class="lead">Without replay prevention, a captured signed command is valid forever. v1.5 adds a mandatory timestamp freshness bound and a sliding-window msg_id seen-set to block replayed messages. <em>(Formerly labelled §8.3; §8 covers Robot Config.)</em></p>
 
     <div class="callout callout-critical">
       <strong>Deployment blocker:</strong> Any RCAN robot accessible over a network is vulnerable to replay attacks without this protection. All v1.5-compliant implementations MUST enforce replay checking.
@@ -29,8 +29,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <ul>
         <li>Default <code>replay_window_s</code>: <strong>30 seconds</strong></li>
         <li>Configurable range: 5–300 seconds (via <code>security.replay_window_s</code>)</li>
-        <li>For <strong>SAFETY messages (type 6)</strong>: window MUST NOT exceed <strong>10 seconds</strong></li>
-        <li>Clock drift tolerance: ±5s (enforced by §8.4 time sync requirement)</li>
+        <li>For <strong>non-ESTOP SAFETY messages (type 6, e.g. RESUME / ESTOP_CLEAR)</strong>: window MUST NOT exceed <strong>10 seconds</strong></li>
+        <li>Clock drift tolerance: ±5s (enforced by §5.6 / §8.4 time sync requirement); <strong>ESTOP is never rejected for staleness or unsynchronized clocks</strong> (see ESTOP Safety Invariant below)</li>
       </ul>
 
       <h3>2. msg_id Seen-Set (Sliding Window)</h3>
@@ -61,14 +61,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <section>
       <h2>ESTOP Safety Invariant</h2>
       <div class="callout callout-safety">
-        <strong>Protocol 66 Invariant:</strong> ESTOP is never blocked by replay checking when the timestamp is fresh. A fresh ESTOP (within 10s) from any identified source MUST always be processed, even if a duplicate msg_id is seen. The replay cache is checked, but ESTOP receipt is not gated on it — ESTOP is processed immediately, and the duplicate is logged.
+        <strong>Protocol 66 Invariant (Fail-Safe):</strong> ESTOP is never blocked by replay checking, timestamp staleness, or unsynchronized clocks. A validly framed ESTOP MUST always be processed immediately to bring the robot to a stop; any staleness or duplicate <code>msg_id</code> is logged to the audit trail rather than causing the stop to be refused.
       </div>
       <p>Specifically:</p>
       <ul>
-        <li>SAFETY messages (type 6) use a 10s replay window (not 30s)</li>
-        <li>A fresh ESTOP with a duplicate msg_id: process ESTOP, log <code>REPLAY_DETECTED</code> warning, do not reject</li>
-        <li>A stale ESTOP (> 10s old): reject — this prevents confusion from severely delayed network delivery</li>
-        <li>RESUME requires fresh timestamp AND unique msg_id (not exempt from replay check)</li>
+        <li>Non-ESTOP SAFETY messages (type 6, such as <code>RESUME</code> / <code>ESTOP_CLEAR</code>) MUST enforce the strict 10s replay window AND unique <code>msg_id</code> (not exempt from replay checking)</li>
+        <li>A fresh ESTOP with a duplicate <code>msg_id</code>: process ESTOP immediately, log <code>REPLAY_DETECTED</code> warning, do not reject</li>
+        <li>A stale ESTOP (&gt; 10s old, or received while <code>clock_synchronized: false</code>): process ESTOP immediately, log <code>STALE_ESTOP</code> warning, do not reject — an unintended stop is fail-safe, whereas refusing a stop due to clock skew or network delay is hazardous (aligns with <a href="/docs/safety/#time-sync">Restricted Mode</a> and <a href="/docs/offline/">Offline Operation</a>)</li>
+        <li><code>RESUME</code> / <code>ESTOP_CLEAR</code> MUST require fresh timestamp (≤ 10s), unique <code>msg_id</code>, and full operator authorization before motion may resume</li>
       </ul>
     </section>
 
@@ -88,12 +88,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <tr>
             <td><code>REPLAY_DETECTED</code></td>
             <td>msg_id already seen within replay window</td>
-            <td>HTTP 409 / COMMAND_NACK (type 31)</td>
+            <td>HTTP 409 / COMMAND_NACK (type 18)</td>
           </tr>
           <tr>
             <td><code>MESSAGE_STALE</code></td>
             <td>timestamp older than replay_window_s</td>
-            <td>HTTP 408 / COMMAND_NACK (type 31)</td>
+            <td>HTTP 408 / COMMAND_NACK (type 18)</td>
           </tr>
         </tbody>
       </table>
@@ -122,7 +122,7 @@ except ReplayAttackError as e:
       <ul>
         <li><a href="/docs/safety/#time-sync">§8.4 Time Synchronization</a> — required for accurate timestamp comparison</li>
         <li><a href="/docs/qos/">QoS &amp; Delivery Guarantees</a> — interaction between replay prevention and QoS retry</li>
-        <li><a href="/docs/messages/#version-compatibility">§3.5 Version Compatibility</a> — replay check precedes version check? No: version check is first, replay check is third</li>
+        <li><a href="/docs/messages/#version-compatibility">§3.5 Version Compatibility</a> — version check runs before replay checking</li>
         <li><a href="/docs/error-codes/">Error Codes</a> — REPLAY_DETECTED, MESSAGE_STALE</li>
       </ul>
     </section>
