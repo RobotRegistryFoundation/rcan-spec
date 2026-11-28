@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Added: §8.6 domain proof and validity of signed records (proposed, #241)
+- `src/pages/docs/key-rotation.astro`: optional `domain_proof` member on Ed25519 keys in
+  `rcan-keys.json` (Ed25519 over `rcan-keys domain-proof/1 domain=<host> kid=<thumbprint>`),
+  so a verifier can tell a key's holder chose to publish it on that domain. Readers that do
+  not use it ignore it (RFC 7517 §4).
+- Same page: rule for signed records with their own signing time (accept a key that was
+  valid when the record was signed; reject at or after `revoked_at`), and note that a key
+  set may carry Bounded Embodiment `key-0.1` entries.
+- Additive and optional; no change to how live messages are verified.
+
 ### Fixed: the rcan.dev root node now publishes its public key
 - `/.well-known/rcan-node.json` served `public_key: null`, so SDK `NodeClient`
   discovery against rcan.dev failed with `missing_pubkey`. The manifest code was
