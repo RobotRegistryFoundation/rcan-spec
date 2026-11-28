@@ -17,16 +17,17 @@ This design lets the bundle be replayed in two modes:
 
 Signatures cover the canonical JSON of the parent object minus the signature field itself.
 
-Canonicalization rules (per `fixtures/canonical-json-v1.json`):
-1. UTF-8 encoding.
-2. Object keys sorted lexicographically (Unicode code-point order).
-3. No unnecessary whitespace.
-4. Whole-number floats normalized to integers (e.g. `50.0` → `50`) for cross-language parity with rcan-ts.
-5. Strings escaped per RFC 8259, no extra whitespace.
-6. Arrays preserve member order.
-7. Non-ASCII Unicode emitted as raw UTF-8 bytes (no `\uXXXX` escapes).
+Canonical JSON is RFC 8785 (JSON Canonicalization Scheme). Its rules, as they apply here:
 
-This matches RFC 8785 (JSON Canonicalization Scheme) with the rcan-ts/rcan-py whole-number-float normalization. Both SDKs emit byte-identical canonical JSON.
+1. UTF-8 encoding, with no byte order mark.
+2. Object members sorted by name, comparing names as sequences of UTF-16 code units (RFC 8785 § 3.2.3). This differs from Unicode code-point order only when names mix characters above U+FFFF with characters in U+E000–U+FFFF: a name starting with U+1F600 (😀) sorts before one starting with U+E000, because U+1F600 is the surrogate pair D83D DE00 and 0xD83D < 0xE000. Names are compared as strings even when they look like numbers: `"10"` sorts before `"9"`.
+3. No whitespace outside strings.
+4. Numbers are IEEE 754 binary64 values, written as ECMAScript's `Number::toString` writes them (RFC 8785 § 3.2.2.3): `50.0` → `50`, `-0` → `0`, `1e21` → `1e+21`, `1e-7` → `1e-7`, `0.000001` → `0.000001`. An integer that binary64 cannot hold exactly is written as the nearest binary64 value: `9007199254740993` → `9007199254740992`. Whole-number floats therefore come out as integers without a separate rule.
+5. Strings: `"` and `\` are written `\"` and `\\`; U+0008, U+0009, U+000A, U+000C and U+000D are written `\b`, `\t`, `\n`, `\f` and `\r`; any other character below U+0020 is written `\u00` and two lowercase hexadecimal digits. Every other character, including non-ASCII, `/`, U+007F and U+2028, is written as raw UTF-8 (RFC 8785 § 3.2.2.2).
+6. Arrays preserve element order.
+7. NaN, Infinity, and strings or names containing an unpaired surrogate have no canonical form. An implementation MUST fail on them rather than write `null`, `Infinity` or a `\uD800`-style escape (RFC 8785 §§ 3.2.2.2 and 3.2.2.3).
+
+Test vectors are in `fixtures/canonical-json-v1.json`: input and expected bytes in `cases`, and inputs that must fail in `error_cases`. Every rule above has at least one vector. Passing them all is necessary for byte-identical output across implementations, not sufficient.
 
 ## Artifact-type registry
 
