@@ -92,3 +92,9 @@
 # Short link for people arriving from the Bounded Embodiment talk
 /bounded-embodiment           /#bounded-embodiment                         302
 /bounded-embodiment/          /#bounded-embodiment                         302
+
+# Robot links. robot-md, robot-md-mcp, rcan-py and rcan-ts print rcan.dev/r/<RRN>
+# (issue #243). Send them to the machine resolver, which answers with JSON and a
+# real 404 for an unknown RRN. 302 so a human page can replace it later.
+/r/:rrn                       /api/v1/resolve/:rrn                         302
+/r/:rrn/                      /api/v1/resolve/:rrn                         302
