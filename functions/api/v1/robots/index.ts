@@ -435,6 +435,31 @@ async function handleDelete(rrn: string, req: Request, env: Env): Promise<Respon
   return json({ message: "Robot registration removed", rrn });
 }
 
+/**
+ * rcan.dev no longer issues RRNs (#243). It and robotregistryfoundation.org kept separate
+ * counters, so the same number could be given to two different robots. New robots
+ * register there; records already here keep resolving.
+ */
+export function registrationMoved(): Response {
+  return new Response(
+    JSON.stringify({
+      error: "GONE",
+      message:
+        "New robots register at robotregistryfoundation.org (RCAN 3.0 signed registration). " +
+        "rcan.dev no longer issues RRNs; robots registered here before still resolve.",
+      register_url: "https://robotregistryfoundation.org/v2/robots/register",
+    }),
+    {
+      status: 410,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        Link: '<https://robotregistryfoundation.org/v2/robots/register>; rel="successor-version"',
+      },
+    },
+  );
+}
+
 // ── Main handler (Cloudflare Pages Functions format) ────────────────────────
 
 export async function onRequest(context: {
@@ -479,20 +504,7 @@ export async function onRequest(context: {
     // /api/v1/robots — collection operations
     if (path.endsWith("/api/v1/robots") || path.endsWith("/api/v1/robots/")) {
       if (method === "GET") return await handleList(request, env);
-      if (method === "POST") {
-        const res = await handleRegister(request, env);
-        // Fire webhook delivery for new registrations
-        if (res.status === 201) {
-          try {
-            const created = await res.clone().json() as Record<string, unknown>;
-            const rrn = String(created.rrn ?? "");
-            if (rrn && typeof waitUntil === "function") {
-              waitUntil(deliverWebhooks(env, rrn, created));
-            }
-          } catch { /* ignore */ }
-        }
-        return res;
-      }
+      if (method === "POST") return registrationMoved();
       return err("Method not allowed", 405);
     }
 
