@@ -78,7 +78,7 @@ Community verification confirms the identity data is plausible and community-rev
   "manufacturer": "ROBOTIS",
   "model": "turtlebot3_burger",
   "timestamp_iso": "2026-01-15T12:00:00Z",
-  "registry_url": "https://rcan.dev/registry/RRN-000000000001",
+  "registry_url": "https://robotregistryfoundation.org/r/RRN-000000000001",
   "signature": "pending"
 }
 ```

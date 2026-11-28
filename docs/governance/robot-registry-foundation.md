@@ -213,7 +213,7 @@ An implementation **MUST** declare its conformance level in its `rcan-config.jso
 ### P66 Conformance
 
 **P66** is the RCAN safety conformance profile, named for the IP66 ingress protection standard. A P66-conformant robot must:
-- Support ESTOP (MessageType 5) with ≤100ms guaranteed response time.
+- Support ESTOP (SAFETY, MessageType 6) with ≤100ms guaranteed response time.
 - Publish a `p66-manifest.json` at a stable URL, included in registry federation proofs.
 - Declare `hardware_safety` capabilities in `rcan-config.json`.
 - Pass the P66 conformance test suite.

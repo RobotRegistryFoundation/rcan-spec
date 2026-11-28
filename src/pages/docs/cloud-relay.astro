@@ -2,13 +2,13 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Cloud Relay Identity" description="RCAN §8.5 — sender_type enum, cloud function identity, and audit trail integrity for cloud-mediated robot commands.">
+<BaseLayout title="Cloud Relay Identity" description="RCAN §5.7 (formerly §8.5) — sender_type enum, cloud function identity, and audit trail integrity for cloud-mediated robot commands.">
   <nav class="doc-nav">
     <a href="/docs/">← Documentation</a>
   </nav>
 
   <article class="doc-article">
-    <h1>§8.5 — Cloud Relay Identity <span class="badge-new">v1.5</span></h1>
+    <h1>§5.7 (formerly §8.5) — Cloud Relay Identity <span class="badge-new">v1.5</span></h1>
     <p class="lead">RCAN messages can arrive via human operators, peer robots, or cloud functions. Without a <code>sender_type</code> field, the audit trail cannot distinguish autonomous cloud automation from human-initiated commands — a critical gap for incident investigation and consent enforcement.</p>
 
     <section>

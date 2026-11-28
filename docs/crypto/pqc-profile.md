@@ -1,6 +1,6 @@
 # RCAN Cryptographic Profiles
 
-> **Status:** Draft — targeted for RCAN v2.3.0
+> **Status:** Draft — see [rcan.dev/compatibility](https://rcan.dev/compatibility) for the target version
 > **Issue:** #188
 
 ## Overview

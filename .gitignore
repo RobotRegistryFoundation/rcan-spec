@@ -34,3 +34,7 @@ package-lock.json
 .worktrees/
 
 docs/superpowers/
+
+# Python
+__pycache__/
+*.pyc

@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    name: Test, Build & Conformance Checks
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run unit & verifier tests
+        run: pnpm test
+
+      - name: Run L1 conformance checker unit tests
+        run: python3 -m unittest scripts/conformance/test_check_l1.py -v
+
+      - name: Build site
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
+        run: pnpm build

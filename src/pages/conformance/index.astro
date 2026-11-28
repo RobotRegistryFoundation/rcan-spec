@@ -311,12 +311,12 @@ L4 REGISTRY   ✅ RCAN Registry-Integrated v1.10</code></pre>
       <tbody>
         <tr>
           <td><code>L4-REG-001</code></td>
-          <td>Send <code>REGISTRY_REGISTER</code> (type 13) with valid RRN and metadata; expect <code>REGISTRY_REGISTER_RESULT</code> (type 16) with <code>status="success"</code></td>
+          <td>Send <code>REGISTRY_REGISTER</code> (type 14) with valid RRN and metadata; expect a registry register response (<code>RESPONSE</code>, type 2) with <code>status="success"</code></td>
           <td>MUST</td>
         </tr>
         <tr>
           <td><code>L4-REG-002</code></td>
-          <td>Send <code>REGISTRY_RESOLVE</code> (type 14) with the registered RRN; expect <code>REGISTRY_RESOLVE_RESULT</code> (type 17) with <code>status="found"</code> and <code>ruri</code> populated</td>
+          <td>Send <code>REGISTRY_RESOLVE</code> (type 15) with the registered RRN; expect a registry resolve response (<code>RESPONSE</code>, type 2) with <code>status="found"</code> and <code>ruri</code> populated</td>
           <td>MUST</td>
         </tr>
         <tr>

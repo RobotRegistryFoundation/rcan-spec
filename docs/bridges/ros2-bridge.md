@@ -25,7 +25,7 @@ The RCAN ↔ ROS2 bridge brings full RCAN governance to existing ROS2 robots **w
 | **Audit Trail** | None — no built-in logging of who commanded what | None | §6 append-only audit chain with SHA-256 linkage |
 | **Network Loss Behavior** | Undefined — commands may queue indefinitely | Undefined | §8 invariants: robot halts or returns to safe state on loss |
 | **HiTL Gate** | None | None | §9 PENDING_AUTH: commands above confidence threshold require human approval |
-| **Specification** | Community standard, fragmented | Experimental | RCAN v1.2, versioned, published |
+| **Specification** | Community standard, fragmented | Experimental | [RCAN protocol](https://rcan.dev/spec), versioned, published |
 
 SROS2 improves DDS transport security but does not address identity, AI accountability, audit trails, or behavioral invariants. The RCAN bridge addresses all of these without requiring SROS2 adoption (though the two are compatible — see §9).
 
