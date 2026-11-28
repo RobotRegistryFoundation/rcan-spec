@@ -21,6 +21,7 @@
 interface Env {
   DB: D1Database;
   RCAN_NODE_URL?: string;   // self URL, defaults to https://rcan.dev
+  RRF_REGISTRY_URL?: string; // registry of record, defaults to https://robotregistryfoundation.org
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -115,6 +116,34 @@ async function fetchFromNode(nodeUrl: string, rrn: string): Promise<{ ok: boolea
 
 // ── Resolution handlers ───────────────────────────────────────────────────────
 
+/** The registry of record for root RRNs (#243). */
+export const RRF_REGISTRY_URL = "https://robotregistryfoundation.org";
+
+/**
+ * Look a root RRN up at robotregistryfoundation.org (GET /v2/robots/:rrn), which returns
+ * only public fields. Null when it isn't there or the registry can't be reached, so a
+ * failure there reads as "not found" here, never as a record.
+ */
+export async function resolveFromRrf(
+  rrn: string,
+  env: { RRF_REGISTRY_URL?: string },
+  fetcher: typeof fetch = fetch,
+): Promise<{ url: string; record: Record<string, unknown> } | null> {
+  const base = (env.RRF_REGISTRY_URL ?? RRF_REGISTRY_URL).replace(/\/+$/, "");
+  try {
+    const res = await fetcher(`${base}/v2/robots/${encodeURIComponent(rrn)}`, {
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (res.status !== 200) return null;
+    const record = (await res.json()) as Record<string, unknown>;
+    if (!record || typeof record !== "object" || record.rrn !== rrn) return null;
+    return { url: base, record };
+  } catch {
+    return null;
+  }
+}
+
 async function resolveRoot(rrn: string, env: Env, noCache: boolean): Promise<Response> {
   const selfUrl = env.RCAN_NODE_URL ?? "https://rcan.dev";
   const now = new Date().toISOString();
@@ -126,6 +155,16 @@ async function resolveRoot(rrn: string, env: Env, noCache: boolean): Promise<Res
   ).bind(rrn).first();
 
   if (!row) {
+    // New robots register at robotregistryfoundation.org (rcan.dev no longer issues
+    // RRNs, #243), so a root RRN this database doesn't know may live there.
+    const rrf = await resolveFromRrf(rrn, env);
+    if (rrf) {
+      return json(
+        { rrn, resolved_by: rrf.url, namespace: "root", record: rrf.record, cache_status: "MISS", resolved_at: now },
+        200,
+        { "X-Resolved-By": rrf.url, "X-Cache": "MISS", "X-RRN-Namespace": "root" },
+      );
+    }
     return json({ error: "NOT_FOUND", rrn }, 404, {
       "X-Resolved-By": selfUrl,
       "X-Cache": "MISS",
