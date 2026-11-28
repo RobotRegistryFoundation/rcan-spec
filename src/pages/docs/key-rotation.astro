@@ -30,7 +30,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       "x":          "base64url-encoded-public-key",
       "exp":        1782000000,       // REQUIRED: max 365 days from creation
       "iat":        1750000000,       // Key creation time
-      "revoked_at": null              // Set when key is compromised
+      "revoked_at": null,             // Set when key is compromised
+      "domain_proof": "base64url-ed25519-signature"   // OPTIONAL, see Domain Proof below
     &#125;,
     &#123;
       "kty":        "OKP",
@@ -45,6 +46,19 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     &#125;
   ]
 &#125;</code></pre>
+    </section>
+
+    <section>
+      <h2>Domain Proof (optional)</h2>
+      <p>A JWKS is public, so anyone can copy another operator's public key into their own <code>rcan-keys.json</code>. Where DNSSEC <code>_rcan</code> TXT records are not in use, nothing ties a key to the domain that serves it. An Ed25519 key MAY carry <code>domain_proof</code>: an Ed25519 signature by that key, base64url without padding, over the UTF-8 bytes of</p>
+      <pre><code>rcan-keys domain-proof/1 domain=&lt;host&gt; kid=&lt;thumbprint&gt;</code></pre>
+      <p>where <code>&lt;host&gt;</code> is the lower-case host name serving the file and <code>&lt;thumbprint&gt;</code> is the RFC 7638 JWK thumbprint of the key (SHA-256 over <code>&#123;"crv","kty","x"&#125;</code>, base64url, 43 characters). The thumbprint is used rather than the <code>kid</code> member so the proof does not depend on how the operator names the key.</p>
+      <ul>
+        <li>A verifier that relies on the binding between a key and a domain MUST check <code>domain_proof</code> with the key itself, and MUST treat a key without a valid proof as published by that domain but not bound to it.</li>
+        <li>Readers that do not use the binding ignore the member (RFC 7517 §4). Existing key sets remain valid.</li>
+        <li>The proof does not cover <code>iat</code>, <code>exp</code> or <code>revoked_at</code>; those stay under the control of whoever serves the file, as today.</li>
+      </ul>
+      <p>A key set MAY also carry Bounded Embodiment <code>key-0.1</code> entries (<code>key_version</code>, <code>kid</code>, <code>public_jwk</code>, <code>lab</code>, <code>contact</code>, <code>added</code>, <code>revoked</code>), whose <code>kid</code> is already the RFC 7638 thumbprint. Readers map <code>added</code> to <code>iat</code> and <code>revoked</code> to <code>revoked_at</code>; such entries have no <code>exp</code>.</p>
     </section>
 
     <section>
@@ -123,6 +137,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </tbody>
       </table>
       <p><strong>Max key validity:</strong> 365 days. Compliance frameworks (SOC 2, ISO 27001) typically require ≤90-day rotation; set <code>exp</code> accordingly.</p>
+
+      <h3>Signed Records</h3>
+      <p>The rules above apply to live messages, checked against the current time. Some signed artifacts are records kept for years: audit bundles, Bounded Embodiment test reports, and records kept with an EU 2023/1230 technical file for 10 years. For a signed record that carries its own signing time <code>signed_at</code>:</p>
+      <ul>
+        <li>A verifier SHOULD accept the key when <code>iat ≤ signed_at ≤ exp</code> and either <code>revoked_at</code> is null or <code>signed_at &lt; revoked_at</code>, even if the key has since expired.</li>
+        <li>A verifier MUST reject the key for a record whose <code>signed_at</code> is at or after <code>revoked_at</code>.</li>
+        <li>Operators SHOULD keep expired keys in <code>rcan-keys.json</code>, with <code>exp</code> in the past, for as long as records signed with them must be checkable, and MUST NOT remove a key's <code>revoked_at</code> once set. Verifiers that have seen a revocation SHOULD keep it.</li>
+      </ul>
+      <p>A record's own signing time is only as trustworthy as its signer; where that matters, anchor records in an append-only log with an independent timestamp.</p>
     </section>
 
     <section>
