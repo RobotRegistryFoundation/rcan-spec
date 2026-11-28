@@ -111,7 +111,7 @@
       "properties": {
         "kid": {
           "type": "string",
-          "description": "Key ID registered with RRF /api/v2/keys/{kid}."
+          "description": "Key ID registered with RRF; resolve it at https://robotregistryfoundation.org/v2/keys/{kid}."
         },
         "alg": {
           "type": "string",
