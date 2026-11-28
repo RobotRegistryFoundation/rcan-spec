@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Proposed: `cell-passport` audit-bundle artifact type (#244)
+- Adds `cell-passport` to the `artifact_type` enum in `schemas/audit-bundle-v1.json`
+  and to the registry table in `spec/audit-bundle-v1.md` (audit bundle v1.1, additive).
+  A cell passport is the signed record of one robot cell as commissioned, chained
+  across later changes of limits. Normative; under the 14-day comment period.
+
 ### Fixed: the rcan.dev root node now publishes its public key
 - `/.well-known/rcan-node.json` served `public_key: null`, so SDK `NodeClient`
   discovery against rcan.dev failed with `missing_pubkey`. The manifest code was
