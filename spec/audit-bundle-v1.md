@@ -44,6 +44,9 @@ The `artifact_type` enum is a closed set in v1.0. Adding a type requires a v1.1 
 | `eu-act-eu-register` | robot-md emit-eu-register | §26 |
 | `version-tuple` | per-repo release CI | matrix-version |
 | `version-matrix-snapshot` | opencastor-ops aggregator | matrix-version |
+| `cell-passport` (v1.1) | robot-gate `compliance-pack`, or any producer of a signed cell passport | the passport's own `schema`, e.g. `graft.cell_passport/0.1` |
+
+A `cell-passport` artifact is the signed record of one robot cell as commissioned: the SHA-256 of its `ROBOT.md` (the bundle's `robot_md_sha256`), the RRN when the `ROBOT.md` has one, who commissioned it and when, and `supersedes_passport_sha256` / `chain_root_sha256` linking each change of limits to the passport it replaces. `payload` is the passport exactly as signed, keeping its own `signature` list; `schema_version` is the passport's `schema`; `produced_at` is its `issued_at_utc`. In `STRICT` mode a verifier checks both `artifact_signature` and the passport's inner signature (Ed25519 over RFC 8785 JSON, `kid` = RFC 7638 thumbprint). The passport carries no safety rating and does not replace hardware safety functions.
 
 ## What this bundle is not
 

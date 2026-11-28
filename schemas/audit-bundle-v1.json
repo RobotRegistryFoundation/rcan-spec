@@ -82,7 +82,8 @@
             "eu-act-incident-report",
             "eu-act-eu-register",
             "version-tuple",
-            "version-matrix-snapshot"
+            "version-matrix-snapshot",
+            "cell-passport"
           ],
           "description": "Discriminator. Adding a new type requires a schema MINOR bump."
         },
