@@ -18,7 +18,7 @@ export const GET: APIRoute = async ({ params, url }) => {
   }
 
   const size = Math.min(parseInt(url.searchParams.get('size') || '200'), 1000);
-  const registryUrl = `https://rcan.dev/registry/${params.rrn}/`;
+  const registryUrl = `https://robotregistryfoundation.org/r/${params.rrn}`;
 
   const svgString = await QRCode.toString(registryUrl, {
     type: 'svg',

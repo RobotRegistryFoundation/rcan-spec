@@ -93,8 +93,7 @@
 /bounded-embodiment           /#bounded-embodiment                         302
 /bounded-embodiment/          /#bounded-embodiment                         302
 
-# Robot links. robot-md, robot-md-mcp, rcan-py and rcan-ts print rcan.dev/r/<RRN>
-# (issue #243). Send them to the machine resolver, which answers with JSON and a
-# real 404 for an unknown RRN. 302 so a human page can replace it later.
-/r/:rrn                       /api/v1/resolve/:rrn                         302
-/r/:rrn/                      /api/v1/resolve/:rrn                         302
+# Robot registry pages moved to robotregistryfoundation.org (#243, supersedes #245 temp 302 once RRF#147 deploys)
+/r/:rrn                       https://robotregistryfoundation.org/r/:rrn          301
+/r/:rrn/                      https://robotregistryfoundation.org/r/:rrn          301
+/registry/RRN-*               https://robotregistryfoundation.org/r/RRN-:splat    301
